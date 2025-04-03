@@ -1,11 +1,11 @@
 import csv
 import json
 import requests
-import datetime
+from datetime import datetime
 import time
 import os
 import pandas as pd
-
+import streamlit as st
 
 
 idInfo = [{"location": "Bae", "meal" : "Breakfast", "locationID" : "96", "mealID" : "148"},
@@ -40,85 +40,25 @@ def get_menu(date, locationID, mealID):
 
     return data
 
-def write_menus(csvFile, date):
-    # first we have to access content in csv file!
-    with open(csvFile) as fileToRead:
-        csvReader = csv.DictReader(fileToRead)
-        rows = [row for row in csvReader]
-
-    # rows is a list of dictionaries!
-    for dct in rows:
-        menuDate = date
-
-        # if user did put slashes in date, otherwise if they put hyphens we will not use datetime
-        if "/" in date:
-            dmy = date.split("/") # Want individual day, month, year for datetime
-          
-            # found .date() from https://docs.python.org/3/library/datetime.html
-            # .date(y, m, d)
-            convertDate = datetime.date(int(dmy[2]), int(dmy[0]), int(dmy[1]))
-        
-            menuDate = convertDate.strftime("%m-%d-%Y")
-
-
-        jsonFileName = dct["location"] + "-" + dct["meal"] + "-" + menuDate + ".json"
-
-        with open(jsonFileName, "w") as outFile:
-            menu = get_menu(date, dct["locationID"], dct["mealID"])
-            json.dump(menu, outFile)
-        
-        time.sleep(2)
 # add Streamlit option of date widget to add in for write_menus() function
 
-files = os.listdir(os.getcwd())
+# Add header
+st.header("Welcome to our Wellesley Fresh App!")
+# Add selectboxes (for date, meal, and location)
+# let's do st.form!!
+with st.form("Find a menu!"):
+    st.header("WFresh")
 
-names = []
-for file in files:
-    if ".json" in file:
-        names.append(file)
+    user_date = st.date_input("Select a Date", datetime.now().date())
+    user_location = st.selectbox("Select location", ["Tower", "Bates", "Lulu", "Stone D"])
+    user_meal = st.selectbox("Select meal", ["Breakfast", "Lunch", "Dinner"])
 
-mergeDf = pd.DataFrame()
+    submit_button = st.form_submit_button("View Menu", type = "primary")
 
-# iterate through list of file names
-for elt in names:
-    df = pd.read_json(elt)
-
-    mergeDf = pd.concat([mergeDf, df], ignore_index = True)
-
-mergeDf = mergeDf.drop(columns = ["date", "image", "stationName", "stationOrder", "price"])
-mergeDf = mergeDf.drop_duplicates(subset= ["id"], keep = "first")
-
-def transform(cell):
-    result = ""
-    if cell:
-        # result is a string where each allergen in the list in the cell is brought together
-        result = ",".join([item["name"] for item in cell])
+if submit_button:
+    get_menu(user_date, user_location, user_meal)
     
-    return result
 
-mergeDf["allergens"] = mergeDf["allergens"].apply(transform)
+# Save those options in variables to add to our functions as arguments
 
-mergeDf["preferences"] = mergeDf["preferences"].apply(transform)
-
-dfFinal = mergeDf.copy()
-
-def dropKeys(cell):
-    cell.pop("id")
-    cell.pop("corporateProductId")
-    cell.pop("caloriesFromSatFat")
-    return cell
-
-mergeDf["nutritionals"] = mergeDf["nutritionals"].apply(dropKeys)
-
-colNames = mergeDf.iloc[0].nutritionals.keys()
-
-# to convert all values into floats, except for col "servingSizeUOM", which would be a string.
-for key in colNames:
-    if key == "servingSizeUOM":
-        mergeDf[key] = mergeDf["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
-    else:
-        mergeDf[key] = mergeDf["nutritionals"].apply(lambda dct: float(dct[key]))
-
-mergeDf = mergeDf.drop("nutritionals", axis = 1)
-
-mergeDf.to_csv("wellesley-meals.csv", index = False)
+# Call functions and produce menu output
