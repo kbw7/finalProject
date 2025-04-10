@@ -12,5 +12,6 @@ Everyone contributed equally and were involved in this milestone!
 
 **Kaurvaki** - For our app design, I worked on the user login and home dashboard pages in Canva and wrote about them in our Google Slides presentation.
 
-**Aileen** - For the prototype, I worked on the food journal and the setting page, and wrote about how our ideas and designs for these pages connect to the Value Sensitive Design and Data Feminism. 
+**Aileen** - For the prototype, I worked on the food journal and the setting page, and wrote about how our ideas and designs for these pages connect to the Value Sensitive Design and Data Feminism.
 
+**Rebecca** - For our prototype on canva, I worked on the data visualizations, community forums, and menu page and connected our design choices to VSD and data feminism in our presentation.
