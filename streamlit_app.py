@@ -106,11 +106,48 @@ if submit_button:
 
     df = df.drop("nutritionals", axis = 1)
 
-    for n in df["name"]:
-        st.write(n)
+    # for n in df["name"]:
+    #     st.write(n)
 
-    with st.expander("**Expand to see Detailed Dataset of all Meals**"):
-        st.write(df)
+    # with st.expander("**Expand to see Detailed Dataset of all Meals**"):
+    #     st.write(df)
+
+    # Coding Challenge
+    # dish, calories, category, journal = st.columns(4)
+
+    # with dish:
+    #     st.write("Dish")
+    
+    # with calories:
+    #     st.write("Calories")
+
+    # with category:
+    #     st.write("Category")
+
+    # with journal:
+    #     st.write("Add to Journal")
+
+    # num = 0
+
+    # for index, row in df.iterrows():
+    #     dish, calories, category, journal = st.columns(4)
+    #     with dish:
+    #         st.write(row["name"])
+        
+    #     with calories:
+    #         st.write(row["calories"])
+        
+    #     with category:
+    #         st.write(row["stationName"])
+        
+    #     with journal:
+    #         st.button("Add", key = num)
+    #         num += 1
+            
+            
+            
+            
+
 
 
 
