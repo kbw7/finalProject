@@ -182,10 +182,10 @@ def get_menu(date, locationID, mealID):
     return result
 
 greeting = ""
-if hour >= 1 and hour <= 11:
+if hour >= 1 and hour <= 10:
     greeting = "Good Morning ☀️" 
     meal = "Breakfast"
-elif hour >= 12 and hour <= 16:
+elif hour >= 11 and hour <= 16:
     greeting = "Good Afternoon ❤️ " 
     meal = "Lunch"
 elif hour >= "17" and hour <= "23":
