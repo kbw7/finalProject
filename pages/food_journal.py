@@ -7,8 +7,16 @@ import uuid
 from datetime import datetime
 import pandas as pd
 import streamlit as st
+from crave_app import render_sidebar
+
+# Kaurvaki Code - to make sure it is not accessible unless they log in
+render_sidebar()
+if "access_token" not in st.session_state:
+    st.warning("Please Log In for Access! 🔒")
+    st.stop()
 
 
+    
 DB_PATH = 'wellesley_crave.db'
 
 def init_db():
