@@ -3,10 +3,14 @@ import pandas as pd
 import csv
 import requests
 from datetime import datetime
-
+from crave_app import render_sidebar
 
 # MENU PAGE
-
+# Kaurvaki Code - to make sure it is not accessible unless they log in
+render_sidebar()
+if "access_token" not in st.session_state:
+    st.warning("Please Log In for Access! 🔒")
+    st.stop()
 
 st.title("AVI MENU")
 
