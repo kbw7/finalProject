@@ -281,3 +281,8 @@ for index, row in df.iterrows():
     with journal:
         st.button("Add", key = num)
         num += 1
+
+
+# Add navigation Bar
+st.sidebar.page_link("pages/food_journal.py")
+st.sidebar.page_link("pages/menu.py")
