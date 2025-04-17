@@ -1,4 +1,3 @@
-# -- Prof. Eni code start -- #
 import streamlit as st
 from auth import google_login
 from user_profile import render_user_profile
@@ -6,7 +5,8 @@ import datetime
 import pandas as pd
 import requests
 
-st.set_page_config(page_title="Dining App", layout="centered")
+# -- Prof. Eni code start -- #
+st.set_page_config(page_title="Wellesley Crave", layout="centered")
 
 DEBUG = False # keep False when testing Google Login
 #DEBUG = True # set to True, when you don't want to go through authentication
@@ -281,4 +281,3 @@ for index, row in df.iterrows():
     with journal:
         st.button("Add", key = num)
         num += 1
-

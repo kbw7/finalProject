@@ -1,3 +1,4 @@
+# -- Prof. Eni code -- #
 import streamlit as st
 import requests
 
@@ -61,7 +62,7 @@ def render_user_profile():
                 return
             first_name = user.get("given_name") or user.get("name", "there").split()[0]
             picture = user.get("picture")
-
+    
         col1, col2 = st.sidebar.columns([1, 4])
         with col1:
             st.image(picture, width=40)
@@ -69,3 +70,4 @@ def render_user_profile():
             st.markdown(f"**Hello, {first_name}!**")
     else:
         st.sidebar.success("Logged in ✅")
+    
