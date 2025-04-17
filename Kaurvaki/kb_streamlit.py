@@ -213,5 +213,72 @@ today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T0
 
 df = df[df["date"] == today]
 
-st.write(df)
+# cleaning up df
+def transform(cell):
+    result = ""
+    if cell:
+        # result is a string where each allergen in the list in the cell is brought together
+        result = ",".join([item["name"] for item in cell])
+    
+    return result
+
+def dropKeys(cell):
+    cell.pop("id")
+    cell.pop("corporateProductId")
+    cell.pop("caloriesFromSatFat")
+    return cell
+
+df = df.drop_duplicates(subset= ["id"], keep = "first")
+df = df.drop(columns = ["date", "image", "id", "categoryName", "stationOrder", "price"])
+
+df["allergens"] = df["allergens"].apply(transform)
+
+df["preferences"] = df["preferences"].apply(transform)
+
+df["nutritionals"] = df["nutritionals"].apply(dropKeys)
+
+# to convert all values into floats, except for col "servingSizeUOM", which would be a string.
+colNames = df.iloc[0].nutritionals.keys()
+for key in colNames:
+    if key == "servingSizeUOM":
+        df[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
+    else:
+        df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
+
+df = df.drop("nutritionals", axis = 1)
+
+
+# Title and print out info
+st.subheader(meal + " Today at " + diningHall)
+
+dish, calories, category, journal = st.columns(4)
+
+with dish:
+    st.write("Dish")
+    
+with calories:
+    st.write("Calories")
+
+with category:
+    st.write("Category")
+
+with journal:
+    st.write("Add to Journal")
+
+num = 0
+
+for index, row in df.iterrows():
+    dish, calories, category, journal = st.columns(4)
+    with dish:
+        st.write(row["name"])
+        
+    with calories:
+        st.write(row["calories"])
+        
+    with category:
+        st.write(row["stationName"])
+        
+    with journal:
+        st.button("Add", key = num)
+        num += 1
 
