@@ -13,6 +13,10 @@ if "access_token" not in st.session_state:
 st.title("Settings ⚙️")
 
 # Add go-to dining hall preference
-st.header("Select your go-to or favorite dining hall (for Home Page Menu)")
+st.markdown("Select your **go-to** or **favorite** dining hall (for Home Page Menu)")
+
+# Use session_state to save go-to dining hall!
+
 favDiningHall = st.selectbox("Choose One", ["Tower", "Bae", "Stone D", "Bates"])
+st.write("You selected " + favDiningHall)
 
