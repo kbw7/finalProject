@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime
 import pandas as pd
 import streamlit as st
-from crave_app import render_sidebar
+from home import render_sidebar
 
 # Kaurvaki Code - to make sure it is not accessible unless they log in
 render_sidebar()

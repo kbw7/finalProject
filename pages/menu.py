@@ -3,7 +3,7 @@ import pandas as pd
 import csv
 import requests
 from datetime import datetime
-from crave_app import render_sidebar
+from home import render_sidebar
 
 # MENU PAGE
 # Kaurvaki Code - to make sure it is not accessible unless they log in
