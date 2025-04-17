@@ -17,3 +17,7 @@ Everyone contributed equally and were involved in this milestone!
 **Rebecca** - For our prototype on canva, I worked on the data visualizations, community forums, and menu page and connected our design choices to VSD and data feminism in our presentation.
 
 **Whole Team** - We met up virtually on Tuesday (April 8) to go over Milestone 2 and started planning what kind of app we wanted and brainstormed features. We met up again in-person on Wednesday (April 9) at Crystal's office hours (Aileen and I, Rebecca joined after her class) and continued working on designing the app on Canva and working on our Google Slides presentation. We finalized details like app name, color scheme, formatting, etc. Then, we worked on our team contract on a shared Google Doc. Finally, we worked on the ER diagramming using Draw.io and the whiteboards at the Science Center! We all met up today (right now as I'm writing) to wrap up our presentation and write this team log. Through our meetings, we made a lot of progress and worked efficiently together.
+
+**`April 17th`**
+
+**Aileen** - I worked on setting up the SQLite database and connected it to the food journal logging system. I also implemented the backend logic so that meal entries are saved and correctly displayed through the journal page.
