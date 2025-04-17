@@ -84,7 +84,7 @@ def transform(cell):
     if cell:
         # result is a string where each allergen in the list in the cell is brought together
         result = ",".join([item["name"] for item in cell])
-    
+
     return result
 
 def dropKeys(cell):
@@ -94,7 +94,7 @@ def dropKeys(cell):
     return cell
 
 
-#----------------- HOME Page -----------------# 
+#----------------- HOME Page -----------------#
 # Show login
 render_sidebar()
 
@@ -119,15 +119,15 @@ meal = ""
 
 greeting = ""
 if hour >= 1 and hour <= 10:
-    greeting = "Good Morning ☀️" 
+    greeting = "Good Morning ☀️"
     meal = "Breakfast"
 
 elif hour >= 11 and hour <= 16:
-    greeting = "Good Afternoon ❤️ " 
+    greeting = "Good Afternoon ❤️ "
     meal = "Lunch"
 
-elif hour >= "17" and hour <= "23":
-    greeting = "Good Evening 🌙" 
+elif hour >= 17 and hour <= 23:
+    greeting = "Good Evening 🌙"
     meal = "Dinner"
 
 st.title(greeting)
@@ -138,11 +138,11 @@ st.subheader("Choose your go-to dining hall")
 diningHall = st.selectbox("Select", ["Tower", "Bates", "Bae", "Stone D"])
 
 # Prof. Eni function get_params()
-location_id, meal_id = get_params(dfKeys, 
-                                       diningHall, 
+location_id, meal_id = get_params(dfKeys,
+                                       diningHall,
                                        meal)
 
-d = datetime.date.today()  
+d = datetime.date.today()
 
 df = get_menu(d, location_id, meal_id)
 # We only want today's menu... not the whole week
@@ -180,7 +180,7 @@ dish, calories, category, journal = st.columns(4)
 
 with dish:
     st.write("Dish")
-    
+
 with calories:
     st.write("Calories")
 
@@ -196,13 +196,13 @@ for index, row in df.iterrows():
     dish, calories, category, journal = st.columns(4)
     with dish:
         st.write(row["name"])
-        
+
     with calories:
         st.write(row["calories"])
-        
+
     with category:
         st.write(row["stationName"])
-        
+
     with journal:
         st.button("Add", key = num)
         num += 1
