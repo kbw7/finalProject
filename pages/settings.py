@@ -26,13 +26,17 @@ if 'user_id' not in st.session_state:
 
 st.title("Settings ⚙️")
 
-# Add go-to dining hall preference
-st.markdown("Select your **go-to** or **favorite** dining hall (for Home Page Menu)")
-
 # Use session_state to save go-to dining hall!
+if 'favorite_dining_hall' not in st.session_state:
+    st.session_state.favorite_dining_hall = "Bates"  # Default value
 
-favDiningHall = st.selectbox("Choose One", ["Tower", "Bae", "Stone D", "Bates"])
-st.write("You selected " + favDiningHall)
+favDiningHall = st.selectbox("Choose One", ["Tower", "Bae", "Stone D", "Bates"], 
+                           index=["Tower", "Bae", "Stone D", "Bates"].index(st.session_state.favorite_dining_hall))
+
+# Save selection to session state when changed
+if favDiningHall != st.session_state.favorite_dining_hall:
+    st.session_state.favorite_dining_hall = favDiningHall
+    st.success(f"Default dining hall updated to {favDiningHall}!")
 
 # Favorite Dishes Section
 st.header("Favorite Dishes")

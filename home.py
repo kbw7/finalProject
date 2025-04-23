@@ -164,10 +164,15 @@ elif hour >= 17 and hour <= 23:
 
 st.title(greeting)
 
-# preferred menu - since we don't have user preferences walkthrough yet, we are going to use dropdown
-# how to get menu for the day
-st.subheader("Choose your go-to dining hall")
-diningHall = st.selectbox("Select", ["Tower", "Bates", "Bae", "Stone D"])
+# Get the user's preferred dining hall from session state if available
+# Initialize with default if not set
+if 'favorite_dining_hall' not in st.session_state:
+    st.session_state.favorite_dining_hall = "Bates"
+
+# Display the current dining hall without option to change
+st.subheader("Your go-to dining hall")
+diningHall = st.session_state.favorite_dining_hall
+st.info(f"📍 {diningHall} (Change this in Settings)")
 
 # Prof. Eni function get_params()
 location_id, meal_id = get_params(dfKeys,
