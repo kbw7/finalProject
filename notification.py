@@ -4,9 +4,20 @@ import sqlite3
 import requests
 from datetime import datetime
 from collections import defaultdict
+from contextlib import contextmanager
 
 # Database constants
 DB_PATH = 'wellesley_crave.db'
+
+@contextmanager
+def get_db_connection():
+    """Context manager for database connections"""
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    try:
+        yield conn
+    finally:
+        conn.close()
 
 def init_favorites_table():
     """Initialize favorites table in the database if it doesn't exist"""
@@ -44,6 +55,20 @@ def add_favorite_dish(user_id, dish_name):
     
     conn.close()
     return success
+
+def delete_favorite_dish(user_id, dish_name):
+    """Delete a favorite dish for a user"""
+    conn = sqlite3.connect('wellesley_crave.db')
+    c = conn.cursor()
+    
+    c.execute(
+        "DELETE FROM user_favorites WHERE user_id = ? AND dish_name = ?",
+        (user_id, dish_name)
+    )
+    
+    conn.commit()
+    conn.close()
+    return True
 
 def get_user_favorite_dishes(user_id):
     """Get all favorite dishes for a user"""
@@ -94,15 +119,19 @@ def get_menu_items(date, location_ids, meal_ids):
 
 def check_favorites_available(user_id):
     """Check if any favorite dishes are available today"""
-
     
-    # Get user's favorite dishes
-    conn = sqlite3.connect('wellesley_crave.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-    c.execute("SELECT dish_name FROM user_favorites WHERE user_id = ?", (user_id,))
-    favorites = [row['dish_name'] for row in c.fetchall()]
-    conn.close()
+    # Initialize the table first to avoid "no such table" error
+    init_favorites_table()
+    
+    # Get user's favorite dishes using the context manager
+    with get_db_connection() as conn:
+        c = conn.cursor()
+        try:
+            c.execute("SELECT dish_name FROM user_favorites WHERE user_id = ?", (user_id,))
+            favorites = [row['dish_name'] for row in c.fetchall()]
+        except sqlite3.OperationalError:
+            # If there's still an error, return empty list
+            favorites = []
     
     # If no favorites, return empty list
     if not favorites:

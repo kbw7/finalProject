@@ -111,6 +111,8 @@ if "access_token" not in st.session_state:
 # st.sidebar.page_link("pages/menu.py")
 
 # Notification for favorite meals - by Aileen
+from notification import init_favorites_table
+init_favorites_table()
 if "access_token" in st.session_state and "user_id" in st.session_state:
     # Check if any favorite dishes are available today
     available_favorites = check_favorites_available(st.session_state["user_id"])
