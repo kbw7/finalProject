@@ -19,13 +19,13 @@ if "access_token" not in st.session_state:
     st.stop()
 
 
-    
-DB_PATH = 'wellesley_crave.db'
+DB_PATH = "C:\\Users\\bajpa\\OneDrive\\Desktop\\Wellesley College\\2024-2025\\Spring Semester Classes\\CS 248\\finalProjectPrivate\\wellesley_crave.db"
+
+# ADDING LOCAL PATH TO CONNECT TO PRIVATE REPO DB
 
 def init_db():
     """Initialize the SQLite database with necessary tables"""
-    db_exists = os.path.exists(DB_PATH)
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH) # adding local path to private repo
     c = conn.cursor()
 
     c.execute('''
@@ -60,7 +60,6 @@ def init_db():
 
     conn.commit()
     conn.close()
-    return db_exists
 
 def add_user(email, username="WellesleyUser"):
     conn = sqlite3.connect(DB_PATH)
@@ -193,7 +192,7 @@ init_db()
 
 # Add a test user
 if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = add_user("test@wellesley.edu")
+    st.session_state['user_id'] = add_user("test@wellesley.edu") # Kaurvaki add Google User Account!! Still have to do!
 
 # Session state setup
 if 'selected_dishes' not in st.session_state:
