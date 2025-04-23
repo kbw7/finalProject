@@ -4,6 +4,7 @@ from user_profile import render_user_profile
 import datetime
 import pandas as pd
 import requests
+from notification import check_favorites_available
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
@@ -105,9 +106,38 @@ if "access_token" not in st.session_state:
 
 # Add navigation Bar
 # Source - https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
-st.sidebar.page_link("pages/food_journal.py")
+# st.sidebar.page_link("pages/food_journal.py")
 
-st.sidebar.page_link("pages/menu.py")
+# st.sidebar.page_link("pages/menu.py")
+
+# Notification for favorite meals - by Aileen
+if "access_token" in st.session_state and "user_id" in st.session_state:
+    # Check if any favorite dishes are available today
+    available_favorites = check_favorites_available(st.session_state["user_id"])
+    
+    # Display notifications if there are available favorites
+    if available_favorites:
+        with st.container(border=True):
+            st.markdown("### 🎉 Good news! Your favorite dishes are available today:")
+            
+            for favorite in available_favorites:
+                # Group locations by meal
+                locations_by_meal = {}
+                for loc in favorite['locations']:
+                    meal = loc['meal']
+                    if meal not in locations_by_meal:
+                        locations_by_meal[meal] = []
+                    locations_by_meal[meal].append(loc['location'])
+                
+                # Create a formatted message
+                message = f"**{favorite['dish_name']}** is available at:"
+                for meal, locations in locations_by_meal.items():
+                    # Join locations with commas
+                    loc_str = ", ".join(sorted(set(locations)))
+                    message += f"\n- {meal}: {loc_str}"
+                
+                st.success(message)
+
 
 
 # Greeting at Top of Page
@@ -206,3 +236,4 @@ for index, row in df.iterrows():
     with journal:
         st.button("Add", key = num)
         num += 1
+
