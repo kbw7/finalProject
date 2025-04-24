@@ -60,7 +60,7 @@ def init_db():
         query = '''
         CREATE TABLE food_journal (
             entry_id TEXT PRIMARY KEY,
-            FOREIGN KEY (user_id) REFERENCES users(user_id),
+            user_id INTEGER AUTO_INCREMENT FOREIGN KEY REFERENCES maintable(user_id),
             date TEXT,
             meal_type TEXT,
             food_item TEXT,
