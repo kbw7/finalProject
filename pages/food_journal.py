@@ -11,6 +11,7 @@ from datetime import datetime
 import pandas as pd
 import streamlit as st
 from home import render_sidebar
+from user_profile import get_user_info
 
 # Kaurvaki Code - to make sure it is not accessible unless they log in
 render_sidebar()
@@ -20,8 +21,26 @@ if "access_token" not in st.session_state:
 
 
 DB_PATH = "C:\\Users\\bajpa\\OneDrive\\Desktop\\Wellesley College\\2024-2025\\Spring Semester Classes\\CS 248\\finalProjectPrivate\\wellesley_crave.db"
-
 # ADDING LOCAL PATH TO CONNECT TO PRIVATE REPO DB
+
+# Access Logged-In User Email
+access_token = st.session_state.get("access_token")
+user = get_user_info(access_token)
+
+# Fetch userId from users table
+conn = sqlite3.connect(DB_PATH) # adding local path to private repo
+c = conn.cursor()
+
+c.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    email TEXT
+)
+''')
+
+c.execute("SELECT user_id FROM users WHERE email = ?", (user.get("email"),))
+userId = c.fetchone()[0]
+
 
 def init_db():
     """Initialize the SQLite database with necessary tables"""
@@ -41,7 +60,7 @@ def init_db():
         query = '''
         CREATE TABLE food_journal (
             entry_id TEXT PRIMARY KEY,
-            user_id TEXT,
+            user_id INTEGER AUTO_INCREMENT FOREIGN KEY,
             date TEXT,
             meal_type TEXT,
             food_item TEXT,
@@ -60,25 +79,25 @@ def init_db():
     conn.commit()
     conn.close()
 
-def add_user(email, username="WellesleyUser"):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
+# def add_user():
+#     conn = sqlite3.connect(DB_PATH)
+#     c = conn.cursor()
 
-    c.execute("SELECT * FROM users WHERE email = ?", (email,))
-    user = c.fetchone()
+#     c.execute("SELECT * FROM users WHERE email = ?", (user.get("email"),))
+#     user = c.fetchone()
 
-    if not user:
-        user_id = str(uuid.uuid4())
-        c.execute(
-            "INSERT INTO users (user_id, email) VALUES (?, ?, ?)",
-            (user_id, email)
-        )
-        conn.commit()
-    else:
-        user_id = user[0]
+#     if not user:
+#         # user_id = str(uuid.uuid4())
+#         c.execute(
+#             "INSERT INTO users (email) VALUES (?)",
+#             (user.get("email"))
+#         )
+#         conn.commit()
+# #     else:
+# #         user_id = user[0]
 
-    conn.close()
-    return user_id
+#     conn.close()
+#     return user_id
 
 def add_food_entry(user_id, date, meal_type, food_item, dining_hall, notes="", calories=0.0, protein=0.0, carbs=0.0, fat=0.0):
     conn = sqlite3.connect(DB_PATH)
@@ -190,8 +209,8 @@ def extract_nutritional_info(nutritionals):
 init_db()
 
 # Add a test user
-if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = add_user("test@wellesley.edu") # Kaurvaki add Google User Account!! Still have to do!
+# if 'user_id' not in st.session_state:
+#     st.session_state['user_id'] = add_user("test@wellesley.edu") # Kaurvaki add Google User Account!! Still have to do!
 
 # Session state setup
 if 'selected_dishes' not in st.session_state:
@@ -291,7 +310,7 @@ with tab1:
             formatted_log_date = log_date.strftime("%Y-%m-%d")
             for dish in st.session_state['selected_dishes']:
                 add_food_entry(
-                    st.session_state['user_id'],
+                    userId,
                     formatted_log_date,
                     meal_type,
                     dish['name'],
@@ -313,7 +332,7 @@ with tab2:
     st.header("Your Food Journal")
     view_date = st.date_input("Select Date to View", datetime.now().date(), key="view_date")
     formatted_view_date = view_date.strftime("%Y-%m-%d")
-    entries = get_food_entries(st.session_state['user_id'], formatted_view_date)
+    entries = get_food_entries(userId, formatted_view_date)
 
     for entry in entries:
         if st.session_state.get(f'delete_{entry["entry_id"]}', False):
