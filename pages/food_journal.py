@@ -30,8 +30,7 @@ def init_db():
 
     c.execute('''
     CREATE TABLE IF NOT EXISTS users (
-        user_id TEXT PRIMARY KEY,
-        username TEXT,
+        user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
         email TEXT
     )
     ''')
@@ -71,8 +70,8 @@ def add_user(email, username="WellesleyUser"):
     if not user:
         user_id = str(uuid.uuid4())
         c.execute(
-            "INSERT INTO users (user_id, username, email) VALUES (?, ?, ?)",
-            (user_id, username, email)
+            "INSERT INTO users (user_id, email) VALUES (?, ?, ?)",
+            (user_id, email)
         )
         conn.commit()
     else:

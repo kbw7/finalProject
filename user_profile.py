@@ -42,7 +42,7 @@ def get_user_info(access_token):
 
 
 
-# VERSION that I'm using for DEBUGGING
+# VERSION that I'm using for DEBUGGING 
 def render_user_profile():
     """Render user profile photo and greeting, if user opts in."""
     access_token = st.session_state.get("access_token")
