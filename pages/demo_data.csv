@@ -1,0 +1,128 @@
+entry_id,user_id,date,meal_type,food_item,dining_hall,notes,calories,protein,carbs,fat,created_at
+86cf0cc7-59fb-4065-80d0-dead0e0a5d36,3,2025-03-15,lunch,Apple,Tower,,95,0.5,25,0.3,2025-03-15 09:00:00
+dc1dd3e4-d0ff-4f01-a4eb-969b3bad8e66,2,2025-03-15,lunch,Steamed Broccoli,Bates,Gluten-free option,55,3.7,11,0.6,2025-03-15 11:00:00
+491e9562-e5f3-4593-88cc-d7a3c8a968c1,3,2025-03-15,snack,Grilled Chicken Breast,Stone-Davis,Loved it!,165,31.0,0,3.6,2025-03-15 20:00:00
+a54b00fb-c44b-4b09-96f6-4e53df533ad4,3,2025-03-16,breakfast,Steamed Broccoli,Lulu,No dressing,55,3.7,11,0.6,2025-03-16 09:00:00
+54664204-3fef-4abb-8ade-1df8a57e0ba5,1,2025-03-16,lunch,Apple,Leaky Beaker,Too salty,95,0.5,25,0.3,2025-03-16 14:00:00
+36a0c431-8b93-4491-83a4-e7ce166854fd,1,2025-03-16,lunch,Steamed Broccoli,Leaky Beaker,Gluten-free option,55,3.7,11,0.6,2025-03-16 22:00:00
+85a7aba8-a557-4cbd-814b-6c0db731acf6,1,2025-03-16,snack,Spaghetti Marinara,Stone-Davis,No dressing,310,10.0,50,7.0,2025-03-16 23:00:00
+009885db-3794-4f77-982f-35c456e52b83,2,2025-03-17,lunch,Veggie Burger,Leaky Beaker,Extra spicy,124,11.0,10,5.0,2025-03-17 04:00:00
+b539df49-25a5-490e-b22e-8b26d205af6b,3,2025-03-17,lunch,Greek Yogurt,Bates,Too salty,100,17.0,6,0.7,2025-03-17 06:00:00
+2e42ada9-c71d-4de7-8ae5-9bffd95e0b60,1,2025-03-17,breakfast,Quinoa Salad,Tower,No dressing,222,8.0,39,6.0,2025-03-17 09:00:00
+14c8efe2-202d-46f4-a120-a278326c07fe,1,2025-03-17,dinner,Brown Rice,Tower,Loved it!,216,5.0,45,1.8,2025-03-17 11:00:00
+dd191024-970d-4cd7-9c9e-d575a1a24d82,3,2025-03-17,breakfast,Apple,Stone-Davis,Extra spicy,95,0.5,25,0.3,2025-03-17 12:00:00
+38d37db7-ddc8-4c15-acfb-fd61bdcbab17,1,2025-03-17,dinner,Greek Yogurt,Lulu,,100,17.0,6,0.7,2025-03-17 14:00:00
+a3376d0d-c9b0-445f-80d3-91bced36a99b,3,2025-03-17,breakfast,Grilled Chicken Breast,Stone-Davis,,165,31.0,0,3.6,2025-03-17 17:00:00
+c6f56961-a55d-461d-837f-07bc63785983,1,2025-03-18,breakfast,Steamed Broccoli,Bates,Loved it!,55,3.7,11,0.6,2025-03-18 10:00:00
+54254f3e-42cb-4666-9df6-521539efc4a9,3,2025-03-19,breakfast,Veggie Burger,Lulu,Too salty,124,11.0,10,5.0,2025-03-19 03:00:00
+1317b51a-ccd2-4220-bc72-12c719fea7e4,1,2025-03-19,breakfast,Apple,Stone-Davis,,95,0.5,25,0.3,2025-03-19 04:00:00
+d1d6db2c-7482-44e4-8c90-9a1c7b82102c,1,2025-03-19,dinner,Greek Yogurt,Leaky Beaker,,100,17.0,6,0.7,2025-03-19 06:00:00
+3ca85cd2-c593-46e9-8d66-06db6d921553,2,2025-03-19,dinner,Greek Yogurt,Lulu,,100,17.0,6,0.7,2025-03-19 18:00:00
+44f470ed-93fe-47a6-b268-e82195b3bab0,2,2025-03-20,dinner,Spaghetti Marinara,Leaky Beaker,Loved it!,310,10.0,50,7.0,2025-03-20 07:00:00
+24781f1e-3279-4fb6-91d1-98e9b0213770,1,2025-03-20,breakfast,Greek Yogurt,Bates,Loved it!,100,17.0,6,0.7,2025-03-20 13:00:00
+c9d07ac2-ed5f-44c4-b349-7d4f97666fdf,3,2025-03-20,snack,Grilled Chicken Breast,Leaky Beaker,,165,31.0,0,3.6,2025-03-20 18:00:00
+a530d844-c0c8-46d5-b9c0-a395a691e6f4,3,2025-03-21,lunch,Veggie Burger,Stone-Davis,Loved it!,124,11.0,10,5.0,2025-03-21 06:00:00
+81ebb0f7-5f9f-4622-9f3d-76eaa461ac40,3,2025-03-21,lunch,Quinoa Salad,Leaky Beaker,Gluten-free option,222,8.0,39,6.0,2025-03-21 17:00:00
+8b1439d1-90ae-4445-a18d-63a701dcc33b,2,2025-03-22,snack,Quinoa Salad,Lulu,Loved it!,222,8.0,39,6.0,2025-03-22 04:00:00
+69647d4e-cd5c-459c-ac41-4055fdccf832,3,2025-03-22,snack,Brown Rice,Tower,No dressing,216,5.0,45,1.8,2025-03-22 05:00:00
+9fce7c6c-8558-4ee3-a875-d006e3006afe,3,2025-03-22,dinner,Brown Rice,Lulu,Too salty,216,5.0,45,1.8,2025-03-22 09:00:00
+0ba712e4-839a-44ab-b3ee-4c50fb21617f,2,2025-03-22,lunch,Apple,Stone-Davis,No dressing,95,0.5,25,0.3,2025-03-22 17:00:00
+85e71f33-b631-4a1b-9483-fcc88001f3b0,1,2025-03-23,breakfast,Veggie Burger,Leaky Beaker,No dressing,124,11.0,10,5.0,2025-03-23 00:00:00
+f8c48060-3e23-4d67-85a2-6e47a14fb490,2,2025-03-23,snack,Veggie Burger,Bates,,124,11.0,10,5.0,2025-03-23 03:00:00
+33342948-b445-43ac-8605-5e7f347c4a9b,1,2025-03-23,dinner,Greek Yogurt,Stone-Davis,Loved it!,100,17.0,6,0.7,2025-03-23 04:00:00
+e031dc14-4338-4452-87cb-5472b5b98770,3,2025-03-23,dinner,Veggie Burger,Bates,No dressing,124,11.0,10,5.0,2025-03-23 11:00:00
+a120129e-dafd-4f12-b36e-3ef9e0369284,3,2025-03-23,dinner,Greek Yogurt,Bates,No dressing,100,17.0,6,0.7,2025-03-23 15:00:00
+e525fcf3-cac4-4066-8282-9a67d0daed3c,2,2025-03-23,lunch,Brown Rice,Tower,Extra spicy,216,5.0,45,1.8,2025-03-23 20:00:00
+afea0d76-827b-4f95-b891-04b78e5efec7,3,2025-03-23,dinner,Quinoa Salad,Lulu,,222,8.0,39,6.0,2025-03-23 22:00:00
+c5f0fc63-48a4-4dce-9355-d4912feae53d,3,2025-03-24,breakfast,Apple,Stone-Davis,Loved it!,95,0.5,25,0.3,2025-03-24 00:00:00
+14128b56-7348-443d-bc20-9244f8b56efa,3,2025-03-24,lunch,Brown Rice,Bates,Extra spicy,216,5.0,45,1.8,2025-03-24 04:00:00
+51dc2e4e-bdd9-42ba-8dd3-5a59c66a0e65,3,2025-03-24,dinner,Brown Rice,Lulu,No dressing,216,5.0,45,1.8,2025-03-24 09:00:00
+116b5b28-e991-4daf-ba73-b02427733677,3,2025-03-25,breakfast,Grilled Chicken Breast,Stone-Davis,No dressing,165,31.0,0,3.6,2025-03-25 01:00:00
+a4a2e55a-541c-4695-b912-8fdd9809a8e4,1,2025-03-25,snack,Steamed Broccoli,Lulu,,55,3.7,11,0.6,2025-03-25 04:00:00
+1c036cb9-ec9f-4332-adf7-302449cea24e,2,2025-03-25,breakfast,Brown Rice,Bates,Loved it!,216,5.0,45,1.8,2025-03-25 05:00:00
+4651a5b7-7a25-404b-94c1-20f1a08f8601,1,2025-03-25,snack,Brown Rice,Bates,,216,5.0,45,1.8,2025-03-25 11:00:00
+5de91a82-8844-447b-a778-3dbab6abeb8b,3,2025-03-25,lunch,Quinoa Salad,Stone-Davis,No dressing,222,8.0,39,6.0,2025-03-25 13:00:00
+a6ff6069-514e-47e5-9f9b-b4360e4f3705,2,2025-03-25,dinner,Veggie Burger,Leaky Beaker,,124,11.0,10,5.0,2025-03-25 14:00:00
+620d1064-ba84-4247-a593-56e2b816de4b,3,2025-03-25,dinner,Apple,Tower,,95,0.5,25,0.3,2025-03-25 15:00:00
+cd929386-19fb-4dfa-b985-2abb1dc21641,3,2025-03-25,lunch,Quinoa Salad,Tower,Extra spicy,222,8.0,39,6.0,2025-03-25 17:00:00
+809bbe48-1aab-4e7e-aa20-f5a7bb4af531,2,2025-03-26,snack,Grilled Chicken Breast,Leaky Beaker,Gluten-free option,165,31.0,0,3.6,2025-03-26 08:00:00
+5a98e840-73cb-43ee-9cfb-85a5f731d5a9,1,2025-03-26,snack,Greek Yogurt,Leaky Beaker,No dressing,100,17.0,6,0.7,2025-03-26 09:00:00
+ae7bba44-f4ba-46cb-a931-24c5b8618281,2,2025-03-27,snack,Apple,Tower,Too salty,95,0.5,25,0.3,2025-03-27 10:00:00
+a7deee30-1375-426d-8e8a-8abf63861b86,3,2025-03-27,lunch,Veggie Burger,Stone-Davis,,124,11.0,10,5.0,2025-03-27 13:00:00
+b7c27798-3887-4e6f-80aa-541ba6ff79fa,1,2025-03-27,snack,Quinoa Salad,Stone-Davis,,222,8.0,39,6.0,2025-03-27 16:00:00
+50b3d5dc-4c81-41b6-9973-c8d1558d5f98,3,2025-03-27,breakfast,Grilled Chicken Breast,Lulu,Extra spicy,165,31.0,0,3.6,2025-03-27 18:00:00
+92c058e9-9349-4d7b-9579-7c49cc0a969a,3,2025-03-27,snack,Spaghetti Marinara,Stone-Davis,Extra spicy,310,10.0,50,7.0,2025-03-27 22:00:00
+b5f4de86-9975-4fbd-8c0c-8fa3e024ca02,2,2025-03-28,dinner,Greek Yogurt,Tower,,100,17.0,6,0.7,2025-03-28 04:00:00
+38a31a57-9f27-4fc3-9ade-0c675129e26a,1,2025-03-28,lunch,Brown Rice,Leaky Beaker,,216,5.0,45,1.8,2025-03-28 23:00:00
+261231cc-05a8-4b3a-8a6c-cd5d826fd3e0,2,2025-03-29,snack,Greek Yogurt,Lulu,,100,17.0,6,0.7,2025-03-29 10:00:00
+4d0a9910-84b1-4623-a497-3333a16022e6,1,2025-03-29,breakfast,Apple,Leaky Beaker,Gluten-free option,95,0.5,25,0.3,2025-03-29 15:00:00
+9ad6db41-f146-4b11-adb1-4c00ee979a35,3,2025-03-29,lunch,Brown Rice,Lulu,Gluten-free option,216,5.0,45,1.8,2025-03-29 18:00:00
+bd0a5647-402f-4db3-ab97-0c0f0a2009d6,2,2025-03-30,breakfast,Greek Yogurt,Tower,Loved it!,100,17.0,6,0.7,2025-03-30 01:00:00
+dc954ceb-18a7-4e81-a094-79b13c693aaf,3,2025-03-30,dinner,Brown Rice,Bates,Loved it!,216,5.0,45,1.8,2025-03-30 02:00:00
+01602dbd-e256-4038-aad8-c84a99173221,1,2025-03-30,lunch,Quinoa Salad,Bates,Loved it!,222,8.0,39,6.0,2025-03-30 04:00:00
+3b6d057b-1dc3-4419-8a3d-cffecc903e6f,1,2025-03-30,breakfast,Veggie Burger,Stone-Davis,Extra spicy,124,11.0,10,5.0,2025-03-30 07:00:00
+3aa0d3b9-6cc6-48c5-a3c6-a0b68e8615d5,2,2025-03-30,lunch,Grilled Chicken Breast,Lulu,,165,31.0,0,3.6,2025-03-30 09:00:00
+3c5900a7-d602-417e-a94b-acf9486c8179,3,2025-03-30,dinner,Apple,Leaky Beaker,No dressing,95,0.5,25,0.3,2025-03-30 12:00:00
+b065bea2-eb57-45a3-b7e1-aec6ff0c9703,2,2025-03-30,snack,Apple,Stone-Davis,No dressing,95,0.5,25,0.3,2025-03-30 17:00:00
+16e24629-150a-4765-b39a-db9f427022d5,1,2025-03-31,dinner,Grilled Chicken Breast,Tower,Too salty,165,31.0,0,3.6,2025-03-31 02:00:00
+189176f8-d9c5-450c-8e05-2f3f0c3a5879,3,2025-03-31,lunch,Grilled Chicken Breast,Tower,Too salty,165,31.0,0,3.6,2025-03-31 04:00:00
+5895cea2-3aca-451d-97b3-07244d1f1a3b,1,2025-03-31,breakfast,Grilled Chicken Breast,Tower,Loved it!,165,31.0,0,3.6,2025-03-31 06:00:00
+cbd43bcc-2d1c-458d-a4d0-1b0c84f1e7fa,1,2025-03-31,dinner,Grilled Chicken Breast,Bates,Extra spicy,165,31.0,0,3.6,2025-03-31 13:00:00
+42b1a875-7caf-419f-a551-709c7c3e672d,3,2025-03-31,dinner,Steamed Broccoli,Bates,,55,3.7,11,0.6,2025-03-31 15:00:00
+73f31dfa-965a-42f9-bc8c-2cc9ccf4887a,1,2025-03-31,dinner,Brown Rice,Leaky Beaker,Gluten-free option,216,5.0,45,1.8,2025-03-31 16:00:00
+e7287a4f-5e74-4271-95d5-d25086cb8a4b,2,2025-03-31,dinner,Quinoa Salad,Lulu,No dressing,222,8.0,39,6.0,2025-03-31 17:00:00
+6380ede1-1d82-4f25-8c41-ffb76fc49b0c,3,2025-04-01,lunch,Greek Yogurt,Lulu,No dressing,100,17.0,6,0.7,2025-04-01 05:00:00
+bafc6f13-3085-48cd-aec5-83a70c63293d,2,2025-04-01,snack,Brown Rice,Tower,Loved it!,216,5.0,45,1.8,2025-04-01 08:00:00
+75ba1631-368c-499b-a9ab-225690b6c9bc,1,2025-04-01,snack,Veggie Burger,Bates,No dressing,124,11.0,10,5.0,2025-04-01 10:00:00
+998ee403-894b-415f-9a1a-8b0fe06e5f89,1,2025-04-01,snack,Veggie Burger,Lulu,Extra spicy,124,11.0,10,5.0,2025-04-01 12:00:00
+3c81fba9-6eff-4169-b184-e9cfb1250701,2,2025-04-02,snack,Apple,Lulu,Gluten-free option,95,0.5,25,0.3,2025-04-02 02:00:00
+b4fdf3aa-6f1e-4dd9-9f6a-47b6b48891fb,1,2025-04-02,snack,Grilled Chicken Breast,Stone-Davis,,165,31.0,0,3.6,2025-04-02 07:00:00
+67ddf708-9c64-40de-be04-5a17fdba3b0c,2,2025-04-02,snack,Apple,Leaky Beaker,Gluten-free option,95,0.5,25,0.3,2025-04-02 14:00:00
+f0c53742-d596-4d36-bc9e-66d6de369566,2,2025-04-02,dinner,Grilled Chicken Breast,Bates,Extra spicy,165,31.0,0,3.6,2025-04-02 15:00:00
+4a5ed63b-d2b7-4cb6-a107-f106e1a0eeef,3,2025-04-02,snack,Quinoa Salad,Stone-Davis,Loved it!,222,8.0,39,6.0,2025-04-02 20:00:00
+cafe2842-c2c1-4335-a65b-34f7e1985bbe,2,2025-04-02,dinner,Greek Yogurt,Leaky Beaker,Loved it!,100,17.0,6,0.7,2025-04-02 21:00:00
+28e94521-910d-4a71-a0ce-4f5c0a96973a,2,2025-04-03,lunch,Grilled Chicken Breast,Stone-Davis,,165,31.0,0,3.6,2025-04-03 11:00:00
+e816b01c-57b9-42e8-977e-7ac9e9fb18e9,3,2025-04-03,dinner,Quinoa Salad,Stone-Davis,,222,8.0,39,6.0,2025-04-03 16:00:00
+c3fc0ec9-4b54-417c-8493-ec9a5a355a25,3,2025-04-03,lunch,Quinoa Salad,Lulu,Gluten-free option,222,8.0,39,6.0,2025-04-03 21:00:00
+55d5a6a2-194d-4d8e-a418-c11b370a84d4,3,2025-04-03,snack,Brown Rice,Tower,Gluten-free option,216,5.0,45,1.8,2025-04-03 23:00:00
+c1152b2c-1473-415f-9ee2-7065fc7b563b,1,2025-04-04,lunch,Apple,Lulu,Too salty,95,0.5,25,0.3,2025-04-04 01:00:00
+aeb14198-7d03-4908-85ac-966e7d45ded8,3,2025-04-04,lunch,Veggie Burger,Tower,Too salty,124,11.0,10,5.0,2025-04-04 08:00:00
+a3012f2d-b01a-43bd-a3d5-515fef570130,2,2025-04-04,snack,Brown Rice,Bates,Gluten-free option,216,5.0,45,1.8,2025-04-04 09:00:00
+f67c2207-cab7-4657-b240-6a9d4e695fb5,1,2025-04-04,dinner,Veggie Burger,Stone-Davis,,124,11.0,10,5.0,2025-04-04 14:00:00
+0e200b23-85ef-45e0-8493-1f005f8342b7,2,2025-04-05,breakfast,Quinoa Salad,Lulu,Too salty,222,8.0,39,6.0,2025-04-05 18:00:00
+6e6b6433-4886-4075-b880-7d3504e8837b,2,2025-04-05,dinner,Veggie Burger,Tower,,124,11.0,10,5.0,2025-04-05 23:00:00
+bd3421f1-583f-4091-9f56-3d9df794df20,2,2025-04-06,snack,Steamed Broccoli,Leaky Beaker,,55,3.7,11,0.6,2025-04-06 01:00:00
+1859ffe9-072b-4184-844d-f70820d838c0,3,2025-04-06,snack,Apple,Leaky Beaker,,95,0.5,25,0.3,2025-04-06 07:00:00
+faf1b7bc-557e-4d12-a7a0-8baee8244962,3,2025-04-06,lunch,Brown Rice,Tower,Loved it!,216,5.0,45,1.8,2025-04-06 12:00:00
+40625d66-e205-4cfe-af5d-75600f4ea65e,3,2025-04-07,dinner,Greek Yogurt,Bates,Too salty,100,17.0,6,0.7,2025-04-07 05:00:00
+02be147a-a6ec-4fec-8698-e77cbf9d4abb,2,2025-04-07,snack,Apple,Leaky Beaker,Too salty,95,0.5,25,0.3,2025-04-07 21:00:00
+01a010d3-a50f-43e3-af70-9e052ee122c2,3,2025-04-08,lunch,Greek Yogurt,Leaky Beaker,,100,17.0,6,0.7,2025-04-08 04:00:00
+61c500f0-f686-4123-8694-0c5fde3eed9f,2,2025-04-08,breakfast,Quinoa Salad,Stone-Davis,,222,8.0,39,6.0,2025-04-08 14:00:00
+682b1746-a4be-4173-b554-dffeae0136f2,1,2025-04-08,lunch,Brown Rice,Stone-Davis,No dressing,216,5.0,45,1.8,2025-04-08 21:00:00
+6a481149-afb2-4bd3-b53c-3301701b0b4b,1,2025-04-09,snack,Spaghetti Marinara,Stone-Davis,Gluten-free option,310,10.0,50,7.0,2025-04-09 04:00:00
+f5366b37-552b-42c0-a88b-ca893102432f,2,2025-04-09,breakfast,Steamed Broccoli,Lulu,Gluten-free option,55,3.7,11,0.6,2025-04-09 06:00:00
+6d6d9a21-9e42-4ef3-a78e-d5b920773a90,3,2025-04-09,dinner,Quinoa Salad,Leaky Beaker,Loved it!,222,8.0,39,6.0,2025-04-09 14:00:00
+2072060b-68a3-435f-8e84-304ea1fefdd1,1,2025-04-09,dinner,Greek Yogurt,Leaky Beaker,No dressing,100,17.0,6,0.7,2025-04-09 17:00:00
+0bbcd6bf-e726-43d5-9591-cd3e875d533a,3,2025-04-10,snack,Quinoa Salad,Tower,Extra spicy,222,8.0,39,6.0,2025-04-10 01:00:00
+adecfe0a-abba-4494-bce2-2d97d3fef4df,2,2025-04-10,lunch,Veggie Burger,Lulu,No dressing,124,11.0,10,5.0,2025-04-10 16:00:00
+c747047f-20b3-47d4-aebb-4a26b96ef01c,3,2025-04-10,breakfast,Steamed Broccoli,Tower,Loved it!,55,3.7,11,0.6,2025-04-10 20:00:00
+9101cd25-b735-4df1-af77-8de4be89befd,3,2025-04-11,snack,Veggie Burger,Tower,Extra spicy,124,11.0,10,5.0,2025-04-11 00:00:00
+646c6332-6eb4-4cd2-b4ef-04a4a6e6cdaf,3,2025-04-11,dinner,Greek Yogurt,Leaky Beaker,No dressing,100,17.0,6,0.7,2025-04-11 02:00:00
+5fc6d487-16ac-475d-a943-9788ad763f85,2,2025-04-11,snack,Steamed Broccoli,Tower,Extra spicy,55,3.7,11,0.6,2025-04-11 03:00:00
+244c8944-dbad-4935-b4c5-9893fa045b79,1,2025-04-11,snack,Grilled Chicken Breast,Lulu,No dressing,165,31.0,0,3.6,2025-04-11 08:00:00
+74b9df28-c2b0-4e37-a234-7090fd821ea6,1,2025-04-11,snack,Brown Rice,Tower,Extra spicy,216,5.0,45,1.8,2025-04-11 10:00:00
+ae0f6a33-8a30-4c1b-a91c-aeadfdcf81af,2,2025-04-11,snack,Spaghetti Marinara,Stone-Davis,,310,10.0,50,7.0,2025-04-11 14:00:00
+879758de-32ee-4590-9df2-65ffc0f4b1e6,2,2025-04-12,breakfast,Veggie Burger,Tower,Gluten-free option,124,11.0,10,5.0,2025-04-12 08:00:00
+ab650606-c797-4b9b-aefe-97984c406efe,1,2025-04-12,breakfast,Spaghetti Marinara,Leaky Beaker,,310,10.0,50,7.0,2025-04-12 11:00:00
+6011b4c0-c1f1-4e4c-a3eb-e81036c4d900,2,2025-04-12,snack,Grilled Chicken Breast,Lulu,Loved it!,165,31.0,0,3.6,2025-04-12 20:00:00
+1d20210a-cf97-4919-866e-3f9b42e15eef,3,2025-04-13,snack,Spaghetti Marinara,Bates,,310,10.0,50,7.0,2025-04-13 12:00:00
+b77ab7d5-e717-4c3f-88c1-68f106dc3e03,2,2025-04-13,dinner,Apple,Stone-Davis,No dressing,95,0.5,25,0.3,2025-04-13 14:00:00
+bc1c3931-02e8-484d-90a2-e92c946eccad,3,2025-04-13,dinner,Spaghetti Marinara,Leaky Beaker,,310,10.0,50,7.0,2025-04-13 17:00:00
+613db176-af74-4e06-b3e1-b071dd846588,2,2025-04-14,breakfast,Steamed Broccoli,Bates,,55,3.7,11,0.6,2025-04-14 03:00:00
+4280d969-0db3-4853-a25f-37d9fdb07cde,3,2025-04-14,dinner,Quinoa Salad,Tower,,222,8.0,39,6.0,2025-04-14 07:00:00
+24e7c111-72fc-4459-8ec8-bd22ff7d41a6,3,2025-04-14,lunch,Brown Rice,Bates,No dressing,216,5.0,45,1.8,2025-04-14 08:00:00
+b045b7fc-03c3-40f7-9147-1b504d78e90a,1,2025-04-14,dinner,Greek Yogurt,Tower,Gluten-free option,100,17.0,6,0.7,2025-04-14 13:00:00
+a188e50c-0a0b-4b6a-b9bc-e3345c33a09c,2,2025-04-14,dinner,Apple,Lulu,Gluten-free option,95,0.5,25,0.3,2025-04-14 16:00:00
+8254bff1-3881-4b7c-870b-2e1d44c76f6b,3,2025-04-14,lunch,Grilled Chicken Breast,Bates,No dressing,165,31.0,0,3.6,2025-04-14 18:00:00
+38efc146-2806-41f7-9d20-bf98cb1c2700,3,2025-04-14,snack,Apple,Stone-Davis,,95,0.5,25,0.3,2025-04-14 21:00:00
+0615ccdf-15d7-4a62-815d-8a20348d5a9d,3,2025-04-14,dinner,Spaghetti Marinara,Stone-Davis,Gluten-free option,310,10.0,50,7.0,2025-04-14 22:00:00
