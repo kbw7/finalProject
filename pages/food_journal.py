@@ -70,8 +70,6 @@ def init_db():
             protein FLOAT,
             carbs FLOAT,
             fat FLOAT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users (user_id)
         )
         '''
         c.execute(query)
