@@ -30,10 +30,10 @@ Everyone contributed equally and were involved in this milestone!
 
 **`April 24th`**
 
-**Aileen** - This week I worked mainly on the notification function. I wrote all the related functions like add_favorite_dish and delete_favorite_dish in notification.py and then import them in settings.py to make the code clean. The notification system was designed to cross-reference the user's preferred dishes from their profile with the daily menus retrieved from the AVI Fresh API. To complete this functionality, I wrote conditional logic that checks current day's each menu item against the user's favorites list before generating relevant alerts. I also tried to link the add button from the homepage, but the code was very buggy and after working with Kauvaki on Thursday, we decided to delete this quick log function from the home page for now. 
+**Aileen** - This week I worked mainly on the notification function. I wrote all the related functions like add_favorite_dish and delete_favorite_dish in notification.py and then import them in settings.py to make the code clean. The notification system was designed to cross-reference the user's preferred dishes from their profile with the daily menus retrieved from the AVI Fresh API. To complete this functionality, I wrote conditional logic that checks current day's each menu item against the user's favorites list before generating relevant alerts. I also tried to link the add button from the homepage, but the code was very buggy and after working with Kauvaki on Thursday, we decided to delete this quick log function from the home page for now.
 
 **Kaurvaki**
 
-**Rebecca**
+**Rebecca** - This week I worked on refining the menu page to match what it looks like on the home page and making the metrics page. For the metrics page, I went through streamlit app demos online and took inspiration from their graphs. Because our database is currently empty, I also asked chatgpt to generate a fake data to demo what the visualizations could look like. I also found a resource online that had information about transition graphs using the retentioneering library, which I found cool and tried very hard to make work but it ultimately wouldn't work with my version of python. I really wanted the functionality of transition graphs but could not figure out how to do it using plotly, so I asked chatgpt to guide me through how it worked. Our review of session state during class was especially helpful when implementing buttons to toggle between visualizations.
 
 **Whole Team**
