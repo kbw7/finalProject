@@ -27,3 +27,13 @@ Everyone contributed equally and were involved in this milestone!
 **Rebecca** - I worked on the menu page which showed breakfast, lunch, and dinner all on one page and and implemented the USDA FoodData API for searching for custom ingredients. I also worked on a few visualizations.
 
 **Whole Team** - We met up online on Monday to go over Milestone 3 and delegate tasks. Tuesday, we met up again to give progress reports and further delegate work if people needed help or decided they wanted to do more. Thursday, our group met up to go over our work and then add their respective work to the main app files. Rebecca and Aileen had to leave early for work so Kaurvaki linked home page with the other pages and finished up remaining tasks. This week was pretty busy for all of us and we did not spend as much time as we wanted on this week's milestone. Kaurvaki was busy with Ruhlman this week. Rebecca had ongoing rehearsals and was not feeling well. Aileen and Kaurvaki both had golf as well. We hope to continue working and adding more features for our app!
+
+**`April 24th`**
+
+**Aileen** - This week I worked mainly on the notification function. I wrote all the related functions like add_favorite_dish and delete_favorite_dish in notification.py and then import them in settings.py to make the code clean. The notification system was designed to cross-reference the user's preferred dishes from their profile with the daily menus retrieved from the AVI Fresh API. To complete this functionality, I wrote conditional logic that checks current day's each menu item against the user's favorites list before generating relevant alerts. I also tried to link the add button from the homepage, but the code was very buggy and after working with Kauvaki on Thursday, we decided to delete this quick log function from the home page for now. 
+
+**Kaurvaki**
+
+**Rebecca**
+
+**Whole Team**
