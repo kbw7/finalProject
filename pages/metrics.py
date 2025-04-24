@@ -63,7 +63,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Day", "Week", "Month", "Year"])
 
 # DAILY
 with tab1:
-    selected_day = st.date_input("Choose a day", df['date'].min(), key="daily_date")
+    selected_day = st.date_input("Choose a day", df['date'].max(), key="daily_date")
     st.subheader("Caloric Intake")
     day_df = df[df['date'] == pd.to_datetime(selected_day)]
     if not day_df.empty:
@@ -74,7 +74,7 @@ with tab1:
 
 # WEEKLY
 with tab2:
-    selected_date = st.date_input("Choose a date in the week", df['date'].min(), key="weekly_date")
+    selected_date = st.date_input("Choose a date in the week", df['date'].max(), key="weekly_date")
     selected_week = pd.to_datetime(selected_date).to_period("W").start_time
     st.subheader("Caloric Intake")
     week_df = df[df['week'] == selected_week]
@@ -153,7 +153,7 @@ with tab2:
 
 # MONTHLY
 with tab3:
-    selected_date = st.date_input("Choose a date in the month", df['date'].min(), key="monthly_date")
+    selected_date = st.date_input("Choose a date in the month", df['date'].max(), key="monthly_date")
     selected_month = pd.to_datetime(selected_date).to_period("M").start_time
     st.subheader("Caloric Intake")
     monthly_df = df[df['month'] == selected_month]
@@ -187,7 +187,7 @@ with tab3:
 
 # YEARLY
 with tab4:
-    selected_date = st.date_input("Choose a date in the year", df['date'].min(), key="yearly_date")
+    selected_date = st.date_input("Choose a date in the year", df['date'].max(), key="yearly_date")
     selected_year = pd.to_datetime(selected_date).year
     st.subheader("Caloric Intake")
     yearly_df = df[df['year'] == selected_year]
