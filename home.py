@@ -159,8 +159,8 @@ def newUser():
 def homePage(): # only show once user has walkthrough!
     # Add navigation Bar
     # Source - https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
-    st.sidebar.page_link("pages/food_journal.py")
-    st.sidebar.page_link("pages/menu.py")
+    # st.sidebar.page_link("pages/food_journal.py")
+    # st.sidebar.page_link("pages/menu.py")
 
     # Greeting at Top of Page
     device_datetime = datetime.datetime.now()
