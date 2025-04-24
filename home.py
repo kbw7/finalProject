@@ -141,7 +141,6 @@ def newUser():
         favHall = st.selectbox("Select", ["Tower", "Bates", "Bae", "Stone D"])
         st.write("You Selected " + favHall)
 
-        st.session_state["newUserDHall"] = True
         choice = st.button("Submit and Get Started with WellesleyCrave!")
 
         if choice: 
