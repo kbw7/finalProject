@@ -6,6 +6,7 @@ import pandas as pd
 import requests
 import sqlite3
 from user_profile import get_user_info
+from notification import check_favorites_available
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
