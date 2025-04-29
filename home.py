@@ -19,7 +19,6 @@ DEBUG = False # keep False when testing Google Login
 download_db_from_github()
 
 
-
 def render_sidebar():
     """A function to handle the login in the sidebar."""
     st.sidebar.header("Login")
@@ -232,7 +231,3 @@ if check: # if new user, then go through walkthrough
     newUser()
 
 homePage()
-
-
-
-
