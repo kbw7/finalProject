@@ -229,7 +229,7 @@ user = get_user_info(access_token)
 check = checkNewUser(user.get("email"))
 
 if check: # if new user, then go through walkthrough
-    newUser()
+    newUser(user)
 
 homePage()
 

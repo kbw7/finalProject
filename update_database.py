@@ -91,7 +91,7 @@ def checkNewUser(email:str):
 
     cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
     
-    userInfo = cursor.fetchone()[0]
+    userInfo = cursor.fetchone()
     
     return str(type(userInfo)) == "<class 'NoneType'>"
 
