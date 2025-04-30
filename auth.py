@@ -52,16 +52,7 @@ def google_login():
         )
         auth_url, _state = oauth.create_authorization_url(AUTH_ENDPOINT)
 
-        st.sidebar.markdown(
-            f"""
-            <a href="{auth_url}" target="_self">
-                <button style='padding:10px 20px;font-size:16px;background-color:#0b72b9;color:white;border:none;border-radius:5px;cursor:pointer;'>
-                    Login with Google
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True,
-        )
+        st.sidebar.link_button("🔐 Login with Google", url=auth_url)
         return False
 
     # ✅ Already logged in
