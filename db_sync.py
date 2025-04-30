@@ -5,9 +5,9 @@ import streamlit as st
 
 # All of Prof. Eni Code from fresh-missing repo
 # Set the DB location in temp space for Streamlit Cloud
-# DB_PATH = "/tmp/wellesely_crave.db"
+DB_PATH = "/tmp/wellesely_crave.db"
 
-DB_PATH = "C:/Users/bajpa/OneDrive/Desktop/Wellesley College/2024-2025/Spring Semester Classes/CS 248/finalProjectPrivate/wellesley_crave.db"
+# DB_PATH = "C:/Users/bajpa/OneDrive/Desktop/Wellesley College/2024-2025/Spring Semester Classes/CS 248/finalProjectPrivate/wellesley_crave.db"
 
 def get_db_path():
     return DB_PATH
