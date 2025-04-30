@@ -22,41 +22,49 @@ def newUser(user):
         st.warning("Please Log In for Access! 🔒")
         st.stop()
 
-    email = user.get("email") # trying this out instead of accessing var. user from home.py 
-
+    email = user.get("email")
     st.title("Welcome " + email[0:5] + "!")
 
-    # go-to dining hall!
+    # Favorite dining hall selection
     st.write("Select your favorite or go-to dining hall to have on your Home Page and click Submit once you have picked your dining hall!")
     favHall = st.selectbox("Select", ["Tower", "Bates", "Bae", "Stone D"])
     st.write("You Selected " + favHall)
 
+    # Save dining hall when user clicks this
+    if "dining_submitted" not in st.session_state:
+        st.session_state["dining_submitted"] = False
+    if st.button("Submit Dining Hall"):
+        st.session_state["dining_submitted"] = True
 
-    submitDiningHall = st.button("Submit", key = "diningHall")
+    # Allergen Section (always rendered!)
+    st.markdown("---")
+    st.subheader("Allergy Information")
 
-    if submitDiningHall:
-        # allergens
-        if "count" not in st.session_state:
-            st.session_state.count = 0
+    aviAllergens = ["Peanut", "Soy", "Dairy", "Egg", "Wheat", "Sesame", "Shellfish", "Fish", "Tree Nut"]
 
-        aviAllergens = ["Peanut", "Soy", "Dairy", "Egg", "Wheat", "Sesame", "Shellfish", "Fish", "Tree Nut", ]
+    titleCols = st.columns(2)
+    titleCols[0].write("Allergen")
+    titleCols[1].write("Check if Yes")
 
-        st.write("Do you have any allergies? (Click the Submit button if you have or have not selected any of the following allergens)")
-        titleCols = st.columns(2)
-        titleCols[0].write("Allergens")
-        titleCols[1].write("Check for Yes")
+    for allergen in aviAllergens:
+        c1, c2 = st.columns(2)
+        c1.write(allergen)
+        with c2:
+            st.checkbox("", key=f"allergen_{allergen}")
 
-        if "allergens" not in st.session_state:
-            st.session_state["allergens"] = False
+    if "allergen_submitted" not in st.session_state:
+        st.session_state["allergen_submitted"] = False
 
-        for x in aviAllergens:
-            c1, c2 = st.columns(2)
-            c1.write(x)
-            with c2:
-                st.checkbox("", key = f"allergen_{x}")
+    if st.button("Submit Allergens"):
+        st.session_state["allergen_submitted"] = True
 
-                
-        st.write(st.session_state)
+    if st.session_state["allergen_submitted"]:
+        userAllergens = [
+            key.split("allergen_")[-1]
+            for key in st.session_state
+            if key.startswith("allergen_") and st.session_state[key]
+        ]
+        st.success(f"✅ You selected: {', '.join(userAllergens) if userAllergens else 'None'}")
 
         # if submitAllergens:
         #     if any_allergens_selected():
