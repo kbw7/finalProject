@@ -6,6 +6,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from home import render_sidebar
+from db_sync import get_db_path
+import sqlite3
 
 
 # Kaurvaki Code - to make sure it is not accessible unless they log in
