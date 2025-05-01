@@ -105,11 +105,17 @@ with tab2:
         # Transition graph
         hall_counts = week_df['dining_hall'].str.strip().str.lower().str.title().value_counts().reset_index()
         hall_counts.columns = ['hall', 'visits']
-
-        user_paths = week_df.sort_values(by=['user_id', 'created_at']).groupby('user_id')['dining_hall'].apply(
-            lambda x: [h.strip().lower().title() for h in x]
-        )
         transitions = []
+
+        if 'created_at' in week_df.columns:
+            user_paths = week_df.sort_values(by=['user_id', 'created_at']).groupby('user_id')['dining_hall'].apply(
+                lambda x: [h.strip().lower().title() for h in x]
+            )
+        else:
+            user_paths = week_df.sort_values(by=['user_id']).groupby('user_id')['dining_hall'].apply(
+                lambda x: [h.strip().lower().title() for h in x]
+            )
+
         for path in user_paths:
             transitions.extend(zip(path[:-1], path[1:]))
 

@@ -8,7 +8,7 @@ from db_sync import download_db_from_github, push_db_to_github
 import requests
 from collections import defaultdict
 
-st.set_page_config(page_title="Menu + Logging", layout="wide")
+st.set_page_config(page_title="Log Meals", layout="wide")
 render_sidebar()
 download_db_from_github()
 
@@ -22,8 +22,7 @@ user_id = get_or_create_user(user["email"])
 if 'selected_dishes' not in st.session_state:
     st.session_state['selected_dishes'] = []
 
-st.title("Dining Menu & Food Logger")
-tab1, tab2, tab3 = st.tabs(["Menu + Add", "Currently Logging", "Past Logs"])
+tab1, tab2, tab3 = st.tabs(["Select", "Log", "Journal"])
 
 def dropKeys(cell):
     cell.pop("id", None)
@@ -78,7 +77,7 @@ with tab1:
                 })
 
 with tab2:
-    st.header("Foods Selected for Logging")
+    st.header("Selected Foods")
     if st.session_state['selected_dishes']:
         total_cal, total_pro, total_carb, total_fat = 0, 0, 0, 0
         for i, d in enumerate(st.session_state['selected_dishes']):
@@ -93,7 +92,7 @@ with tab2:
             total_carb += d['carbs']
             total_fat += d['fat']
 
-        st.markdown("### Nutrient Totals")
+        st.markdown("### Macronutrient Breakdown")
         stat_cols = st.columns(4)
         stat_cols[0].metric("Calories", f"{total_cal:.1f}")
         stat_cols[1].metric("Protein", f"{total_pro:.1f}g")
