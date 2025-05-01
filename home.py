@@ -56,9 +56,6 @@ def render_sidebar():
             background-size: cover;
             background-position: center;
         }}
-        .streamlit-sidebar:hover {{
-            background-color: blue;
-        }}
         </style>
         """,
         unsafe_allow_html=True,
