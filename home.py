@@ -28,9 +28,10 @@ user = get_user_info(access_token)
 
 
 def render_sidebar():
-
     """A function to handle the login in the sidebar."""
-    st.sidebar.header("Login")
+    blank_square = "https://i.imgur.com/3Th4rvF.png"
+    sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
+
     logo_image_url = "https://i.imgur.com/4vlJszs.png"
     st.markdown(
         f"""
@@ -48,11 +49,7 @@ def render_sidebar():
         unsafe_allow_html=True,
     )
 
-    current_hour = datetime.datetime.now().hour
-
-    sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
-        #sidebar_image_url = "https://i.imgur.com/qpnzD2h.jpeg"
-
+    # Add custom CSS for aligning content at the bottom
     st.markdown(
         f"""
         <style>
@@ -60,8 +57,26 @@ def render_sidebar():
             background-image: url("{sidebar_image_url}");
             background-size: cover;
             background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+        }}
+        .sidebar-content {{
+            text-align: center;
         }}
         </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Sidebar content
+    st.sidebar.markdown(
+        f"""
+        <div class="sidebar-content">
+            <img src="{blank_square}" alt="Logo" width="250">
+
+        </div>
         """,
         unsafe_allow_html=True,
     )
@@ -73,7 +88,6 @@ def render_sidebar():
             for key in ["access_token", "oauth_state"]:
                 st.session_state.pop(key, None)
             st.rerun()
-
     else:
         st.sidebar.warning("Not logged in.")
         st.sidebar.markdown("Please log in with your Google Account using your **Wellesley** Email:")
