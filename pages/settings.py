@@ -78,6 +78,7 @@ st.markdown("Add your favorite dishes to get notified when they're available.")
 conn = sqlite3.connect(DB_PATH)
 c = conn.cursor()
 user_email = st.session_state['user_id']
+c.execute("ALTER TABLE users ADD COLUMN favorites TEXT")
 
 c.execute("SELECT favorites FROM users WHERE email = ?", (user_email,))
 row = c.fetchone()
