@@ -4,7 +4,7 @@ import sqlite3
 import pandas as pd
 from datetime import datetime
 from home import render_sidebar
-from notification import init_favorites_table, add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish
+from notification import add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish
 from user_profile import get_user_info
 
 # To make sure it is not accessible unless they log in
