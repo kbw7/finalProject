@@ -50,6 +50,25 @@ def init_db():
     conn.commit()
     conn.close()
 
+def fetch_food_journal():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM food_journal")
+    entries = cursor.fetchall()
+    conn.close()
+
+    return entries
+
+def fetch_user_info(email: str):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
+    user_info = cursor.fetchone()
+    conn.close()
+
+    return user_info
 
 # def store_missing_data(
 #     missing_dish_ids: List[int],
@@ -90,9 +109,9 @@ def checkNewUser(email:str):
     cursor = conn.cursor()
 
     cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
-    
+
     userInfo = cursor.fetchone()
-    
+
     return str(type(userInfo)) == "<class 'NoneType'>"
 
 
@@ -102,7 +121,7 @@ def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRest
     cursor = conn.cursor()
 
     cursor.execute("INSERT INTO users (email, diningHall, allergens, dietaryRestrictions) VALUES (?, ?, ?, ?)", (email, diningHall, allergens, dietaryRestrictions))
-    
+
     conn.commit()
     conn.close()
 
