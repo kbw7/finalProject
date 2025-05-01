@@ -42,6 +42,7 @@ st.title("Settings ⚙️")
 from db_sync import get_db_path
 DB_PATH = get_db_path()
 conn = sqlite3.connect(DB_PATH)
+c = conn.cursor()
 
 # c.execute('''
 # CREATE TABLE IF NOT EXISTS users (
