@@ -10,6 +10,8 @@ from userWalkthrough import newUser
 from update_database import checkNewUser
 from update_database import init_db
 from update_database import getUserFavDiningHall
+from notification import check_favorites_available
+
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
@@ -205,19 +207,20 @@ def homePage(): # only show once user has walkthrough!
     # format of date data in df: 2025-04-14T00:00:00
     today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
 
-    df = df[df["date"] == today] # only shows today's meals
+    df = df[df["date"] == today]  # only today's meals
+
+    if df.empty:
+        st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
+        return  # Exit early so nothing else runs
 
     # cleaning up df
-    df = df.drop_duplicates(subset= ["id"], keep = "first")
-    df = df.drop(columns = ["date", "image", "id", "categoryName", "stationOrder", "price"])
+    df = df.drop_duplicates(subset=["id"], keep="first")
+    df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
     df["allergens"] = df["allergens"].apply(transform)
-
     df["preferences"] = df["preferences"].apply(transform)
-
     df["nutritionals"] = df["nutritionals"].apply(dropKeys)
 
-    # to convert all values into floats, except for col "servingSizeUOM", which would be a string.
     colNames = df.iloc[0].nutritionals.keys()
     for key in colNames:
         if key == "servingSizeUOM":
@@ -225,42 +228,43 @@ def homePage(): # only show once user has walkthrough!
         else:
             df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
-    df = df.drop("nutritionals", axis = 1)
+    df = df.drop("nutritionals", axis=1)
 
 
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
 
-    dish, calories, category = st.columns(3)
-
-    with dish:
-        st.write("Dish")
-
-    with calories:
-        st.write("Calories")
-
-    with category:
-        st.write("Category")
-
-    # with journal:
-    #     st.write("Add to Journal")
-
-    num = 0
-
-    for index, row in df.iterrows():
+    with st.container(border = True):
         dish, calories, category = st.columns(3)
+
         with dish:
-            st.write(row["name"])
+            st.markdown("**Dish**")
 
         with calories:
-            st.write(row["calories"])
+            st.write("Calories")
 
-        with category:
-            st.write(row["stationName"])
+        # with category:
+        #     st.write("Category")
 
         # with journal:
-        #     st.button("Add", key = num)
-        #     num += 1
+        #     st.write("Add to Journal")
+
+        num = 0
+
+        for index, row in df.iterrows():
+            dish, calories, category = st.columns(3)
+            with dish:
+                st.write(row["name"])
+
+            with calories:
+                st.write(row["calories"])
+
+            # with category:
+            #     st.write(row["stationName"])
+
+            # with journal:
+            #     st.button("Add", key = num)
+            #     num += 1
 
 #----------------- HOME Page -----------------#
 # Show login
@@ -281,3 +285,14 @@ if check: # if new user, then go through walkthrough
     newUser(user)
 
 homePage()
+
+# ------------------------------------Aileen's code-------------------------------------------------- #
+# Display notification for favorite dish
+available_favs = check_favorites_available(st.session_state["user_id"])
+
+if available_favs:
+    st.markdown("### 🔔 Favorite Dishes Available Today!")
+    for fav in available_favs:
+        dish = fav["dish_name"]
+        for loc in fav["locations"]:
+            st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")

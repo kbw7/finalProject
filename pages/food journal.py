@@ -3,10 +3,11 @@ import pandas as pd
 from datetime import datetime
 from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
-from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry
+from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry, fetch_user_info
 from db_sync import download_db_from_github, push_db_to_github
 import requests
 from collections import defaultdict
+import ast
 
 st.set_page_config(page_title="Log Meals", layout="wide")
 render_sidebar()
@@ -18,6 +19,16 @@ if "access_token" not in st.session_state:
 
 user = get_user_info(st.session_state["access_token"])
 user_id = get_or_create_user(user["email"])
+user_record = fetch_user_info(user["email"])
+user_allergens = []
+user_preferences = []
+
+if user_record:
+    try:
+        user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
+        user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
+    except Exception as e:
+        st.warning("Could not parse stored user allergies/preferences.")
 
 if 'selected_dishes' not in st.session_state:
     st.session_state['selected_dishes'] = []
@@ -31,28 +42,37 @@ def dropKeys(cell):
     return cell
 
 with tab1:
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     selected_date = col1.date_input("Select Date", datetime.now().date())
     selected_location = col2.selectbox("Dining Hall", sorted(dfKeys["location"].unique()))
+    selected_meal = col3.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"])
 
-    for meal in ["Breakfast", "Lunch", "Dinner"]:
-        location_id, meal_id = get_params(dfKeys, selected_location, meal)
+    apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu")
 
-        params = {
-            "date": selected_date.strftime("%m-%d-%Y"),
-            "locationID": location_id,
-            "mealID": meal_id
-        }
-        r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
-        items = r.json()
+    location_id, meal_id = get_params(dfKeys, selected_location, selected_meal)
 
-        if not items:
-            continue
+    params = {
+        "date": selected_date.strftime("%m-%d-%Y"),
+        "locationID": location_id,
+        "mealID": meal_id
+    }
+    r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
+    items = r.json()
 
-        st.subheader(f"{meal} at {selected_location}")
-        for item in items:
+    if items:
+        st.subheader(f"{selected_meal} at {selected_location}")
+        for i, item in enumerate(items):
             name = item.get("name", "")
             station = item.get("stationName", "")
+            allergies = [a['name'] for a in item.get("allergens", [])]
+            preferences = [p['name'] for p in item.get("preferences", [])]
+
+            if apply_custom_filter:
+                if any(allergen in user_allergens for allergen in allergies):
+                    continue
+                if user_preferences and not any(pref in preferences for pref in user_preferences):
+                    continue
+
             nutrition = item.get("nutritionals", {})
             nutrition = dropKeys(nutrition) if nutrition else {}
             calories = nutrition.get("calories", 0.0)
@@ -60,22 +80,21 @@ with tab1:
             carbs = nutrition.get("carbohydrates", 0.0)
             fat = nutrition.get("fat", 0.0)
 
-            row = st.columns([4, 1, 2, 0.5])
+            row = st.columns([3, 1.5, 2.5, 0.5])  # tighter layout
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
-            checked = row[3].checkbox("", key=f"add_{meal}_{name}")
+            checked = row[3].checkbox("", key=f"add_{selected_meal}_{name}_{i}")
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
                     "dining_hall": selected_location,
-                    "meal_type": meal,
+                    "meal_type": selected_meal,
                     "calories": float(calories),
                     "protein": float(protein),
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-
 with tab2:
     st.header("Selected Foods")
     if st.session_state['selected_dishes']:
@@ -131,33 +150,40 @@ with tab3:
     entries = get_food_entries(user_id, formatted_view_date)
 
     if entries:
-        grouped = defaultdict(list)
+        grouped_by_meal = defaultdict(list)
         for entry in entries:
-            grouped[entry['meal_type']].append(entry)
+            grouped_by_meal[entry['meal_type']].append(entry)
 
-        for meal_type, meal_entries in grouped.items():
-            total_cal = sum(e['calories'] for e in meal_entries)
-            total_pro = sum(e['protein'] for e in meal_entries)
-            total_carb = sum(e['carbs'] for e in meal_entries)
-            total_fat = sum(e['fat'] for e in meal_entries)
+        for meal_type, meal_entries in grouped_by_meal.items():
+            # Group again by shared notes
+            grouped_by_notes = defaultdict(list)
+            for entry in meal_entries:
+                grouped_by_notes[entry['notes']].append(entry)
 
-            with st.expander(f"🍽️ {meal_type} ({len(meal_entries)} items, {total_cal:.0f} cal)"):
-                st.caption(f"Total: {total_pro:.1f}g protein, {total_carb:.1f}g carbs, {total_fat:.1f}g fat")
-                for entry in meal_entries:
-                    with st.container(border=True):
-                        col1, col2, col3 = st.columns([3, 1, 0.5])
-                        with col1:
-                            st.markdown(f"**{entry['food_item']}**")
-                            st.caption(f"{entry['dining_hall']}")
-                            if entry['notes']:
-                                st.text(f"Notes: {entry['notes']}")
-                        with col2:
-                            st.caption(f"{entry['calories']} cal")
-                            st.caption(f"{entry['protein']}g protein")
-                        with col3:
-                            if st.button("✕", key=f"delete_{entry['entry_id']}"):
-                                delete_food_entry(entry["entry_id"])
-                                push_db_to_github()
-                                st.rerun()
+            for note, note_entries in grouped_by_notes.items():
+                total_cal = sum(e['calories'] for e in note_entries)
+                total_pro = sum(e['protein'] for e in note_entries)
+                total_carb = sum(e['carbs'] for e in note_entries)
+                total_fat = sum(e['fat'] for e in note_entries)
+
+                with st.expander(f"🍽️ {meal_type} — {len(note_entries)} items | {total_cal:.0f} cal"):
+                    st.caption(f"**Total:** {total_pro:.1f}g protein, {total_carb:.1f}g carbs, {total_fat:.1f}g fat")
+                    if note:
+                        st.markdown(f"**Notes:** {note}")
+
+                    for entry in note_entries:
+                        with st.container(border=True):
+                            col1, col2, col3 = st.columns([3, 1, 0.5])
+                            with col1:
+                                st.markdown(f"**{entry['food_item']}**")
+                                st.caption(f"{entry['dining_hall']}")
+                            with col2:
+                                st.caption(f"{entry['calories']} cal")
+                                st.caption(f"{entry['protein']}g protein")
+                            with col3:
+                                if st.button("✕", key=f"delete_{entry['entry_id']}"):
+                                    delete_food_entry(entry["entry_id"])
+                                    push_db_to_github()
+                                    st.rerun()
     else:
         st.info("No food logs for this day yet.")
