@@ -282,8 +282,25 @@ def homePage(): # only show once user has walkthrough!
 
         # with journal:
         #      st.write("Add to Journal")
+        params = {
+        "date": d.strftime("%m-%d-%Y"),
+        "locationID": location_id,
+        "mealID": meal_id
+        }
+        
+        r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
+        items = r.json()
 
-        for i, item in enumerate(df.iterrows()): # Aileen's code from food_journal.py
+        if items:
+            st.subheader(f"{userMeal} at {userDiningHall}")
+            header = st.columns([6])
+            header[0].markdown("**Dish**")
+            header[1].markdown("**Calories**")
+            header[2].markdown("**Protein**")
+            header[3].markdown("**Fat**")
+            header[4].markdown("**Carbohydrates**")
+            header[5].markdown("**Add to Food Journal Log?**")
+        for i, item in enumerate(items): # Aileen's code from food_journal.py
             name = item.get("name", "")
             station = item.get("stationName", "")
             allergies = [a['name'] for a in item.get("allergens", [])]
@@ -305,8 +322,10 @@ def homePage(): # only show once user has walkthrough!
             row = st.columns([3, 1.5, 2.5, 0.5])  # tighter layout
             row[0].write(name)
             row[1].write(f"{calories} cal")
-            row[2].write(station)
-            checked = row[3].checkbox("", key=f"add_{userMeal}_{name}_{i}")
+            row[2].write(f"{protein} g")
+            row[3].write(f"{fat} g")
+            row[4].write(f"{carbs} g")
+            checked = row[5].checkbox("", key=f"add_{userMeal}_{name}_{i}")
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
