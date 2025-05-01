@@ -5,7 +5,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from home import render_sidebar
+from Home import render_sidebar
 from update_database import fetch_food_journal
 from db_sync import get_db_path
 import sqlite3

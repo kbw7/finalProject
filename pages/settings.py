@@ -2,7 +2,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
-from home import render_sidebar
+from Home import render_sidebar
 from notification import add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish
 from user_profile import get_user_info
 from db_sync import get_db_path, push_db_to_github
