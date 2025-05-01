@@ -219,9 +219,6 @@ def homePage(): # only show once user has walkthrough!
     st.subheader(userMeal + " Today at " + userDiningHall)
 
     with st.container(border = True):
-        st.write("Hello")
-        
-    with st.container(border = True):
         dish, calories, category = st.columns(3)
 
         with dish:
@@ -230,8 +227,8 @@ def homePage(): # only show once user has walkthrough!
         with calories:
             st.write("Calories")
 
-        with category:
-            st.write("Category")
+        # with category:
+        #     st.write("Category")
 
         # with journal:
         #     st.write("Add to Journal")
