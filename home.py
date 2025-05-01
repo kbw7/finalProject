@@ -55,6 +55,7 @@ def render_sidebar():
             background-image: url("{sidebar_image_url}");
             background-size: cover;
             background-position: center;
+            font-family: "Roboto"
         }}
         </style>
         """,
