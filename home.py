@@ -283,7 +283,7 @@ def homePage(): # only show once user has walkthrough!
         # with journal:
         #      st.write("Add to Journal")
 
-        for i, item in df.iterrows(): # Aileen's code from food_journal.py
+        for i, item in enumerate(df.iterrows()): # Aileen's code from food_journal.py
             name = item.get("name", "")
             station = item.get("stationName", "")
             allergies = [a['name'] for a in item.get("allergens", [])]
