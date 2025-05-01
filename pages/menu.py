@@ -24,6 +24,12 @@ if 'selected_dishes' not in st.session_state:
 st.title("Dining Menu & Food Logger")
 tab1, tab2 = st.tabs(["Menu + Add", "Currently Logging"])
 
+def dropKeys(cell):
+    cell.pop("id", None)
+    cell.pop("corporateProductId", None)
+    cell.pop("caloriesFromSatFat", None)
+    return cell
+
 with tab1:
     col1, col2 = st.columns(2)
     selected_date = col1.date_input("Select Date", datetime.now().date())
@@ -48,19 +54,26 @@ with tab1:
             name = item.get("name", "")
             station = item.get("stationName", "")
             nutrition = item.get("nutritionals", {})
-            calories = nutrition.get("calories", "N/A")
-            row = st.columns([4, 1, 2, 2])
+            nutrition = dropKeys(nutrition) if nutrition else {}
+            calories = nutrition.get("calories", 0.0)
+            protein = nutrition.get("protein", 0.0)
+            carbs = nutrition.get("carbohydrates", 0.0)
+            fat = nutrition.get("fat", 0.0)
+
+            row = st.columns([4, 1, 2, 1])
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
-            added = row[3].selectbox("Add?", ["No", "Yes"], key=f"add_{meal}_{name}")
-            if added == "Yes" and name not in [x['name'] for x in st.session_state['selected_dishes']]:
+            checked = row[3].checkbox("Add", key=f"add_{meal}_{name}")
+            if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
                     "dining_hall": selected_location,
                     "meal_type": meal,
-                    "calories": float(calories) if calories else 0.0,
-                    "protein": 0.0, "carbs": 0.0, "fat": 0.0
+                    "calories": float(calories),
+                    "protein": float(protein),
+                    "carbs": float(carbs),
+                    "fat": float(fat)
                 })
 
 with tab2:
