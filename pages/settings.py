@@ -40,9 +40,9 @@ st.title("Settings ⚙️")
 #     st.success(f"Default dining hall updated to {favDiningHall}!")
 
 # retrieve current go-to dining hall from sql database and update it if user changes! Kaurvaki's updated code
-DB_PATH = "C:\\Users\\bajpa\\OneDrive\\Desktop\\Wellesley College\\2024-2025\\Spring Semester Classes\\CS 248\\finalProjectPrivate\\wellesley_crave.db"
-conn = sqlite3.connect(DB_PATH) # adding local path to private repo
-c = conn.cursor()
+from db_sync import get_db_path
+DB_PATH = get_db_path()
+conn = sqlite3.connect(DB_PATH)
 
 c.execute('''
 CREATE TABLE IF NOT EXISTS users (
