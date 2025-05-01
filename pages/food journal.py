@@ -66,7 +66,7 @@ with tab1:
         header[0].markdown("**Dish**")
         header[1].markdown("**Calories**")
         header[2].markdown("**Station**")
-        header[3].markdown("**Select**")
+        header[3].markdown("**Log**")
         for i, item in enumerate(items):
             name = item.get("name", "")
             station = item.get("stationName", "")
