@@ -170,20 +170,20 @@ def get_food_entries(user_id, date=None):
 
     if date:
         c.execute('''
-            SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
-                   calories, protein, carbs as carbs, fat, created_at
-            FROM food_journal 
-            WHERE user_id = ? AND date = ? 
-            ORDER BY meal_type, created_at DESC
-        ''', (user_id, date))
+    SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
+           calories, protein, carbs, fat
+    FROM food_journal 
+    WHERE user_id = ? AND date = ? 
+    ORDER BY meal_type
+''', (user_id, date))
     else:
         c.execute('''
-            SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
-                   calories, protein, carbs as carbs, fat, created_at
-            FROM food_journal 
-            WHERE user_id = ? 
-            ORDER BY date DESC, meal_type, created_at DESC
-        ''', (user_id,))
+    SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
+           calories, protein, carbs, fat
+    FROM food_journal 
+    WHERE user_id = ? 
+    ORDER BY date DESC, meal_type
+''', (user_id,))
 
     rows = c.fetchall()
     entries = [dict(row) for row in rows]
