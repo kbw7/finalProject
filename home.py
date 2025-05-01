@@ -180,7 +180,7 @@ def greeting_Menu():
     elif hour >= 17 and hour <= 23:
         greeting = "Good Evening 🌙"
         meal = "Dinner"
-
+    st.write(hour)
     st.title(greeting)
 
     return meal
