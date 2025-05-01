@@ -191,19 +191,20 @@ def homePage(): # only show once user has walkthrough!
     # format of date data in df: 2025-04-14T00:00:00
     today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
 
-    df = df[df["date"] == today] # only shows today's meals
+    df = df[df["date"] == today]  # only today's meals
+
+    if df.empty:
+        st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
+        return  # Exit early so nothing else runs
 
     # cleaning up df
-    df = df.drop_duplicates(subset= ["id"], keep = "first")
-    df = df.drop(columns = ["date", "image", "id", "categoryName", "stationOrder", "price"])
+    df = df.drop_duplicates(subset=["id"], keep="first")
+    df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
     df["allergens"] = df["allergens"].apply(transform)
-
     df["preferences"] = df["preferences"].apply(transform)
-
     df["nutritionals"] = df["nutritionals"].apply(dropKeys)
 
-    # to convert all values into floats, except for col "servingSizeUOM", which would be a string.
     colNames = df.iloc[0].nutritionals.keys()
     for key in colNames:
         if key == "servingSizeUOM":
@@ -211,7 +212,7 @@ def homePage(): # only show once user has walkthrough!
         else:
             df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
-    df = df.drop("nutritionals", axis = 1)
+    df = df.drop("nutritionals", axis=1)
 
 
     # Menu Title and Info.
