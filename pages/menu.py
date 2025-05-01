@@ -47,23 +47,21 @@ with tab1:
     selected_date = col1.date_input("Select Date", datetime.now().date())
     selected_location = col2.selectbox("Dining Hall", sorted(dfKeys["location"].unique()))
 
+    selected_meal = st.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"])
     apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu")
 
-    for meal in ["Breakfast", "Lunch", "Dinner"]:
-        location_id, meal_id = get_params(dfKeys, selected_location, meal)
+    location_id, meal_id = get_params(dfKeys, selected_location, selected_meal)
 
-        params = {
-            "date": selected_date.strftime("%m-%d-%Y"),
-            "locationID": location_id,
-            "mealID": meal_id
-        }
-        r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
-        items = r.json()
+    params = {
+        "date": selected_date.strftime("%m-%d-%Y"),
+        "locationID": location_id,
+        "mealID": meal_id
+    }
+    r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
+    items = r.json()
 
-        if not items:
-            continue
-
-        st.subheader(f"{meal} at {selected_location}")
+    if items:
+        st.subheader(f"{selected_meal} at {selected_location}")
         for item in items:
             name = item.get("name", "")
             station = item.get("stationName", "")
@@ -87,18 +85,17 @@ with tab1:
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
-            checked = row[3].checkbox("", key=f"add_{meal}_{name}")
+            checked = row[3].checkbox("", key=f"add_{selected_meal}_{name}")
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
                     "dining_hall": selected_location,
-                    "meal_type": meal,
+                    "meal_type": selected_meal,
                     "calories": float(calories),
                     "protein": float(protein),
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-
 with tab2:
     st.header("Foods Selected for Logging")
     if st.session_state['selected_dishes']:
