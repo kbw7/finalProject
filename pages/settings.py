@@ -2,10 +2,11 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
-from Home import render_sidebar
+from home import render_sidebar
 from notification import add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish
 from user_profile import get_user_info
 from db_sync import get_db_path, push_db_to_github
+
 
 # ----------------- Login & Access Control ----------------- #
 render_sidebar()
@@ -72,31 +73,29 @@ conn.close()
 st.header("Favorite Dishes")
 st.markdown("Add your favorite dishes to get notified when they're available.")
 
-# Input for adding a new favorite dish
-favorite_dish = st.text_input("Enter a favorite dish", key="favorite_dish")
+# Suggest dishes from past week's menu
+all_menu_items = get_all_menus_for_week()
+dish_options = sorted({item["name"] for item in all_menu_items if item.get("name")})
 
-# Add dish to database when user clicks button
-if favorite_dish and st.button("Add Favorite"):
-    success = add_favorite_dish(st.session_state['user_id'], favorite_dish)
+selected_dish = st.selectbox("Search and select a favorite dish", options=[""] + list(dish_options))
+
+if selected_dish and st.button("Add Favorite"):
+    success = add_favorite_dish(st.session_state['user_id'], selected_dish)
     if success:
-        st.success(f"Added '{favorite_dish}' to your favorites!")
+        st.success(f"Added '{selected_dish}' to your favorites!")
     else:
-        st.info(f"'{favorite_dish}' is already in your favorites.")
+        st.info(f"'{selected_dish}' is already in your favorites.")
 
-# Display section title
+# Show user's favorite dishes
 st.subheader("Your Favorite Dishes")
 
-# Handle dish deletion if requested
 if 'delete_favorite' in st.session_state and st.session_state['delete_favorite']:
     delete_favorite_dish(st.session_state['user_id'], st.session_state['delete_favorite'])
-    # Clear the delete flag and rerun the app
     st.session_state['delete_favorite'] = None
     st.rerun()
 
-# Get current favorite dishes
 favorites = get_user_favorite_dishes(st.session_state['user_id'])
 
-# Display all favorites with delete buttons
 if favorites:
     for i, favorite in enumerate(favorites):
         col1, col2 = st.columns([5, 1])

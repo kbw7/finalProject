@@ -176,3 +176,42 @@ def check_favorites_available(user_id):
         })
     
     return result
+
+@st.cache_data(ttl=3600)
+def get_all_menus_for_week(days=7):
+    """Fetch all menu items from the past `days` days across all dining halls."""
+    idInfo = [
+        {"location": "Bae", "meal": "Breakfast", "locationID": 96, "mealID": 148},
+        {"location": "Bae", "meal": "Lunch", "locationID": 96, "mealID": 149},
+        {"location": "Bae", "meal": "Dinner", "locationID": 96, "mealID": 312},
+        {"location": "Bates", "meal": "Breakfast", "locationID": 95, "mealID": 145},
+        {"location": "Bates", "meal": "Lunch", "locationID": 95, "mealID": 146},
+        {"location": "Bates", "meal": "Dinner", "locationID": 95, "mealID": 311},
+        {"location": "Stone D", "meal": "Breakfast", "locationID": 131, "mealID": 261},
+        {"location": "Stone D", "meal": "Lunch", "locationID": 131, "mealID": 262},
+        {"location": "Stone D", "meal": "Dinner", "locationID": 131, "mealID": 263},
+        {"location": "Tower", "meal": "Breakfast", "locationID": 97, "mealID": 153},
+        {"location": "Tower", "meal": "Lunch", "locationID": 97, "mealID": 154},
+        {"location": "Tower", "meal": "Dinner", "locationID": 97, "mealID": 310}
+    ]
+
+    all_items = []
+
+    for delta in range(days):
+        date_str = (datetime.now() - pd.Timedelta(days=delta)).strftime("%m-%d-%Y")
+        for info in idInfo:
+            try:
+                r = requests.get(
+                    "https://dish.avifoodsystems.com/api/menu-items",
+                    params={"date": date_str, "locationID": info["locationID"], "mealID": info["mealID"]}
+                )
+                menu_items = r.json()
+                for item in menu_items:
+                    item['location'] = info["location"]
+                    item['meal'] = info["meal"]
+                    item['date'] = date_str
+                    all_items.append(item)
+            except:
+                continue
+
+    return all_items
