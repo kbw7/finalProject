@@ -56,7 +56,7 @@ def render_sidebar():
             background-size: cover;
             background-position: center;
         }}
-        st.sidebar:hover {{
+        .streamlit-sidebar:hover {{
             background-color: blue;
         }}
         </style>
