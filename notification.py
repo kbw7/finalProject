@@ -6,8 +6,8 @@ from datetime import datetime
 from collections import defaultdict
 from contextlib import contextmanager
 
-# Database constants
-DB_PATH = 'tmp/wellesley_crave.db'
+from db_sync import get_db_path
+DB_PATH = get_db_path()
 
 @contextmanager
 def get_db_connection():
@@ -19,23 +19,6 @@ def get_db_connection():
     finally:
         conn.close()
 
-def init_favorites_table():
-    """Initialize favorites table in the database if it doesn't exist"""
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS user_favorites (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT,
-        dish_name TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UNIQUE(user_id, dish_name)
-    )
-    ''')
-    
-    conn.commit()
-    conn.close()
 
 def add_favorite_dish(user_id, dish_name):
     """Add a favorite dish for a user"""
@@ -58,7 +41,7 @@ def add_favorite_dish(user_id, dish_name):
 
 def delete_favorite_dish(user_id, dish_name):
     """Delete a favorite dish for a user"""
-    conn = sqlite3.connect('wellesley_crave.db')
+    conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     
     c.execute(
@@ -119,9 +102,6 @@ def get_menu_items(date, location_ids, meal_ids):
 
 def check_favorites_available(user_id):
     """Check if any favorite dishes are available today"""
-    
-    # Initialize the table first to avoid "no such table" error
-    init_favorites_table()
     
     # Get user's favorite dishes using the context manager
     with get_db_connection() as conn:

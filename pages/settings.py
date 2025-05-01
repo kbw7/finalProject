@@ -7,7 +7,6 @@ from home import render_sidebar
 from notification import init_favorites_table, add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish
 from user_profile import get_user_info
 
-init_favorites_table()
 # To make sure it is not accessible unless they log in
 render_sidebar()
 if "access_token" not in st.session_state:
@@ -44,15 +43,15 @@ from db_sync import get_db_path
 DB_PATH = get_db_path()
 conn = sqlite3.connect(DB_PATH)
 
-c.execute('''
-CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT,
-    diningHall TEXT
-)
-''') # USERNAME is nonexistent right now as we are not working on random-generated usernames currently!
+# c.execute('''
+# CREATE TABLE IF NOT EXISTS users (
+#     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#     email TEXT,
+#     diningHall TEXT
+# )
+# ''') # USERNAME is nonexistent right now as we are not working on random-generated usernames currently!
 
-conn.commit()
+# conn.commit()
 
 # Access Logged-In User Email
 access_token = st.session_state.get("access_token")
