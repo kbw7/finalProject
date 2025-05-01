@@ -53,15 +53,15 @@ def delete_favorite_dish(user_id, dish_name):
     conn.close()
     return True
 
-def get_user_favorite_dishes(user_id):
+def get_user_favorite_dishes(user_email):
     """Get all favorite dishes for a user"""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
     
     c.execute(
-        "SELECT dish_name FROM user_favorites WHERE user_id = ?",
-        (user_id,)
+        "SELECT dish_name FROM user_favorites WHERE email = ?",
+        (user_email,)
     )
     
     rows = c.fetchall()

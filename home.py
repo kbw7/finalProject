@@ -32,7 +32,6 @@ if not user:
     st.error("Unable to fetch user information. Please log in again.")
     st.stop()
 
-st.session_state["user_id"] = user["email"]
 
 
 def render_sidebar():
@@ -202,7 +201,7 @@ def homePage(): # only show once user has walkthrough!
 
     # ------------------------------------Aileen's code-------------------------------------------------- #
     # Display notification for favorite dish
-    available_favs = check_favorites_available(st.session_state["user_id"])
+    available_favs = check_favorites_available(user.get("email"))
 
     if available_favs:
         st.markdown("### 🔔 Favorite Dishes Available Today!")
