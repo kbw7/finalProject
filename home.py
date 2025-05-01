@@ -273,7 +273,7 @@ def homePage(): # only show once user has walkthrough!
                 st.write(row["fat"])
 
             with carbs:
-                st.write(row["carbs"])
+                st.write(row["carbohydrates"])
 
             # with journal:
             #     st.button("Add", key = num)
