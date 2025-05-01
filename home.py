@@ -32,18 +32,18 @@ def render_sidebar():
     blank_square = "https://i.imgur.com/3Th4rvF.png"
     sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
 
+
     logo_image_url = "https://i.imgur.com/4vlJszs.png"
     st.markdown(
         f"""
         <style>
-        .sticky-logo {{
-            top: 55px;
-            left: 360px;
+        .logo {{
+            margin-top: 10px;
             z-index: 1000;
         }}
         </style>
-        <div class="sticky-logo">
-            <img src="{logo_image_url}" alt="Logo" width="400">
+        <div class="logo">
+            <img src="{logo_image_url}" alt="Logo" width="600">
         </div>
         """,
         unsafe_allow_html=True,
@@ -248,7 +248,7 @@ def homePage(): # only show once user has walkthrough!
 
         with fat:
             st.write("Fat")
-        
+
         with carbs:
             st.write("Carbs")
 
@@ -267,8 +267,8 @@ def homePage(): # only show once user has walkthrough!
                 st.write(str(row["calories"]))
 
             with protein:
-                st.write(str(row["protein"]) + "g")
-            
+                st.write(row["protein"])
+
             with fat:
                 st.write(str(row["fat"]) + "g")
 
@@ -309,4 +309,3 @@ if check: # if new user, then go through walkthrough
     newUser(user)
 
 homePage()
-

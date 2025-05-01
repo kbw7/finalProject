@@ -17,6 +17,7 @@ if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
 
+
 user = get_user_info(st.session_state["access_token"])
 user_id = get_or_create_user(user["email"])
 user_record = fetch_user_info(user["email"])
