@@ -1,6 +1,7 @@
 # Settings page where user enters preferences, allergens, etc.
 import streamlit as st
 import sqlite3
+import json
 from datetime import datetime
 from home import render_sidebar
 from notification import add_favorite_dish, get_user_favorite_dishes, delete_favorite_dish, get_all_menus_for_week
@@ -73,29 +74,46 @@ conn.close()
 st.header("Favorite Dishes")
 st.markdown("Add your favorite dishes to get notified when they're available.")
 
-# Suggest dishes from past week's menu
+# --- Fetch user's favorites from users table ---
+conn = sqlite3.connect(DB_PATH)
+c = conn.cursor()
+user_email = st.session_state['user_id']
+
+c.execute("SELECT favorites FROM users WHERE email = ?", (user_email,))
+row = c.fetchone()
+if row and row[0]:
+    favorites = json.loads(row[0])
+else:
+    favorites = []
+
+# --- Suggest dishes from past week's menu ---
 all_menu_items = get_all_menus_for_week()
 dish_options = sorted({item["name"] for item in all_menu_items if item.get("name")})
 
 selected_dish = st.selectbox("Search and select a favorite dish", options=[""] + list(dish_options))
 
 if selected_dish and st.button("Add Favorite"):
-    success = add_favorite_dish(st.session_state['user_id'], selected_dish)
-    if success:
+    if selected_dish in favorites:
+        st.info(f"'{selected_dish}' is already in your favorites.")
+    else:
+        favorites.append(selected_dish)
+        c.execute("UPDATE users SET favorites = ? WHERE email = ?", (json.dumps(favorites), user_email))
+        conn.commit()
         push_db_to_github()
         st.success(f"Added '{selected_dish}' to your favorites!")
-    else:
-        st.info(f"'{selected_dish}' is already in your favorites.")
 
-# Show user's favorite dishes
+# --- Show user's favorite dishes ---
 st.subheader("Your Favorite Dishes")
 
 if 'delete_favorite' in st.session_state and st.session_state['delete_favorite']:
-    delete_favorite_dish(st.session_state['user_id'], st.session_state['delete_favorite'])
+    to_remove = st.session_state['delete_favorite']
+    if to_remove in favorites:
+        favorites.remove(to_remove)
+        c.execute("UPDATE users SET favorites = ? WHERE email = ?", (json.dumps(favorites), user_email))
+        conn.commit()
+        push_db_to_github()
     st.session_state['delete_favorite'] = None
     st.rerun()
-
-favorites = get_user_favorite_dishes(st.session_state['user_id'])
 
 if favorites:
     for i, favorite in enumerate(favorites):
@@ -108,3 +126,5 @@ if favorites:
                 st.rerun()
 else:
     st.info("You haven't added any favorite dishes yet.")
+
+conn.close()

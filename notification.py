@@ -20,55 +20,48 @@ def get_db_connection():
         conn.close()
 
 
-def add_favorite_dish(user_id, dish_name):
-    """Add a favorite dish for a user"""
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    
-    try:
-        c.execute(
-            "INSERT INTO user_favorites (user_id, dish_name) VALUES (?, ?)",
-            (user_id, dish_name)
-        )
-        conn.commit()
-        success = True
-    except sqlite3.IntegrityError:
-        # Dish already exists as a favorite
-        success = False
-    
-    conn.close()
-    return success
+def add_favorite_dish(email, dish_name):
+    """Add a favorite dish to the user's favorites column."""
+    favorites = get_user_favorite_dishes(email)
+    if dish_name in favorites:
+        return False  # Already exists
 
-def delete_favorite_dish(user_id, dish_name):
-    """Delete a favorite dish for a user"""
+    favorites.append(dish_name)
+    new_fav_str = ",".join(favorites)
+
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-    
-    c.execute(
-        "DELETE FROM user_favorites WHERE user_id = ? AND dish_name = ?",
-        (user_id, dish_name)
-    )
-    
+    c.execute("UPDATE users SET favorites = ? WHERE email = ?", (new_fav_str, email))
     conn.commit()
     conn.close()
     return True
 
-def get_user_favorite_dishes(user_email):
-    """Get all favorite dishes for a user"""
+def delete_favorite_dish(email, dish_name):
+    favorites = get_user_favorite_dishes(email)
+    if dish_name not in favorites:
+        return False
+
+    favorites.remove(dish_name)
+    new_fav_str = ",".join(favorites)
+
     conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
     c = conn.cursor()
-    
-    c.execute(
-        "SELECT dish_name FROM user_favorites WHERE email = ?",
-        (user_email,)
-    )
-    
-    rows = c.fetchall()
-    favorites = [row['dish_name'] for row in rows]
+    c.execute("UPDATE users SET favorites = ? WHERE email = ?", (new_fav_str, email))
+    conn.commit()
     conn.close()
-    
-    return favorites
+    return True
+
+def get_user_favorite_dishes(email):
+    """Fetch favorite dishes from the users table (new format)."""
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("SELECT favorites FROM users WHERE email = ?", (email,))
+    row = c.fetchone()
+    conn.close()
+
+    if row and row[0]:
+        return row[0].split(",")  # Assumes comma-separated string
+    return []
 
 def get_menu_items(date, location_ids, meal_ids):
     """Get menu items for specified date, locations, and meals"""
