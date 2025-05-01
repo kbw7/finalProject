@@ -26,6 +26,9 @@ download_db_from_github()
 access_token = st.session_state.get("access_token")
 user = get_user_info(access_token)
 
+if "user_id" not in st.session_state:
+    st.session_state["user_id"] = user["email"]
+
 
 def render_sidebar():
     """A function to handle the login in the sidebar."""
