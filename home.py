@@ -20,7 +20,9 @@ DEBUG = False # keep False when testing Google Login
 download_db_from_github()
 
 
+
 def render_sidebar():
+
     """A function to handle the login in the sidebar."""
     st.sidebar.header("Login")
     logo_image_url = "https://i.imgur.com/4vlJszs.png"
@@ -28,10 +30,9 @@ def render_sidebar():
         f"""
         <style>
         .sticky-logo {{
-            position: fixed;
             top: 55px;
-            left: 360px; /* Distance from the left edge of the page */
-            z-index: 1000; /* Ensure it stays above other elements */
+            left: 360px;
+            z-index: 1000;
         }}
         </style>
         <div class="sticky-logo">
@@ -43,10 +44,8 @@ def render_sidebar():
 
     current_hour = datetime.datetime.now().hour
 
-    if current_hour >= 19:  # After 7 PM
-        sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
-    else:
-        sidebar_image_url = "https://i.imgur.com/qpnzD2h.jpeg"
+    sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
+        #sidebar_image_url = "https://i.imgur.com/qpnzD2h.jpeg"
 
     st.markdown(
         f"""
@@ -60,7 +59,6 @@ def render_sidebar():
         """,
         unsafe_allow_html=True,
     )
-
 
     if "access_token" in st.session_state:
         render_user_profile()
