@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 from typing import List
 from zoneinfo import ZoneInfo
+import uuid
 
 # All of Prof. Eni Code from fresh-missing repo
 # def get_et_now():
