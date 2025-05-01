@@ -26,12 +26,6 @@ download_db_from_github()
 access_token = st.session_state.get("access_token")
 user = get_user_info(access_token)
 
-user = get_user_info(access_token)
-
-if not user:
-    st.error("Unable to fetch user information. Please log in again.")
-    st.stop()
-
 
 
 def render_sidebar():
