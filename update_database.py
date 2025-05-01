@@ -21,7 +21,7 @@ def init_db():
 
     # Table for individual users
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT,
             diningHall TEXT,
