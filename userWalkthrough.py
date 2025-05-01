@@ -64,8 +64,6 @@ def newUser(user):
             for key in st.session_state
             if key.startswith("allergen_") and st.session_state[key]
         ]
-
-        userAllergens = str(userAllergens)
         st.success(f"✅ You selected: {', '.join(userAllergens) if userAllergens else 'None'}")
 
    
