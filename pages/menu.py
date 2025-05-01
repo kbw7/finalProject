@@ -43,11 +43,11 @@ def dropKeys(cell):
     return cell
 
 with tab1:
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     selected_date = col1.date_input("Select Date", datetime.now().date())
     selected_location = col2.selectbox("Dining Hall", sorted(dfKeys["location"].unique()))
+    selected_meal = col3.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"])
 
-    selected_meal = st.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"])
     apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu")
 
     location_id, meal_id = get_params(dfKeys, selected_location, selected_meal)
@@ -81,7 +81,7 @@ with tab1:
             carbs = nutrition.get("carbohydrates", 0.0)
             fat = nutrition.get("fat", 0.0)
 
-            row = st.columns([3, 1.5, 2.5, 0.5])  # adjusted spacing
+            row = st.columns([3, 1.5, 2.5, 0.5])  # tighter layout
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
