@@ -235,7 +235,7 @@ def homePage(): # only show once user has walkthrough!
     st.subheader(userMeal + " Today at " + userDiningHall)
 
     with st.container(border = True):
-        dish, calories, protein, fats, carbs, journal = st.columns(6)
+        dish, calories, protein, fat, carbs, journal = st.columns(6)
 
         with dish:
             st.markdown("**Dish**")
@@ -274,7 +274,7 @@ def homePage(): # only show once user has walkthrough!
 
             with carbs:
                 st.write(row["carbs"])
-                
+
             # with journal:
             #     st.button("Add", key = num)
             #     num += 1
