@@ -222,7 +222,7 @@ def homePage(): # only show once user has walkthrough!
         dish, calories, category = st.columns(3)
 
         with dish:
-            st.write("Dish")
+            st.markdown("**Dish**")
 
         with calories:
             st.write("Calories")
@@ -243,8 +243,8 @@ def homePage(): # only show once user has walkthrough!
             with calories:
                 st.write(row["calories"])
 
-            with category:
-                st.write(row["stationName"])
+            # with category:
+            #     st.write(row["stationName"])
 
             # with journal:
             #     st.button("Add", key = num)
