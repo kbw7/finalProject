@@ -57,7 +57,7 @@ def render_sidebar():
             background-position: center;
         }}
         st.sidebar:hover {{
-            backgroun-color: blue;
+            background-color: blue;
         }}
         </style>
         """,
