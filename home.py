@@ -297,9 +297,9 @@ def homePage(): # only show once user has walkthrough!
 
 #----------------- HOME Page -----------------#
 # Show login
-if __name__ == "__main__":
-    init_db()
-    print("Database initialized.")
+
+init_db()
+print("Database initialized.")
 
 render_sidebar()
 
