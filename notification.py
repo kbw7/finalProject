@@ -7,7 +7,7 @@ from collections import defaultdict
 from contextlib import contextmanager
 
 # Database constants
-DB_PATH = 'wellesley_crave.db'
+DB_PATH = 'tmp/wellesley_crave.db'
 
 @contextmanager
 def get_db_connection():

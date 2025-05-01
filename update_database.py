@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 from typing import List
 from zoneinfo import ZoneInfo
+import uuid
 
 # All of Prof. Eni Code from fresh-missing repo
 # def get_et_now():
@@ -12,10 +13,10 @@ from zoneinfo import ZoneInfo
 # DB_NAME = "wellesley_crave.db"
 
 from db_sync import get_db_path
-DB_NAME = get_db_path()
+DB_PATH = get_db_path()
 
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     # Table for individual users
@@ -51,7 +52,7 @@ def init_db():
     conn.close()
 
 def fetch_food_journal():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM food_journal")
@@ -61,7 +62,7 @@ def fetch_food_journal():
     return entries
 
 def fetch_user_info(email: str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
@@ -105,7 +106,7 @@ def fetch_user_info(email: str):
 #     conn.close()
 
 def checkNewUser(email:str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
@@ -117,7 +118,7 @@ def checkNewUser(email:str):
 
 
 def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRestrictions: str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("INSERT INTO users (email, diningHall, allergens, dietaryRestrictions) VALUES (?, ?, ?, ?)", (email, diningHall, allergens, dietaryRestrictions))
@@ -125,6 +126,89 @@ def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRest
     conn.commit()
     conn.close()
 
+def getUserFavDiningHall(user):
+    conn = sqlite3.connect(DB_PATH) # adding local path to private repo
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
+
+    diningHall = cursor.fetchone()[0]
+
+    conn.close()
+
+    return diningHall
+
+# ------ Food Journal Methods -------
+def get_or_create_user(email):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT
+        )
+    ''')
+    c.execute("SELECT user_id FROM users WHERE email = ?", (email,))
+    result = c.fetchone()
+    if result:
+        user_id = result[0]
+    else:
+        c.execute("INSERT INTO users (email) VALUES (?)", (email,))
+        conn.commit()
+        user_id = c.lastrowid
+    conn.close()
+    return user_id
+
+def add_food_entry(user_id, date, meal_type, food_item, dining_hall, notes="", calories=0.0, protein=0.0, carbs=0.0, fat=0.0):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    entry_id = str(uuid.uuid4())
+
+    query = '''
+    INSERT INTO food_journal 
+    (entry_id, user_id, date, meal_type, food_item, dining_hall, notes, calories, protein, carbs, fat) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    '''
+    c.execute(query, (entry_id, user_id, date, meal_type, food_item, dining_hall, notes, calories, protein, carbs, fat))
+
+    conn.commit()
+    conn.close()
+    return entry_id
+
+def get_food_entries(user_id, date=None):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    if date:
+        c.execute('''
+    SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
+           calories, protein, carbs, fat
+    FROM food_journal 
+    WHERE user_id = ? AND date = ? 
+    ORDER BY meal_type
+''', (user_id, date))
+    else:
+        c.execute('''
+    SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
+           calories, protein, carbs, fat
+    FROM food_journal 
+    WHERE user_id = ? 
+    ORDER BY date DESC, meal_type
+''', (user_id,))
+
+    rows = c.fetchall()
+    entries = [dict(row) for row in rows]
+    conn.close()
+    return entries
+
+def delete_food_entry(entry_id):
+    conn = sqlite3.connect(DB_PATH)
+    c = conn.cursor()
+    c.execute("DELETE FROM food_journal WHERE entry_id = ?", (entry_id,))
+    conn.commit()
+    conn.close()
+    return True
 
 
 # Call this once in your main app to initialize the DB (if not already)
