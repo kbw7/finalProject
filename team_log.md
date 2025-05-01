@@ -41,7 +41,7 @@ Everyone contributed equally and were involved in this milestone!
 **`May 1st`**
 **Aileen** - This week I worked on the 
 
-**Kaurvaki** 
+**Kaurvaki** - This week I worked on adding the code from Prof. Eni's missing-fresh repo regarding connecting our database in a private repo to our public repo and reorganizing some of our code to reflect the strucutre in Prof. Eni's repo. The organization made sense because we had all of our queries or sqlite code in one file (update_database.py) where we would reach out to the database and our other files would call methods from update_database.py. I also finalized the user-walkthrough experience, home page, and created the resources/about us page. There were a lot of Git errors that I experienced during this time and that also took a lot of our work time to resolve. 
 
 **Rebecca** 
 
