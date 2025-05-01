@@ -60,11 +60,11 @@ with tab1:
             carbs = nutrition.get("carbohydrates", 0.0)
             fat = nutrition.get("fat", 0.0)
 
-            row = st.columns([4, 1, 2, 1])
+            row = st.columns([4, 1, 2, 0.5])
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
-            checked = row[3].checkbox("Add", key=f"add_{meal}_{name}")
+            checked = row[3].checkbox("", key=f"add_{meal}_{name}")
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
@@ -92,11 +92,12 @@ with tab2:
             total_carb += d['carbs']
             total_fat += d['fat']
 
-        st.write("---")
-        st.metric("Total Calories", f"{total_cal:.1f}")
-        st.metric("Total Protein", f"{total_pro:.1f}g")
-        st.metric("Total Carbs", f"{total_carb:.1f}g")
-        st.metric("Total Fat", f"{total_fat:.1f}g")
+        st.markdown("### Nutrient Totals")
+        stat_cols = st.columns(4)
+        stat_cols[0].metric("Calories", f"{total_cal:.1f}")
+        stat_cols[1].metric("Protein", f"{total_pro:.1f}g")
+        stat_cols[2].metric("Carbs", f"{total_carb:.1f}g")
+        stat_cols[3].metric("Fat", f"{total_fat:.1f}g")
 
         log_date = st.date_input("Log Date", datetime.now().date(), key="log_date")
         meal_type = st.selectbox("Meal Type", ["Breakfast", "Lunch", "Dinner", "Snack"], key="meal_type")
@@ -120,4 +121,3 @@ with tab2:
             st.session_state['selected_dishes'] = []
     else:
         st.info("No items selected yet from the menu.")
-
