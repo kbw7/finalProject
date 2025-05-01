@@ -47,7 +47,8 @@ with tab1:
         for item in items:
             name = item.get("name", "")
             station = item.get("stationName", "")
-            calories = item.get("calories", "N/A")
+            nutrition = item.get("nutritionals", {})
+            calories = nutrition.get("calories", "N/A")
             row = st.columns([4, 1, 2, 2])
             row[0].write(name)
             row[1].write(f"{calories} cal")
