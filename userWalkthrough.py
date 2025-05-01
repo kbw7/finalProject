@@ -50,7 +50,7 @@ def newUser(user):
         c1, c2 = st.columns(2)
         c1.write(allergen)
         with c2:
-            st.checkbox("", key=f"allergen_{allergen}")
+            st.checkbox("", key=f"allerg_{allergen}")
 
     if "allergen_submitted" not in st.session_state:
         st.session_state["allergen_submitted"] = False
@@ -60,9 +60,9 @@ def newUser(user):
 
     if st.session_state["allergen_submitted"]:
         userAllergens = [
-            key.split("allergen_")[-1]
+            key.split("allerg_")[-1]
             for key in st.session_state
-            if key.startswith("allergen_") and st.session_state[key]
+            if key.startswith("allerg_") and st.session_state[key]
         ]
         st.success(f"✅ You selected: {', '.join(userAllergens) if userAllergens else 'None'}")
 
