@@ -163,7 +163,7 @@ def dropKeys(cell):
 def greeting_Menu():
     # Greeting at Top of Page
     device_datetime = datetime.datetime.now()
-
+    st.write(device_datetime)
     hour = int(device_datetime.strftime("%H"))
 
     meal = ""
