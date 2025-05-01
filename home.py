@@ -24,17 +24,10 @@ download_db_from_github()
 
 # Access Logged-In User Email
 access_token = st.session_state.get("access_token")
-
-if not access_token:
-    st.warning("Please Log In for Access! 🔒")
-    st.stop()
-
 user = get_user_info(access_token)
-if not user:
-    st.error("Unable to fetch user information. Please log in again.")
-    st.stop()
 
-st.session_state["user_id"] = user["email"]
+if "user_id" not in st.session_state:
+    st.session_state["user_id"] = user["email"]
 
 
 def render_sidebar():
