@@ -287,13 +287,13 @@ def homePage(): # only show once user has walkthrough!
         "locationID": location_id,
         "mealID": meal_id
         }
-        
+
         r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
         items = r.json()
 
         if items:
             st.subheader(f"{userMeal} at {userDiningHall}")
-            header = st.columns([6])
+            header = st.columns(6)
             header[0].markdown("**Dish**")
             header[1].markdown("**Calories**")
             header[2].markdown("**Protein**")
