@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from Home import render_sidebar, get_params, dfKeys
+from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
 from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry, fetch_user_info
 from db_sync import download_db_from_github, push_db_to_github
