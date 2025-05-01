@@ -8,6 +8,7 @@ from user_profile import get_user_info
 from db_sync import download_db_from_github
 from userWalkthrough import newUser
 from update_database import checkNewUser
+from update_database import init_db
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
@@ -214,6 +215,10 @@ def homePage(): # only show once user has walkthrough!
 
 #----------------- HOME Page -----------------#
 # Show login
+if __name__ == "__main__":
+    init_db()
+    print("Database initialized.")
+
 render_sidebar()
 
 if "access_token" not in st.session_state:
