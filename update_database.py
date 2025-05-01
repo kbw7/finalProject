@@ -15,7 +15,7 @@ from db_sync import get_db_path
 DB_PATH = get_db_path()
 
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     # Table for individual users
