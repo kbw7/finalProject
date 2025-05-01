@@ -264,16 +264,16 @@ def homePage(): # only show once user has walkthrough!
                 st.write(row["name"])
 
             with calories:
-                st.write(row["calories"])
+                st.write(str(row["calories"]))
 
             with protein:
-                st.write(row["protein"])
+                st.write(str(row["protein"]) + "g")
             
             with fat:
-                st.write(row["fat"])
+                st.write(str(row["fat"]) + "g")
 
             with carbs:
-                st.write(row["carbohydrates"])
+                st.write(str(row["carbohydrates"]) + "g")
 
             # with journal:
             #     st.button("Add", key = num)
