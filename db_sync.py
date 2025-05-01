@@ -69,7 +69,7 @@ def push_db_to_github():
 
     r = requests.put(url, headers=put_headers, json=data)
     if r.status_code in (200, 201):
-        st.success("✅ DB pushed back to private repo.")
+        # st.success("✅ DB pushed back to private repo.")
         return True
     else:
         st.error(f"❌ Failed to push DB: {r.status_code}")
