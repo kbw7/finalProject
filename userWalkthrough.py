@@ -106,7 +106,7 @@ def newUser(user):
 
         if next:
             store_new_user_info(email, favHall, str(userAllergens), str(userDietaryRestrictions)) 
-            st.sucess(f"Saved!")
+            st.success(f"Saved!")
 
         push_db_to_github()
                                  
