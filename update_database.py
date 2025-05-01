@@ -30,7 +30,6 @@ def init_db():
             favorites TEXT
         )
     ''')
-    cursor.execute("ALTER TABLE users ADD COLUMN favorites TEXT")
 
     # Table for submission summaries
     cursor.execute('''
