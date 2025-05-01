@@ -279,7 +279,7 @@ def homePage(): # only show once user has walkthrough!
                 st.write(str(row["calories"]))
 
             with protein:
-                st.write(row["protein"])
+                st.write(str(row["protein"]) + "g")
 
             with fat:
                 st.write(str(row["fat"]) + "g")
