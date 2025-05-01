@@ -221,7 +221,7 @@ def homePage(): # only show once user has walkthrough!
     st.subheader(userMeal + " Today at " + userDiningHall)
 
     with st.container(border = True):
-        dish, calories, category = st.columns(3)
+        dish, calories, protein, fats, carbs, journal = st.columns(6)
 
         with dish:
             st.markdown("**Dish**")
@@ -229,25 +229,38 @@ def homePage(): # only show once user has walkthrough!
         with calories:
             st.write("Calories")
 
-        # with category:
-        #     st.write("Category")
+        with protein:
+            st.write("Protein")
 
-        # with journal:
-        #     st.write("Add to Journal")
+        with fat:
+            st.write("Fat")
+        
+        with carbs:
+            st.write("Carbs")
+
+
+        with journal:
+             st.write("Add to Journal")
 
         num = 0
 
         for index, row in df.iterrows():
-            dish, calories, category = st.columns(3)
+            dish, calories, protein, fat, carbs, journal = st.columns(6)
             with dish:
                 st.write(row["name"])
 
             with calories:
                 st.write(row["calories"])
 
-            # with category:
-            #     st.write(row["stationName"])
+            with protein:
+                st.write(row["protein"])
+            
+            with fat:
+                st.write(row["fat"])
 
+            with carbs:
+                st.write(row["carbs"])
+                
             # with journal:
             #     st.button("Add", key = num)
             #     num += 1
