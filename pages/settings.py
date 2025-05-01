@@ -50,7 +50,13 @@ else:
 
 # Let user select a new dining hall preference
 st.write("Update your favorite or go-to dining hall for your Home Page!")
-favHall = st.selectbox("Select Dining Hall", ["Tower", "Bates", "Bae", "Stone D"])
+
+available_halls = ["Tower", "Bates", "Bae", "Stone D"]
+
+# Default to previously selected dining hall, or fallback to first option
+default_index = available_halls.index(diningHall) if diningHall in available_halls else 0
+
+favHall = st.selectbox("Select Dining Hall", available_halls, index=default_index)
 st.write("You Selected:", favHall)
 
 # If user clicks update, push changes to database and GitHub
