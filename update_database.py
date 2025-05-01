@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 # DB_NAME = "wellesley_crave.db"
 
 from db_sync import get_db_path
-DB_NAME = get_db_path()
+DB_PATH = get_db_path()
 
 def init_db():
     conn = sqlite3.connect(DB_NAME)
