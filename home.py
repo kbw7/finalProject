@@ -11,6 +11,8 @@ from update_database import checkNewUser
 from update_database import init_db
 from update_database import getUserFavDiningHall
 from notification import check_favorites_available
+import ast
+from update_database import fetch_user_info
 
 
 # -- Prof. Eni code start -- #
@@ -247,45 +249,91 @@ def homePage(): # only show once user has walkthrough!
     st.subheader(userMeal + " Today at " + userDiningHall)
 
     with st.container(border = True):
-        dish, calories, protein, fat, carbs, journal = st.columns(6)
+        user_record = fetch_user_info(user["email"]) # Aileen's code from food_journal.py
+        user_allergens = [] # Aileen's code from food_journal.py
+        # user_preferences = [] not enough time to look into dietary restrictions/preferences
 
-        with dish:
-            st.markdown("**Dish**")
+        if user_record: # Aileen's code from food_journal.py
+            try: 
+                user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
+                # user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
+            except Exception as e:
+                st.warning("Could not parse stored user allergies/preferences.")
 
-        with calories:
-            st.write("Calories")
+        apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu") # Aileen's code from food_journal.py
 
-        with protein:
-            st.write("Protein")
+        # dish, calories, protein, fat, carbs, journal = st.columns(6)
 
-        with fat:
-            st.write("Fat")
+        # with dish:
+        #     st.markdown("**Dish**")
 
-        with carbs:
-            st.write("Carbs")
+        # with calories:
+        #     st.write("Calories")
+
+        # with protein:
+        #     st.write("Protein")
+
+        # with fat:
+        #     st.write("Fat")
+
+        # with carbs:
+        #     st.write("Carbs")
 
 
-        with journal:
-             st.write("Add to Journal")
+        # with journal:
+        #      st.write("Add to Journal")
 
-        num = 0
+        for i, item in df.iterrows(): # Aileen's code from food_journal.py
+            name = item.get("name", "")
+            station = item.get("stationName", "")
+            allergies = [a['name'] for a in item.get("allergens", [])]
+            # preferences = [p['name'] for p in item.get("preferences", [])]
 
-        for index, row in df.iterrows():
-            dish, calories, protein, fat, carbs, journal = st.columns(6)
-            with dish:
-                st.write(row["name"])
+            if apply_custom_filter:
+                if any(allergen in user_allergens for allergen in allergies):
+                    continue
+                # if user_preferences and not any(pref in preferences for pref in user_preferences):
+                #     continue
 
-            with calories:
-                st.write(str(row["calories"]))
+            nutrition = item.get("nutritionals", {})
+            nutrition = dropKeys(nutrition) if nutrition else {}
+            calories = nutrition.get("calories", 0.0)
+            protein = nutrition.get("protein", 0.0)
+            carbs = nutrition.get("carbohydrates", 0.0)
+            fat = nutrition.get("fat", 0.0)
 
-            with protein:
-                st.write(str(row["protein"]) + "g")
+            row = st.columns([3, 1.5, 2.5, 0.5])  # tighter layout
+            row[0].write(name)
+            row[1].write(f"{calories} cal")
+            row[2].write(station)
+            checked = row[3].checkbox("", key=f"add_{userMeal}_{name}_{i}")
+            if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
+                st.session_state['selected_dishes'].append({
+                    "name": name,
+                    "dining_hall": userDiningHall,
+                    "meal_type": userMeal,
+                    "calories": float(calories),
+                    "protein": float(protein),
+                    "carbs": float(carbs),
+                    "fat": float(fat)
+                })
 
-            with fat:
-                st.write(str(row["fat"]) + "g")
+        # for index, row in df.iterrows():
+        #     dish, calories, protein, fat, carbs, journal = st.columns(6)
+        #     with dish:
+        #         st.write(row["name"])
 
-            with carbs:
-                st.write(str(row["carbohydrates"]) + "g")
+        #     with calories:
+        #         st.write(str(row["calories"]))
+
+        #     with protein:
+        #         st.write(str(row["protein"]) + "g")
+
+        #     with fat:
+        #         st.write(str(row["fat"]) + "g")
+
+        #     with carbs:
+        #         st.write(str(row["carbohydrates"]) + "g")
 
             # with journal:
             #     st.button("Add", key = num)

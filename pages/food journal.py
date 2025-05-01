@@ -22,7 +22,7 @@ user = get_user_info(st.session_state["access_token"])
 user_id = get_or_create_user(user["email"])
 user_record = fetch_user_info(user["email"])
 user_allergens = []
-user_preferences = []
+# user_preferences = [] not enough time to look into dietary restrictions/preferences
 
 if user_record:
     try:
