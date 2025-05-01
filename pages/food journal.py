@@ -62,6 +62,11 @@ with tab1:
 
     if items:
         st.subheader(f"{selected_meal} at {selected_location}")
+        header = st.columns([3, 1.5, 2.5, 0.5])
+        header[0].markdown("**Dish**")
+        header[1].markdown("**Calories**")
+        header[2].markdown("**Station**")
+        header[3].markdown("**Log**")
         for i, item in enumerate(items):
             name = item.get("name", "")
             station = item.get("stationName", "")
