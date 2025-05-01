@@ -74,7 +74,7 @@ def render_sidebar():
     st.sidebar.markdown(
         f"""
         <div class="sidebar-content">
-            <img src="{blank_square}" alt="Logo" width="250">
+            <img src="{blank_square}" alt="Logo" width="350">
 
         </div>
         """,
