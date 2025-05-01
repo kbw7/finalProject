@@ -9,6 +9,7 @@ from db_sync import download_db_from_github
 from userWalkthrough import newUser
 from update_database import checkNewUser
 from update_database import init_db
+from update_database import getUserFavDiningHall
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
@@ -19,6 +20,9 @@ DEBUG = False # keep False when testing Google Login
 # To access db
 download_db_from_github()
 
+# Access Logged-In User Email
+access_token = st.session_state.get("access_token")
+user = get_user_info(access_token)
 
 def render_sidebar():
     """A function to handle the login in the sidebar."""
@@ -165,87 +169,82 @@ def greeting_Menu():
 
     st.title(greeting)
 
+    return meal
+
 
 def homePage(): # only show once user has walkthrough!
     # Add navigation Bar
     # Source - https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
 
-    greeting_Menu()
+    userMeal = greeting_Menu()
 
-    # # preferred menu - retrieve user favHall from db
-    # conn = sqlite3.connect(DB_PATH) # adding local path to private repo
-    # c = conn.cursor()
+    userDiningHall = getUserFavDiningHall(user)
 
-    # c.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
+    # Prof. Eni function get_params()
+    location_id, meal_id = get_params(dfKeys,
+                                        userDiningHall,
+                                        userMeal)
 
-    # diningHall = c.fetchone()[0]
+    d = datetime.date.today()
 
+    df = get_menu(d, location_id, meal_id)
 
-    # # Prof. Eni function get_params()
-    # location_id, meal_id = get_params(dfKeys,
-    #                                     diningHall,
-    #                                     meal)
+    # We only want today's menu... not the whole week
+    # format of date data in df: 2025-04-14T00:00:00
+    today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
 
-    # d = datetime.date.today()
+    df = df[df["date"] == today] # only shows today's meals
 
-    # df = get_menu(d, location_id, meal_id)
-    # # We only want today's menu... not the whole week
-    # # format of date data in df: 2025-04-14T00:00:00
+    # cleaning up df
+    df = df.drop_duplicates(subset= ["id"], keep = "first")
+    df = df.drop(columns = ["date", "image", "id", "categoryName", "stationOrder", "price"])
 
-    # today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
+    df["allergens"] = df["allergens"].apply(transform)
 
-    # df = df[df["date"] == today] # only shows today's meals
+    df["preferences"] = df["preferences"].apply(transform)
 
-    # # cleaning up df
-    # df = df.drop_duplicates(subset= ["id"], keep = "first")
-    # df = df.drop(columns = ["date", "image", "id", "categoryName", "stationOrder", "price"])
+    df["nutritionals"] = df["nutritionals"].apply(dropKeys)
 
-    # df["allergens"] = df["allergens"].apply(transform)
+    # to convert all values into floats, except for col "servingSizeUOM", which would be a string.
+    colNames = df.iloc[0].nutritionals.keys()
+    for key in colNames:
+        if key == "servingSizeUOM":
+            df[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
+        else:
+            df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
-    # df["preferences"] = df["preferences"].apply(transform)
-
-    # df["nutritionals"] = df["nutritionals"].apply(dropKeys)
-
-    # # to convert all values into floats, except for col "servingSizeUOM", which would be a string.
-    # colNames = df.iloc[0].nutritionals.keys()
-    # for key in colNames:
-    #     if key == "servingSizeUOM":
-    #         df[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
-    #     else:
-    #         df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
-
-    # df = df.drop("nutritionals", axis = 1)
+    df = df.drop("nutritionals", axis = 1)
 
 
-    # # Menu Title and Info.
-    # st.subheader(meal + " Today at " + diningHall)
+    # Menu Title and Info.
+    st.subheader(userMeal + " Today at " + userDiningHall)
 
-    # dish, calories, category = st.columns(3)
+    dish, calories, category = st.columns(3)
 
-    # with dish:
-    #     st.write("Dish")
+    with dish:
+        st.write("Dish")
 
-    # with calories:
-    #     st.write("Calories")
+    with calories:
+        st.write("Calories")
 
-    # with category:
-    #     st.write("Category")
+    with category:
+        st.write("Category")
 
-    # # with journal:
-    # #     st.write("Add to Journal")
+    # with journal:
+    #     st.write("Add to Journal")
 
-    # num = 0
+    num = 0
 
-    # for index, row in df.iterrows():
-    #     dish, calories, category = st.columns(3)
-    #     with dish:
-    #         st.write(row["name"])
+    for index, row in df.iterrows():
+        dish, calories, category = st.columns(3)
+        with dish:
+            st.write(row["name"])
 
-    #     with calories:
-    #         st.write(row["calories"])
+        with calories:
+            st.write(row["calories"])
 
-    #     with category:
-    #         st.write(row["stationName"])
+        with category:
+            st.write(row["stationName"])
 
         # with journal:
         #     st.button("Add", key = num)
@@ -262,10 +261,6 @@ render_sidebar()
 if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
-
- # Access Logged-In User Email
-access_token = st.session_state.get("access_token")
-user = get_user_info(access_token)
 
 # After user logs in, have to call new_user() to see if new user needs walkthrough
 check = checkNewUser(user.get("email"))

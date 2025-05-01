@@ -125,6 +125,17 @@ def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRest
     conn.commit()
     conn.close()
 
+def getUserFavDiningHall(user):
+    conn = sqlite3.connect(DB_PATH) # adding local path to private repo
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
+
+    diningHall = cursor.fetchone()[0]
+
+    conn.close()
+
+    return diningHall
 
 # ------ Food Journal Methods -------
 def get_or_create_user(email):
