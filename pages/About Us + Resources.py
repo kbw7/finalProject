@@ -1,0 +1,2 @@
+import streamlit as st
+st.write("WellesleyCrave is an app made my CS248 students: Kaurvaki, Aileen, and Rebecca. Our app's purpose is to make the food logging experience for Wellesley students a positive one! All of the information regarding food is sourced from Wellesley Fresh AVI.")
