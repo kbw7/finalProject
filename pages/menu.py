@@ -3,8 +3,8 @@ import pandas as pd
 from datetime import datetime
 from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
-from update_database import get_or_create_user, add_food_entry
-from db_sync import download_db_from_github
+from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry
+from db_sync import download_db_from_github, push_db_to_github
 import requests
 
 st.set_page_config(page_title="Menu + Logging", layout="wide")
@@ -22,7 +22,7 @@ if 'selected_dishes' not in st.session_state:
     st.session_state['selected_dishes'] = []
 
 st.title("Dining Menu & Food Logger")
-tab1, tab2 = st.tabs(["Menu + Add", "Currently Logging"])
+tab1, tab2, tab3 = st.tabs(["Menu + Add", "Currently Logging", "Past Logs"])
 
 def dropKeys(cell):
     cell.pop("id", None)
@@ -117,7 +117,34 @@ with tab2:
                     d['carbs'],
                     d['fat']
                 )
-            st.success("Meal successfully logged!")
+            push_db_to_github()
+            st.success("Meal successfully logged and synced!")
             st.session_state['selected_dishes'] = []
     else:
         st.info("No items selected yet from the menu.")
+
+with tab3:
+    st.header("Your Past Food Logs")
+    view_date = st.date_input("Select Date to View", datetime.now().date(), key="view_date")
+    formatted_view_date = view_date.strftime("%Y-%m-%d")
+    entries = get_food_entries(user_id, formatted_view_date)
+
+    if entries:
+        for entry in entries:
+            with st.container(border=True):
+                col1, col2, col3 = st.columns([3, 1, 0.5])
+                with col1:
+                    st.markdown(f"**{entry['food_item']}**")
+                    st.caption(f"{entry['meal_type']} from {entry['dining_hall']}")
+                    if entry['notes']:
+                        st.text(f"Notes: {entry['notes']}")
+                with col2:
+                    st.caption(f"{entry['calories']} cal")
+                    st.caption(f"{entry['protein']}g protein")
+                with col3:
+                    if st.button("✕", key=f"delete_{entry['entry_id']}"):
+                        delete_food_entry(entry["entry_id"])
+                        push_db_to_github()
+                        st.rerun()
+    else:
+        st.info("No food logs for this day yet.")
