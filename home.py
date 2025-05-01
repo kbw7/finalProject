@@ -218,36 +218,37 @@ def homePage(): # only show once user has walkthrough!
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
 
-    dish, calories, category = st.columns(3)
-
-    with dish:
-        st.write("Dish")
-
-    with calories:
-        st.write("Calories")
-
-    with category:
-        st.write("Category")
-
-    # with journal:
-    #     st.write("Add to Journal")
-
-    num = 0
-
-    for index, row in df.iterrows():
+    with st.container(border = True):
         dish, calories, category = st.columns(3)
+
         with dish:
-            st.write(row["name"])
+            st.write("Dish")
 
         with calories:
-            st.write(row["calories"])
+            st.write("Calories")
 
         with category:
-            st.write(row["stationName"])
+            st.write("Category")
 
         # with journal:
-        #     st.button("Add", key = num)
-        #     num += 1
+        #     st.write("Add to Journal")
+
+        num = 0
+
+        for index, row in df.iterrows():
+            dish, calories, category = st.columns(3)
+            with dish:
+                st.write(row["name"])
+
+            with calories:
+                st.write(row["calories"])
+
+            with category:
+                st.write(row["stationName"])
+
+            # with journal:
+            #     st.button("Add", key = num)
+            #     num += 1
 
 #----------------- HOME Page -----------------#
 # Show login
