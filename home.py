@@ -10,6 +10,8 @@ from userWalkthrough import newUser
 from update_database import checkNewUser
 from update_database import init_db
 from update_database import getUserFavDiningHall
+from notification import check_favorites_available
+
 
 # -- Prof. Eni code start -- #
 st.set_page_config(page_title="Wellesley Crave", layout="centered")
@@ -269,3 +271,14 @@ if check: # if new user, then go through walkthrough
     newUser(user)
 
 homePage()
+
+# ------------------------------------Aileen's code-------------------------------------------------- #
+# Display notification for favorite dish
+available_favs = check_favorites_available(st.session_state["user_id"])
+
+if available_favs:
+    st.markdown("### 🔔 Favorite Dishes Available Today!")
+    for fav in available_favs:
+        dish = fav["dish_name"]
+        for loc in fav["locations"]:
+            st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
