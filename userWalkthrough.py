@@ -37,8 +37,8 @@ def newUser(user):
         st.session_state["dining_submitted"] = True
 
     # Allergen Section (always rendered!)
-    st.markdown("---")
     st.subheader("Allergy Information")
+    st.write("Are you allergic to any of the following?")
 
     aviAllergens = ["Peanut", "Soy", "Dairy", "Egg", "Wheat", "Sesame", "Shellfish", "Fish", "Tree Nut"]
 
@@ -66,47 +66,48 @@ def newUser(user):
         ]
         st.success(f"✅ You selected: {', '.join(userAllergens) if userAllergens else 'None'}")
 
-        # if submitAllergens:
-        #     if any_allergens_selected():
-        #         userAllergens = [x.split("allergen_")[-1] for key in st.session_state if key.startswith("allergen_")]
-        #     else:
-        #         userAllergens = "None"
+   
 
     
 
-        #     # Dietary Restrictions
-        #     restrictions = ["Vegetarian", "Vegan", "Gluten Sensitive", "Halal", "Kosher", "Lactose-Intolerant"]
+    # Dietary Restrictions
+    restrictions = ["Vegetarian", "Vegan", "Gluten Sensitive", "Halal", "Kosher", "Lactose-Intolerant"]
 
-        #     st.write("Do you have any dietary restrictions/preferences? (Click the Submit button if you have or have not selected any of the following restrictions/preferences)")
+    st.write("Do you have any dietary restrictions/preferences? (Click the Submit button if you have or have not selected any of the following restrictions/preferences)")
 
-        #     titleCols = st.columns(2)
-        #     titleCols[0].write("")
-        #     titleCols[1].write("Check for Yes")
+    titleCols = st.columns(2)
+    titleCols[0].write("")
+    titleCols[1].write("Check for Yes")
 
-        #     for x in restrictions:
-        #         c1, c2 = st.columns(2)
-        #         c1.write(x)
-        #         with c2:
-        #             st.checkbox("", key = f"restrict_{x}")
+    for x in restrictions:
+        c1, c2 = st.columns(2)
+        c1.write(x)
+        with c2:
+            st.checkbox("", key = f"restrict_{x}")
 
-            
-        #     submitRestrictions = st.button("Submit", key = "dietaryRestrictions")
+    if "restriction_submitted" not in st.session_state:
+        st.session_state["restriction_submitted"] = False
 
-        #     if submitRestrictions:
-        #         if any_restrictions_selected():
-        #             userDietaryRestrictions = [x.split("restrict_")[-1] for key in st.session_state if key.startswith("restrict_")]
-        #         else:
-        #             userDietaryRestrictions = "None"
+    if st.button("Submit Dietary Restrictions/Preferences"):
+        st.session_state["restriction_submitted"] = True
 
+    if st.session_state["restriction_submitted"]:
+        userDietaryRestrictions = [
+            key.split("restrict_")[-1]
+            for key in st.session_state
+            if key.startswith("restrict_") and st.session_state[key]
+        ]
+        st.success(f"✅ You selected: {', '.join(userDietaryRestrictions) if userDietaryRestrictions else 'None'}")
         
-        #         st.write("You're all set up! Click Next to Get Started with our App")
-        #         next = st.button("Next", key = "nextPageHome")
+        st.write("You're all set up! Click Next to Get Started with our App")
 
-        #         if next:
-        #             store_new_user_info(email, favHall, userAllergens, userDietaryRestrictions) 
-        #             st.sucess(f"Saved!")
+        next = st.button("Next", key = "nextPageHome")
 
-                    # push_db_to_github()
+        if next:
+            store_new_user_info(email, favHall, userAllergens, userDietaryRestrictions) 
+            st.sucess(f"Saved!")
+
+        push_db_to_github()
                                  
 
 
