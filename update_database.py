@@ -51,7 +51,7 @@ def init_db():
     conn.close()
 
 def fetch_food_journal():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM food_journal")
@@ -61,7 +61,7 @@ def fetch_food_journal():
     return entries
 
 def fetch_user_info(email: str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
@@ -105,7 +105,7 @@ def fetch_user_info(email: str):
 #     conn.close()
 
 def checkNewUser(email:str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("SELECT email FROM users WHERE email = ?", (email,))
@@ -117,7 +117,7 @@ def checkNewUser(email:str):
 
 
 def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRestrictions: str):
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("INSERT INTO users (email, diningHall, allergens, dietaryRestrictions) VALUES (?, ?, ?, ?)", (email, diningHall, allergens, dietaryRestrictions))
