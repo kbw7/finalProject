@@ -3,10 +3,11 @@ import pandas as pd
 from datetime import datetime
 from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
-from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry
+from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry, fetch_user_info
 from db_sync import download_db_from_github, push_db_to_github
 import requests
 from collections import defaultdict
+import ast
 
 st.set_page_config(page_title="Menu + Logging", layout="wide")
 render_sidebar()
@@ -18,6 +19,16 @@ if "access_token" not in st.session_state:
 
 user = get_user_info(st.session_state["access_token"])
 user_id = get_or_create_user(user["email"])
+user_record = fetch_user_info(user["email"])
+user_allergens = []
+user_preferences = []
+
+if user_record:
+    try:
+        user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
+        user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
+    except Exception as e:
+        st.warning("Could not parse stored user allergies/preferences.")
 
 if 'selected_dishes' not in st.session_state:
     st.session_state['selected_dishes'] = []
@@ -35,6 +46,8 @@ with tab1:
     col1, col2 = st.columns(2)
     selected_date = col1.date_input("Select Date", datetime.now().date())
     selected_location = col2.selectbox("Dining Hall", sorted(dfKeys["location"].unique()))
+
+    apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu")
 
     for meal in ["Breakfast", "Lunch", "Dinner"]:
         location_id, meal_id = get_params(dfKeys, selected_location, meal)
@@ -54,6 +67,15 @@ with tab1:
         for item in items:
             name = item.get("name", "")
             station = item.get("stationName", "")
+            allergies = [a['name'] for a in item.get("allergens", [])]
+            preferences = [p['name'] for p in item.get("preferences", [])]
+
+            if apply_custom_filter:
+                if any(allergen in user_allergens for allergen in allergies):
+                    continue
+                if user_preferences and not any(pref in preferences for pref in user_preferences):
+                    continue
+
             nutrition = item.get("nutritionals", {})
             nutrition = dropKeys(nutrition) if nutrition else {}
             calories = nutrition.get("calories", 0.0)
@@ -61,7 +83,7 @@ with tab1:
             carbs = nutrition.get("carbohydrates", 0.0)
             fat = nutrition.get("fat", 0.0)
 
-            row = st.columns([4, 1, 2, 0.5])
+            row = st.columns([3, 1.5, 2.5, 0.5])  # adjusted spacing
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(station)
