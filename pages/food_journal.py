@@ -102,13 +102,15 @@ with tab1:
 
     food_options = []
     food_item_map = {}
+    seen_names = set()
+
     for item in st.session_state['all_menu_items']:
         name = item.get('name', '')
-        if name:
-            label = f"{name} ({item['dining_hall']} - {item['meal_type']})"
+        if name and name not in seen_names:
+            label = name  # simpler label without dining hall/meal
             food_options.append(label)
             food_item_map[label] = item
-    food_options.sort()
+            seen_names.add(name)
 
     col1, col2 = st.columns(2)
     log_date = col1.date_input("Date", datetime.now().date())
