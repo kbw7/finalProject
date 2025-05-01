@@ -279,6 +279,17 @@ def homePage(): # only show once user has walkthrough!
             #     st.button("Add", key = num)
             #     num += 1
 
+    # ------------------------------------Aileen's code-------------------------------------------------- #
+    # Display notification for favorite dish
+    available_favs = check_favorites_available(st.session_state["user_id"])
+
+    if available_favs:
+        st.markdown("### 🔔 Favorite Dishes Available Today!")
+        for fav in available_favs:
+            dish = fav["dish_name"]
+            for loc in fav["locations"]:
+                st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
+
 #----------------- HOME Page -----------------#
 # Show login
 if __name__ == "__main__":
@@ -299,13 +310,3 @@ if check: # if new user, then go through walkthrough
 
 homePage()
 
-# ------------------------------------Aileen's code-------------------------------------------------- #
-# Display notification for favorite dish
-available_favs = check_favorites_available(st.session_state["user_id"])
-
-if available_favs:
-    st.markdown("### 🔔 Favorite Dishes Available Today!")
-    for fav in available_favs:
-        dish = fav["dish_name"]
-        for loc in fav["locations"]:
-            st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
