@@ -27,6 +27,7 @@ def init_db():
             diningHall TEXT,
             allergens TEXT,
             dietaryRestrictions TEXT
+            favorites TEXT
         )
     ''')
 
