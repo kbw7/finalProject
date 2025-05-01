@@ -300,6 +300,10 @@ def homePage(): # only show once user has walkthrough!
             header[3].markdown("**Fat**")
             header[4].markdown("**Carbohydrates**")
             header[5].markdown("**Add to Food Journal Log?**")
+        
+        if 'selected_dishes' not in st.session_state:
+            st.session_state['selected_dishes'] = []
+            
         for i, item in enumerate(items): # Aileen's code from food_journal.py
             name = item.get("name", "")
             station = item.get("stationName", "")
