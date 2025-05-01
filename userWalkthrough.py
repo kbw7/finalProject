@@ -102,13 +102,13 @@ def newUser(user):
 
         st.write("You're all set up! Click Next to Get Started with our App")
 
-    next = st.button("Next", key = "nextPageHome")
+        next = st.button("Next", key = "nextPageHome")
 
-    if next:
-        store_new_user_info(email, favHall, userAllergens, userDietaryRestrictions) 
-        st.sucess(f"Saved!")
+        if next:
+            store_new_user_info(email, favHall, str(userAllergens), str(userDietaryRestrictions)) 
+            st.sucess(f"Saved!")
 
-    push_db_to_github()
+        push_db_to_github()
                                  
 
 
