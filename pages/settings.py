@@ -82,6 +82,7 @@ selected_dish = st.selectbox("Search and select a favorite dish", options=[""] +
 if selected_dish and st.button("Add Favorite"):
     success = add_favorite_dish(st.session_state['user_id'], selected_dish)
     if success:
+        push_db_to_github()
         st.success(f"Added '{selected_dish}' to your favorites!")
     else:
         st.info(f"'{selected_dish}' is already in your favorites.")
