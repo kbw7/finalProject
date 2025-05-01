@@ -264,20 +264,31 @@ def homePage(): # only show once user has walkthrough!
                 st.write(row["name"])
 
             with calories:
-                st.write(row["calories"])
+                st.write(str(row["calories"]))
 
             with protein:
                 st.write(row["protein"])
 
             with fat:
-                st.write(row["fat"])
+                st.write(str(row["fat"]) + "g")
 
             with carbs:
-                st.write(row["carbohydrates"])
+                st.write(str(row["carbohydrates"]) + "g")
 
             # with journal:
             #     st.button("Add", key = num)
             #     num += 1
+
+    # ------------------------------------Aileen's code-------------------------------------------------- #
+    # Display notification for favorite dish
+    available_favs = check_favorites_available(st.session_state["user_id"])
+
+    if available_favs:
+        st.markdown("### 🔔 Favorite Dishes Available Today!")
+        for fav in available_favs:
+            dish = fav["dish_name"]
+            for loc in fav["locations"]:
+                st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
 
 #----------------- HOME Page -----------------#
 # Show login
@@ -298,14 +309,3 @@ if check: # if new user, then go through walkthrough
     newUser(user)
 
 homePage()
-
-# ------------------------------------Aileen's code-------------------------------------------------- #
-# Display notification for favorite dish
-available_favs = check_favorites_available(st.session_state["user_id"])
-
-if available_favs:
-    st.markdown("### 🔔 Favorite Dishes Available Today!")
-    for fav in available_favs:
-        dish = fav["dish_name"]
-        for loc in fav["locations"]:
-            st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
