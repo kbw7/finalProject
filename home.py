@@ -219,6 +219,9 @@ def homePage(): # only show once user has walkthrough!
     st.subheader(userMeal + " Today at " + userDiningHall)
 
     with st.container(border = True):
+        st.write("Hello")
+        
+    with st.container(border = True):
         dish, calories, category = st.columns(3)
 
         with dish:
