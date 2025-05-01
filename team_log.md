@@ -37,3 +37,12 @@ Everyone contributed equally and were involved in this milestone!
 **Rebecca** - This week I worked on the metrics page and on refining the menu page to match the menu on the home page. For the metrics page, I went through streamlit app demos online and took inspiration from their graphs. Because our database is currently empty, I also asked chatgpt to generate a fake data to demo what the visualizations could look like. I also found a resource online that had information about transition graphs using the retentioneering library, which I found cool and tried very hard to make work but it ultimately wouldn't work with my version of python. I really wanted the functionality of transition graphs but could not figure out how to do it using plotly, so I asked chatgpt to guide me through how it worked. Our review of session state during class was especially helpful when implementing buttons to toggle between visualizations.
 
 **Whole Team** - We met virtually on Tuesday night to go over Milestone 4 and check in on our progress with the pages we were tasked with. Over spring weekend, Aileen and Kaurvaki went to a golf tournament and Rebecca performed at a Wushu show so most of our progress was made this week. We also met in person on Wednesday to work on the project together, which took a few hours. We met again in person on Thursday to finalize details before sharing the app with our peers. Aileen and Kaurvaki tried for a while to link the add button from the homepage, but it ended up not working out and the add function was removed from all pages in our app. Kaurvaki and Rebecca also ran into issues merging/pushing/pulling, and had to delete and reclone the repo. In the process, Kaurvaki lost some of the progress she made during Thursday and is currently trying to recover her code.
+
+**`May 1st`**
+**Aileen** - This week I worked on the 
+
+**Kaurvaki** 
+
+**Rebecca** 
+
+**Whole Team** 
