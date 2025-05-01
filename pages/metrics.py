@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from home import render_sidebar
+from update_database import fetch_food_journal
 from db_sync import get_db_path
 import sqlite3
 
@@ -16,10 +17,23 @@ if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
 
-# Load data
-df = pd.read_csv("demo_data.csv", parse_dates=['date', 'created_at'])
+# Fetch data from the database
+food_journal_data = fetch_food_journal()
 
-df['date'] = pd.to_datetime(df['date'])
+columns = [
+    "entry_id", "user_id", "date", "meal_type", "food_item",
+    "dining_hall", "notes", "calories", "protein", "carbs", "fat"
+]
+
+df = pd.DataFrame(food_journal_data, columns=columns)
+df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+# Drop rows where 'date' is NaT)
+df = df.dropna(subset=['date'])
+
+if df.empty:
+    st.warning("No data available. Log your meals to see your metrics!")
+
 df['week'] = df['date'].dt.to_period('W').apply(lambda r: r.start_time)
 df['month'] = df['date'].dt.to_period('M').apply(lambda r: r.start_time)
 df['year'] = df['date'].dt.year

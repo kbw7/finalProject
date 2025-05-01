@@ -12,6 +12,15 @@ import pandas as pd
 import streamlit as st
 from home import render_sidebar
 from user_profile import get_user_info
+from update_database import (
+    init_db,
+    get_or_create_user,
+    add_food_entry,
+    get_food_entries,
+    delete_food_entry
+)
+
+userId = get_or_create_user(user.get("email"))
 
 # Kaurvaki Code - to make sure it is not accessible unless they log in
 render_sidebar()
@@ -26,56 +35,9 @@ DB_PATH = "C:\\Users\\bajpa\\OneDrive\\Desktop\\Wellesley College\\2024-2025\\Sp
 # Access Logged-In User Email
 access_token = st.session_state.get("access_token")
 user = get_user_info(access_token)
-
-# Fetch userId from users table
-conn = sqlite3.connect(DB_PATH) # adding local path to private repo
-c = conn.cursor()
-
-c.execute('''
-CREATE TABLE IF NOT EXISTS users (
-    user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    email TEXT
-)
-''')
-
-c.execute("SELECT user_id FROM users WHERE email = ?", (user.get("email"),))
-userId = c.fetchone()[0]
+userId = get_or_create_user(user.get("email"))
 
 
-def init_db():
-    """Initialize the SQLite database with necessary tables"""
-    conn = sqlite3.connect(DB_PATH) # adding local path to private repo
-    c = conn.cursor()
-
-    c.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-        email TEXT
-    )
-    ''')
-
-    # Check if food_journal table exists
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='food_journal'")
-    if not c.fetchone():
-        query = '''
-        CREATE TABLE food_journal (
-            entry_id TEXT PRIMARY KEY,
-            user_id INTEGER AUTO_INCREMENT FOREIGN KEY REFERENCES users(user_id),
-            date TEXT,
-            meal_type TEXT,
-            food_item TEXT,
-            dining_hall TEXT,
-            notes TEXT,
-            calories FLOAT,
-            protein FLOAT,
-            carbs FLOAT,
-            fat FLOAT,
-        )
-        '''
-        c.execute(query)
-
-    conn.commit()
-    conn.close()
 
 # def add_user():
 #     conn = sqlite3.connect(DB_PATH)
@@ -97,56 +59,6 @@ def init_db():
 #     conn.close()
 #     return user_id
 
-def add_food_entry(user_id, date, meal_type, food_item, dining_hall, notes="", calories=0.0, protein=0.0, carbs=0.0, fat=0.0):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    entry_id = str(uuid.uuid4())
-
-    query = '''
-    INSERT INTO food_journal 
-    (entry_id, user_id, date, meal_type, food_item, dining_hall, notes, calories, protein, carbs, fat) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    '''
-    c.execute(query, (entry_id, user_id, date, meal_type, food_item, dining_hall, notes, calories, protein, carbs, fat))
-
-    conn.commit()
-    conn.close()
-    return entry_id
-
-def get_food_entries(user_id, date=None):
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    if date:
-        c.execute('''
-            SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
-                   calories, protein, carbs as carbs, fat, created_at
-            FROM food_journal 
-            WHERE user_id = ? AND date = ? 
-            ORDER BY meal_type, created_at DESC
-        ''', (user_id, date))
-    else:
-        c.execute('''
-            SELECT entry_id, user_id, date, meal_type, food_item, dining_hall, notes, 
-                   calories, protein, carbs as carbs, fat, created_at
-            FROM food_journal 
-            WHERE user_id = ? 
-            ORDER BY date DESC, meal_type, created_at DESC
-        ''', (user_id,))
-
-    rows = c.fetchall()
-    entries = [dict(row) for row in rows]
-    conn.close()
-    return entries
-
-def delete_food_entry(entry_id):
-    conn = sqlite3.connect(DB_PATH)
-    c = conn.cursor()
-    c.execute("DELETE FROM food_journal WHERE entry_id = ?", (entry_id,))
-    conn.commit()
-    conn.close()
-    return True
 
 idInfo = [
     {"location": "Bae", "meal": "Breakfast", "locationID": "96", "mealID": "148"},
