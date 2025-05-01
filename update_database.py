@@ -21,7 +21,7 @@ def init_db():
 
     # Table for individual users
     cursor.execute('''
-        CREATE TABLE users (
+        CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT,
             diningHall TEXT,
@@ -30,6 +30,7 @@ def init_db():
             favorites TEXT
         )
     ''')
+    cursor.execute("ALTER TABLE users ADD COLUMN favorites TEXT")
 
     # Table for submission summaries
     cursor.execute('''
