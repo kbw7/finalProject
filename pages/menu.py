@@ -118,6 +118,7 @@ with tab2:
                     d['fat']
                 )
             push_db_to_github()
+            download_db_from_github()
             st.success("Meal successfully logged and synced!")
             st.session_state['selected_dishes'] = []
     else:
