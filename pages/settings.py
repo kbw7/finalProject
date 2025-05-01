@@ -128,3 +128,36 @@ else:
     st.info("You haven't added any favorite dishes yet.")
 
 conn.close()
+
+# -------- Allergens & Restrictions Section -------- #
+st.header("Allergy & Dietary Preferences")
+aviAllergens = ["Peanut", "Soy", "Dairy", "Egg", "Wheat", "Sesame", "Shellfish", "Fish", "Tree Nut"]
+restrictions = ["Vegetarian", "Vegan", "Gluten Sensitive", "Halal", "Kosher", "Lactose-Intolerant"]
+
+# Load current selections from DB
+conn = sqlite3.connect(DB_PATH)
+c = conn.cursor()
+c.execute("SELECT allergens, dietaryRestrictions FROM users WHERE email = ?", (user_email,))
+row = c.fetchone()
+curr_allergens = json.loads(row[0]) if row and row[0] else []
+curr_restrictions = json.loads(row[1]) if row and row[1] else []
+
+st.subheader("Select Allergies")
+new_allergens = []
+for allergen in aviAllergens:
+    if st.checkbox(allergen, value=(allergen in curr_allergens), key=f"allergen_{allergen}"):
+        new_allergens.append(allergen)
+
+st.subheader("Select Dietary Restrictions")
+new_restrictions = []
+for restrict in restrictions:
+    if st.checkbox(restrict, value=(restrict in curr_restrictions), key=f"restrict_{restrict}"):
+        new_restrictions.append(restrict)
+
+if st.button("Save Allergy/Restriction Preferences"):
+    c.execute("UPDATE users SET allergens = ?, dietaryRestrictions = ? WHERE email = ?", 
+              (json.dumps(new_allergens), json.dumps(new_restrictions), user_email))
+    conn.commit()
+    push_db_to_github()
+    st.success("Preferences saved successfully!")
+conn.close()
