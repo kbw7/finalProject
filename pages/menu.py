@@ -6,6 +6,7 @@ from user_profile import get_user_info
 from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry
 from db_sync import download_db_from_github, push_db_to_github
 import requests
+from collections import defaultdict
 
 st.set_page_config(page_title="Menu + Logging", layout="wide")
 render_sidebar()
@@ -118,7 +119,7 @@ with tab2:
                     d['fat']
                 )
             push_db_to_github()
-            download_db_from_github()
+            st.session_state['last_logged_date'] = log_date
             st.success("Meal successfully logged and synced!")
             st.session_state['selected_dishes'] = []
     else:
@@ -126,26 +127,38 @@ with tab2:
 
 with tab3:
     st.header("Your Past Food Logs")
-    view_date = st.date_input("Select Date to View", datetime.now().date(), key="view_date")
+    view_date = st.date_input("Select Date to View", st.session_state.get("last_logged_date", datetime.now().date()), key="view_date")
     formatted_view_date = view_date.strftime("%Y-%m-%d")
     entries = get_food_entries(user_id, formatted_view_date)
 
     if entries:
+        grouped = defaultdict(list)
         for entry in entries:
-            with st.container(border=True):
-                col1, col2, col3 = st.columns([3, 1, 0.5])
-                with col1:
-                    st.markdown(f"**{entry['food_item']}**")
-                    st.caption(f"{entry['meal_type']} from {entry['dining_hall']}")
-                    if entry['notes']:
-                        st.text(f"Notes: {entry['notes']}")
-                with col2:
-                    st.caption(f"{entry['calories']} cal")
-                    st.caption(f"{entry['protein']}g protein")
-                with col3:
-                    if st.button("✕", key=f"delete_{entry['entry_id']}"):
-                        delete_food_entry(entry["entry_id"])
-                        push_db_to_github()
-                        st.rerun()
+            grouped[entry['meal_type']].append(entry)
+
+        for meal_type, meal_entries in grouped.items():
+            total_cal = sum(e['calories'] for e in meal_entries)
+            total_pro = sum(e['protein'] for e in meal_entries)
+            total_carb = sum(e['carbs'] for e in meal_entries)
+            total_fat = sum(e['fat'] for e in meal_entries)
+
+            with st.expander(f"🍽️ {meal_type} ({len(meal_entries)} items, {total_cal:.0f} cal)"):
+                st.caption(f"Total: {total_pro:.1f}g protein, {total_carb:.1f}g carbs, {total_fat:.1f}g fat")
+                for entry in meal_entries:
+                    with st.container(border=True):
+                        col1, col2, col3 = st.columns([3, 1, 0.5])
+                        with col1:
+                            st.markdown(f"**{entry['food_item']}**")
+                            st.caption(f"{entry['dining_hall']}")
+                            if entry['notes']:
+                                st.text(f"Notes: {entry['notes']}")
+                        with col2:
+                            st.caption(f"{entry['calories']} cal")
+                            st.caption(f"{entry['protein']}g protein")
+                        with col3:
+                            if st.button("✕", key=f"delete_{entry['entry_id']}"):
+                                delete_food_entry(entry["entry_id"])
+                                push_db_to_github()
+                                st.rerun()
     else:
         st.info("No food logs for this day yet.")
