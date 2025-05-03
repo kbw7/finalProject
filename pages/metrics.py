@@ -11,8 +11,8 @@ from db_sync import get_db_path
 import sqlite3
 
 
-# Kaurvaki Code - to make sure it is not accessible unless they log in
 render_sidebar()
+# Kaurvaki Code - to make sure it is not accessible unless they log in
 if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()

@@ -29,14 +29,13 @@ access_token = st.session_state.get("access_token")
 user = get_user_info(access_token)
 
 
-
 def render_sidebar():
-    """A function to handle the login in the sidebar."""
+    #URLs for the images used in the sidebar
     blank_square = "https://i.imgur.com/3Th4rvF.png"
     sidebar_image_url = "https://i.imgur.com/oyBooq2.jpeg"
-
-
     logo_image_url = "https://i.imgur.com/4vlJszs.png"
+
+    # Adds a centered logo at the top of the page (not sidebar)
     st.markdown(
         f"""
         <style>
@@ -51,8 +50,7 @@ def render_sidebar():
         """,
         unsafe_allow_html=True,
     )
-
-    # Add custom CSS for aligning content at the bottom
+    # Adds background image to sidebar
     st.markdown(
         f"""
         <style>
@@ -73,7 +71,7 @@ def render_sidebar():
         unsafe_allow_html=True,
     )
 
-    # Sidebar content
+    # Adds transparent square to push login section down (it's hard to read against a black background)
     st.sidebar.markdown(
         f"""
         <div class="sidebar-content">
@@ -97,7 +95,6 @@ def render_sidebar():
         logged_in = google_login()
         if logged_in:
             st.rerun()
-
 
 
 # This data can also be in a CSV file and then directly loaded from the file
@@ -254,7 +251,7 @@ def homePage(): # only show once user has walkthrough!
         # user_preferences = [] not enough time to look into dietary restrictions/preferences
 
         if user_record: # Aileen's code from food_journal.py
-            try: 
+            try:
                 user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
                 # user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
             except Exception as e:
@@ -300,10 +297,10 @@ def homePage(): # only show once user has walkthrough!
             header[3].markdown("**Fat**")
             header[4].markdown("**Carbohydrates**")
             header[5].markdown("**Add to Food Journal Log?**")
-        
+
         if 'selected_dishes' not in st.session_state:
             st.session_state['selected_dishes'] = []
-            
+
         for i, item in enumerate(items): # Aileen's code from food_journal.py
             name = item.get("name", "")
             station = item.get("stationName", "")
@@ -362,7 +359,7 @@ def homePage(): # only show once user has walkthrough!
             #     st.button("Add", key = num)
             #     num += 1
 
-    
+
 
 #----------------- HOME Page -----------------#
 # Show login
