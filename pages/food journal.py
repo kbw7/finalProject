@@ -163,6 +163,7 @@ with tab3:
         for meal_type, meal_entries in grouped_by_meal.items():
             # Group again by shared notes
             grouped_by_notes = defaultdict(list)
+            # can you simplify 
             for entry in meal_entries:
                 grouped_by_notes[entry['notes']].append(entry)
 

@@ -13,17 +13,19 @@ if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
 
+# do we have user_id in session_State(check!)
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = st.session_state.get('email', 'default_user')
 
 st.title("Settings ⚙️")
 
 DB_PATH = get_db_path()
-user_email = st.session_state['user_id']
+user_email = st.session_state['user_id'] # check this line!
 access_token = st.session_state["access_token"]
 user = get_user_info(access_token)
 
 # ----------------- Dining Hall Preference ----------------- #
+# call the method get user dinning hall fom update database
 with sqlite3.connect(DB_PATH) as conn:
     c = conn.cursor()
     c.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
@@ -40,6 +42,8 @@ default_index = available_halls.index(diningHall) if diningHall in available_hal
 
 favHall = st.selectbox("Select Dining Hall", available_halls, index=default_index)
 st.write("You Selected:", favHall)
+
+# move all queries to update database
 
 if st.button("Update"):
     with sqlite3.connect(DB_PATH) as conn:

@@ -93,7 +93,7 @@ def get_menu_items(date, location_ids, meal_ids):
     
     return all_menu_items
 
-def check_favorites_available(user_id):
+def check_favorites_available(user_id): # user_id to email, also why created a separate table, should just be able to get it from users table
     """Check if any favorite dishes are available today"""
     
     # Get user's favorite dishes using the context manager

@@ -22,11 +22,11 @@ DEBUG = False # keep False when testing Google Login
 
 
 # To access db
-download_db_from_github()
+download_db_from_github() #initialize the database
 
 # Access Logged-In User Email
 access_token = st.session_state.get("access_token")
-user = get_user_info(access_token)
+user = get_user_info(access_token) 
 
 
 def render_sidebar():
@@ -151,7 +151,6 @@ def transform(cell):
     if cell:
         # result is a string where each allergen in the list in the cell is brought together
         result = ",".join([item["name"] for item in cell])
-
     return result
 
 def dropKeys(cell):
@@ -212,7 +211,7 @@ def homePage(): # only show once user has walkthrough!
 
     d = datetime.date.today()
 
-    df = get_menu(d, location_id, meal_id)
+    df = get_menu(d, location_id, meal_id) # d is date
 
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
@@ -228,7 +227,7 @@ def homePage(): # only show once user has walkthrough!
     df = df.drop_duplicates(subset=["id"], keep="first")
     df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
-    df["allergens"] = df["allergens"].apply(transform)
+    df["allergens"] = df["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
     df["preferences"] = df["preferences"].apply(transform)
     df["nutritionals"] = df["nutritionals"].apply(dropKeys)
 
@@ -252,6 +251,7 @@ def homePage(): # only show once user has walkthrough!
 
         if user_record: # Aileen's code from food_journal.py
             try:
+                # ******ast library and method 
                 user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
                 # user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
             except Exception as e:
@@ -304,6 +304,8 @@ def homePage(): # only show once user has walkthrough!
         for i, item in enumerate(items): # Aileen's code from food_journal.py
             name = item.get("name", "")
             station = item.get("stationName", "")
+
+            # explain a['name']
             allergies = [a['name'] for a in item.get("allergens", [])]
             # preferences = [p['name'] for p in item.get("preferences", [])]
 
