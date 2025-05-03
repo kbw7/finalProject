@@ -387,10 +387,9 @@ if "user_walkthrough" not in st.session_state:
     st.session_state["user_walkthrough"] = False
 
 if check: # if new user, then go through walkthrough
-    newUser(user)
-    st.session_state["user_walkthrough"] = True
+    result = newUser(user)
 else:
-    homePage()
+    homePage() # returning user
 
-if st.session_state["user_walkthrough"]:
+if result:
     homePage()
