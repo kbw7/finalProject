@@ -262,7 +262,10 @@ def update_user_allergy_preferences(email: str, allergens: list, restrictions: l
             "UPDATE users SET allergens = ?, dietaryRestrictions = ? WHERE email = ?",
             (json.dumps(allergens), json.dumps(restrictions), email)
         )
+
+        result = conn.fetchall()
         conn.commit()
+        return result
 
 # Call this once in your main app to initialize the DB (if not already)
 if __name__ == "__main__":
