@@ -186,9 +186,7 @@ def greeting_Menu():
 
 
 def homePage(): # only show once user has walkthrough!
-    # Add navigation Bar
-    # Source - https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
-    download_db_from_github()
+    download_db_from_github() # Kaurvaki - Chose to download again once new user has gone through walkthrough so that the home menu would be the of the dining hall they recently selected.
     
     userMeal = greeting_Menu()
 
@@ -393,4 +391,5 @@ else:
     homePage() # returning user
 
 if result:
+    st.rerun()
     homePage()
