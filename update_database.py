@@ -142,7 +142,7 @@ def getUserFavDiningHall(user):
     try:
         diningHall = cursor.fetchone()[0]
     except TypeError:
-        diningHall = ""
+        diningHall = "Bae" # making this default for now!
 
     conn.close()
 
