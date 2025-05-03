@@ -380,12 +380,11 @@ if "access_token" not in st.session_state:
     st.stop()
 
 # After user logs in, have to call new_user() to see if new user needs walkthrough
-check = checkNewUser(user.get("email"))
-
-if check: # if new user, then go through walkthrough
+if checkNewUser(user.get("email")): # if new user, then go through walkthrough
     result = newUser(user)
+
+    if result:
+        homePage()
+        
 else:
     homePage() # returning user
-
-if result:
-    homePage()
