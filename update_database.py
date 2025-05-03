@@ -142,7 +142,7 @@ def getUserFavDiningHall(user):
     try:
         diningHall = cursor.fetchone()[0]
     except TypeError:
-        print("No dining hall stored in db yet (waiting for user to submit choices)")
+        diningHall = ""
 
     conn.close()
 
