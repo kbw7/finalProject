@@ -8,10 +8,7 @@ import uuid
 # def get_et_now():
 #     """Return current datetime in Eastern Time (America/New_York)."""
 #     return datetime.now(tz=ZoneInfo("America/New_York"))
-
-# Define the database schema
-# DB_NAME = "wellesley_crave.db"
-
+                                                             
 from db_sync import get_db_path
 DB_PATH = get_db_path()
 

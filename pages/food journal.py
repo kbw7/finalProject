@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 from datetime import datetime
 from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
