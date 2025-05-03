@@ -38,6 +38,7 @@ df['week'] = df['date'].dt.to_period('W').apply(lambda r: r.start_time)
 df['month'] = df['date'].dt.to_period('M').apply(lambda r: r.start_time)
 df['year'] = df['date'].dt.year
 
+# gram to calorie convertion
 df['calories_from_protein'] = df['protein'] * 4
 df['calories_from_carbs'] = df['carbs'] * 4
 df['calories_from_fat'] = df['fat'] * 9

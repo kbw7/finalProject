@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime
 from typing import List
 from zoneinfo import ZoneInfo
+import json
 import uuid
 
 # All of Prof. Eni Code from fresh-missing repo
@@ -213,6 +214,54 @@ def delete_food_entry(entry_id):
     conn.close()
     return True
 
+# --------------------------------------Settings Page Methods ---------------------------------------
+def update_user_dining_hall(email: str, dining_hall: str):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute("UPDATE users SET diningHall = ? WHERE email = ?", (dining_hall, email))
+        conn.commit()
+
+def get_user_favorites(email: str):
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT favorites FROM users WHERE email = ?", (email,))
+        row = cursor.fetchone()
+        return json.loads(row[0]) if row and row[0] else []
+
+def add_favorite_dish(email: str, new_dish: str):
+    favorites = get_user_favorites(email)
+    if new_dish not in favorites:
+        favorites.append(new_dish)
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute("UPDATE users SET favorites = ? WHERE email = ?", (json.dumps(favorites), email))
+            conn.commit()
+    return favorites
+
+def remove_favorite_dish(email: str, dish: str):
+    favorites = get_user_favorites(email)
+    if dish in favorites:
+        favorites.remove(dish)
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute("UPDATE users SET favorites = ? WHERE email = ?", (json.dumps(favorites), email))
+            conn.commit()
+    return favorites
+
+def get_user_allergens_and_restrictions(email: str):
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT allergens, dietaryRestrictions FROM users WHERE email = ?", (email,))
+        row = cursor.fetchone()
+        curr_allergens = json.loads(row[0]) if row and row[0] else []
+        curr_restrictions = json.loads(row[1]) if row and row[1] else []
+        return curr_allergens, curr_restrictions
+
+
+def update_user_allergy_preferences(email: str, allergens: list, restrictions: list):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            "UPDATE users SET allergens = ?, dietaryRestrictions = ? WHERE email = ?",
+            (json.dumps(allergens), json.dumps(restrictions), email)
+        )
+        conn.commit()
 
 # Call this once in your main app to initialize the DB (if not already)
 if __name__ == "__main__":
