@@ -10,46 +10,54 @@ from update_database import fetch_food_journal
 from db_sync import get_db_path
 import sqlite3
 
-
 render_sidebar()
+
 # Kaurvaki Code - to make sure it is not accessible unless they log in
 if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
 
-# Fetch data from the database
+# Fetches food journal entries from SQLite db
 food_journal_data = fetch_food_journal()
 
+# Define columns to be used in df
 columns = [
     "entry_id", "user_id", "date", "meal_type", "food_item",
     "dining_hall", "notes", "calories", "protein", "carbs", "fat"
 ]
 
-df = pd.DataFrame(food_journal_data, columns=columns)
-df['date'] = pd.to_datetime(df['date'], errors='coerce')
+df = pd.DataFrame(food_journal_data, columns=columns) # Create df from journal data
+df['date'] = pd.to_datetime(df['date'], errors='coerce') # Convert 'date' column to datetime format
 
-# Drop rows where 'date' is NaT)
+# Drop rows where 'date' is NaT, ex. when food journal is empty)
 df = df.dropna(subset=['date'])
 
 if df.empty:
     st.warning("No data available. Log your meals to see your metrics!")
 
-df['week'] = df['date'].dt.to_period('W').apply(lambda r: r.start_time)
+# Converts the date column into weekly, monthly, yearly periods.
+df['week'] = df['date'].dt.to_period('W').apply(lambda r: r.start_time) #start_time gives the first day of the week
 df['month'] = df['date'].dt.to_period('M').apply(lambda r: r.start_time)
-df['year'] = df['date'].dt.year
+df['year'] = df['date'].dt.year # gives the year from the date
 
-# gram to calorie convertion
+# Estimates how many calories came from each macronutrient. ex. each gram of protein is 4 calories
 df['calories_from_protein'] = df['protein'] * 4
 df['calories_from_carbs'] = df['carbs'] * 4
 df['calories_from_fat'] = df['fat'] * 9
 
+
 def toggleable_macro_plot(df_plot, x_col, title, key):
+    # key is used so each tab (daily, weekly, etc.) has its own independent toggle
+    # starts in bar chart mode (when toggle is false) by default
     if f"{key}_toggle" not in st.session_state:
         st.session_state[f"{key}_toggle"] = False
 
+    # creates button that when clicked, changes the current toggle value
+    # uses the same key to ensure the button is linked to the right view state
     if st.button("Toggle View", key=key):
         st.session_state[f"{key}_toggle"] = not st.session_state[f"{key}_toggle"]
 
+    # If toggle is false, shows stacked bar chart
     if not st.session_state[f"{key}_toggle"]:
         fig = px.bar(
             df_plot,
@@ -59,31 +67,47 @@ def toggleable_macro_plot(df_plot, x_col, title, key):
             labels={"value": "Calories", x_col: x_col.capitalize(), "variable": "Macronutrient"},
             barmode='stack'
         )
-    else:
-        latest = df_plot.iloc[-1]
+    else: # If toggle is true, shows pie chart
+        total_protein = df_plot['protein'].sum()
+        total_carbs = df_plot['carbs'].sum()
+        total_fat = df_plot['fat'].sum()
+        total_cals = df_plot['calories'].sum() if 'calories' in df_plot.columns else 0
+
+        cals_from_macros = (total_protein * 4) + (total_carbs * 4) + (total_fat * 9)
+        cals_other = max(total_cals - cals_from_macros, 0)
+
         pie_data = pd.DataFrame({
-            'Macronutrient': ['Protein', 'Carbs', 'Fat'],
-            'Calories': [latest['protein'] * 4, latest['carbs'] * 4, latest['fat'] * 9]
+            'Macronutrient': ['Protein', 'Carbs', 'Fat', 'Other'],
+            'Calories': [
+                total_protein * 4,
+                total_carbs * 4,
+                total_fat * 9,
+                cals_other
+            ]
         })
+
         fig = px.pie(
             pie_data,
             names='Macronutrient',
             values='Calories',
-            title=f"{title}"
+            title=f"{title} (Total Breakdown)"
         )
 
     st.plotly_chart(fig)
 
-
-# toggle between timframes
+# allow switching between daily, weekly, monthly, and yearly summaries
 tab1, tab2, tab3, tab4 = st.tabs(["Day", "Week", "Month", "Year"])
 
 # DAILY
 with tab1:
+    # Displays a date picker allowing user to select a specific day
     selected_day = st.date_input("Choose a day", df['date'].max(), key="daily_date")
     st.subheader("Caloric Intake")
+    # Filters the  df to only include rows from the selected date
     day_df = df[df['date'] == pd.to_datetime(selected_day)]
+    # If the filtered df is not empty, it means there is data for that day
     if not day_df.empty:
+        # This groups the logs by meal type (breakfast, lunch, dinner) and sums the macros
         daily_macros = day_df.groupby('meal_type')[['protein', 'carbs', 'fat']].sum().reset_index()
         toggleable_macro_plot(daily_macros, 'meal_type', f"Caloric Intake – {selected_day.strftime('%Y-%m-%d')}", key="daily")
     else:
@@ -96,17 +120,23 @@ with tab2:
     st.subheader("Caloric Intake")
     week_df = df[df['week'] == selected_week]
     if not week_df.empty:
+        # Adds a column like "Monday", "Tuesday", etc. Used to group entries by day.
         week_df['day_name'] = week_df['date'].dt.day_name()
+        # Groups the logs by day of the week and sums the macros
         weekly_macros = week_df.groupby('day_name')[['protein', 'carbs', 'fat']].sum().reset_index()
         ordered_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         weekly_macros['day_name'] = pd.Categorical(weekly_macros['day_name'], categories=ordered_days, ordered=True)
         weekly_macros = weekly_macros.sort_values('day_name')
         toggleable_macro_plot(weekly_macros, 'day_name', f"Caloric Intake – Week of {selected_week.strftime('%Y-%m-%d')}", key="weekly")
 
-        # Transition graph
+        # Transition graph generated by ChatGPT given prompts tailored to our needs
+        # Count how many times each dining hall was visited that week
         hall_counts = week_df['dining_hall'].str.strip().str.lower().str.title().value_counts().reset_index()
         hall_counts.columns = ['hall', 'visits']
         transitions = []
+
+        # Groups data by user and sort each user's logs chronologically
+        # Extracts sequences of dining hall visits
 
         if 'created_at' in week_df.columns:
             user_paths = week_df.sort_values(by=['user_id', 'created_at']).groupby('user_id')['dining_hall'].apply(
@@ -116,14 +146,15 @@ with tab2:
             user_paths = week_df.sort_values(by=['user_id']).groupby('user_id')['dining_hall'].apply(
                 lambda x: [h.strip().lower().title() for h in x]
             )
-
+        # Build a list of (from_hall, to_hall) pairs representing transitions
         for path in user_paths:
             transitions.extend(zip(path[:-1], path[1:]))
-
+        # Converts the transition pairs to a df and count their frequency
         trans_df = pd.DataFrame(transitions, columns=['from', 'to'])
         trans_df = trans_df[trans_df['from'] != trans_df['to']]
         trans_count = trans_df.value_counts().reset_index(name='count')
 
+        # generate (x, y) positions for each dining hall arranged in a circular layout
         halls = hall_counts['hall'].tolist()
         angles = [i * 360 / len(halls) for i in range(len(halls))]
         import math
@@ -134,7 +165,8 @@ with tab2:
 
         fig = go.Figure()
 
-        # Add arcs
+        # Draw curved arcs between halls to represent transitions
+        # Arc thickness is based on number of transitions
         for _, row in trans_count.iterrows():
             x0, y0 = pos[row['from']]
             x1, y1 = pos[row['to']]
@@ -150,7 +182,7 @@ with tab2:
                 text=f"{row['from']} → {row['to']}: {row['count']} transitions"
             ))
 
-        # Add nodes
+        # Plot each dining hall as a node with size proportional to visit count
         for _, row in hall_counts.iterrows():
             x, y = pos[row['hall']]
             fig.add_trace(go.Scatter(
@@ -162,9 +194,8 @@ with tab2:
                 hoverinfo='text',
                 hovertext=f"{row['hall']}: {row['visits']} visits"
             ))
-
         fig.update_layout(
-            title="Dining Hall Transition Network (Curved Links)",
+            title="Dining Hall Transition Network",
             showlegend=False,
             xaxis=dict(showgrid=False, zeroline=False, visible=False),
             yaxis=dict(showgrid=False, zeroline=False, visible=False),
@@ -184,13 +215,19 @@ with tab3:
         monthly_macros = monthly_df.groupby('date')[['protein', 'carbs', 'fat']].sum().reset_index()
         toggleable_macro_plot(monthly_macros, 'date', f"Caloric Intake – {selected_month.strftime('%B %Y')}", key="monthly")
 
-        # heatmap of daily logs
+        # Generates a list of all days in the selected month
+        # Counts how many entries exist for each day
         all_days = pd.date_range(start=selected_month, end=selected_month + pd.offsets.MonthEnd(0))
         log_counts = monthly_df['date'].value_counts().to_dict()
+
+        # Creates a new DataFrame representing log activity per day
+        # Each row = one date in the month, and the number of food entries logged
         heatmap_data = pd.DataFrame({
             'date': all_days,
             'log_count': [log_counts.get(day, 0) for day in all_days]
         })
+
+        # Add metadata to each date: day of month, week number, and weekday name
         heatmap_data['day'] = heatmap_data['date'].dt.day
         heatmap_data['week'] = heatmap_data['date'].dt.isocalendar().week
         heatmap_data['weekday'] = heatmap_data['date'].dt.day_name()
@@ -215,6 +252,9 @@ with tab4:
     st.subheader("Caloric Intake")
     yearly_df = df[df['year'] == selected_year]
     if not yearly_df.empty:
+        # strftime stands for “string format time”.
+        # It’s a method used to convert a python/pantas datetime object into a formatted string
+        # ex. .strftime('%B') converts each date into its full month name (like "April", "May")
         yearly_df['month_name'] = yearly_df['date'].dt.strftime('%B')
         yearly_macros = yearly_df.groupby('month_name')[['protein', 'carbs', 'fat']].sum().reset_index()
         month_order = ["January", "February", "March", "April", "May", "June",
