@@ -1,5 +1,4 @@
 import streamlit as st
-import sqlite3
 from update_database import store_new_user_info
 from db_sync import push_db_to_github
 

@@ -139,6 +139,7 @@ def getUserFavDiningHall(user):
 
     cursor.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
 
+    # Source on try/except - https://www.geeksforgeeks.org/python-exception-handling/
     try:
         diningHall = cursor.fetchone()[0]
     except TypeError:

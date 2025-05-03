@@ -307,7 +307,6 @@ def homePage(): # only show once user has walkthrough!
 
         for i, item in enumerate(items): # Aileen's code from food_journal.py
             name = item.get("name", "")
-            station = item.get("stationName", "")
 
             # explain a['name']
             allergies = [a['name'] for a in item.get("allergens", [])]
