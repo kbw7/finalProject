@@ -18,8 +18,8 @@ if "access_token" not in st.session_state:
 
 
 user = get_user_info(st.session_state["access_token"])
-user_id = get_or_create_user(user["email"])
 user_record = fetch_user_info(user["email"])
+user_id = fetch_user_info(user["email"])[0]
 user_allergens = []
 # user_preferences = [] not enough time to look into dietary restrictions/preferences
 
@@ -35,7 +35,7 @@ if 'selected_dishes' not in st.session_state:
 
 tab1, tab2, tab3 = st.tabs(["Select", "Log", "Journal"])
 
-def dropKeys(cell):
+def dropKeys(cell): # from home, drop irrelevant keys
     cell.pop("id", None)
     cell.pop("corporateProductId", None)
     cell.pop("caloriesFromSatFat", None)
@@ -116,6 +116,7 @@ with tab2:
             total_carb += d['carbs']
             total_fat += d['fat']
 
+        # find out what metric do
         st.markdown("### Macronutrient Breakdown")
         stat_cols = st.columns(4)
         stat_cols[0].metric("Calories", f"{total_cal:.1f}")
