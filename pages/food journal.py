@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime
 from home import render_sidebar, get_params, dfKeys
 from user_profile import get_user_info
-from update_database import get_or_create_user, add_food_entry, get_food_entries, delete_food_entry, fetch_user_info
+from update_database import add_food_entry, get_food_entries, delete_food_entry, fetch_user_info
 from db_sync import download_db_from_github, push_db_to_github
 import requests
 from collections import defaultdict
