@@ -101,6 +101,7 @@ st.subheader("Select Dietary Restrictions")
 new_restrictions = [r for r in restrictions if st.checkbox(r, value=(r in curr_restrictions), key=f"restrict_{r}")]
 
 if st.button("Save Allergy/Restriction Preferences"):
+    st.write(new_allergens)
     allergensUpdate = update_user_allergy_preferences(user_email, new_allergens, new_restrictions)
     st.write(allergensUpdate)
     push_db_to_github()
