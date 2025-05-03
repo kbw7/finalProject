@@ -258,7 +258,8 @@ def get_user_allergens_and_restrictions(email: str):
 
 def update_user_allergy_preferences(email: str, allergens: list, restrictions: list):
     with sqlite3.connect(DB_PATH) as conn:
-        conn.execute(
+        cursor = conn.cursor()
+        cursor.execute(
             "UPDATE users SET allergens = ?, dietaryRestrictions = ? WHERE email = ?",
             (json.dumps(allergens), json.dumps(restrictions), email)
         )
