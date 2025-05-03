@@ -264,7 +264,7 @@ def update_user_allergy_preferences(email: str, allergens: list, restrictions: l
             (json.dumps(allergens), json.dumps(restrictions), email)
         )
 
-        result = conn.fetchall()
+        result = cursor.fetchall()
         conn.commit()
         return result
 
