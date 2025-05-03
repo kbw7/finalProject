@@ -188,7 +188,8 @@ def greeting_Menu():
 def homePage(): # only show once user has walkthrough!
     # Add navigation Bar
     # Source - https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
-
+    download_db_from_github()
+    
     userMeal = greeting_Menu()
 
     # ------------------------------------Aileen's code-------------------------------------------------- #
