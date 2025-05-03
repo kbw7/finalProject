@@ -24,17 +24,16 @@ user_allergens = []
 # user_preferences = [] not enough time to look into dietary restrictions/preferences
 
 # Code below from ChatGPT 
-"""
-Learning about the ast (Abstract Syntax Trees) library
 
-ast.literal_eval() is a safe version of eal() that only evaluations
-Python literals such as strings, numbers, lists, dicts, etc.
+# Learning about the ast (Abstract Syntax Trees) library
 
-Example: safe parsing of a string that looks like a list
-ast.literal_eval('[1, 2, 3]')
-# ➝ [1, 2, 3]
+# ast.literal_eval() is a safe version of eal() that only evaluations
+# Python literals such as strings, numbers, lists, dicts, etc.
 
-"""
+# Example: safe parsing of a string that looks like a list
+# ast.literal_eval('[1, 2, 3]')
+# # ➝ [1, 2, 3]
+
 if user_record:
     try:
         user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
