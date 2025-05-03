@@ -164,20 +164,24 @@ with tab3:
     st.header("Your Past Food Logs")
     view_date = st.date_input("Select Date to View", st.session_state.get("last_logged_date", datetime.now().date()), key="view_date")
     formatted_view_date = view_date.strftime("%Y-%m-%d")
+
+    # Get entries for a date
     entries = get_food_entries(user_id, formatted_view_date)
 
     if entries:
+        # Group by meal type
         grouped_by_meal = defaultdict(list)
         for entry in entries:
             grouped_by_meal[entry['meal_type']].append(entry)
 
+        # For each meal, group by notes
+        # We want to group by notes as it is useful if they comment on meals
         for meal_type, meal_entries in grouped_by_meal.items():
-            # Group again by shared notes
             grouped_by_notes = defaultdict(list)
-            # can you simplify 
             for entry in meal_entries:
                 grouped_by_notes[entry['notes']].append(entry)
-
+            
+            # Display each group of foods under its meal and note
             for note, note_entries in grouped_by_notes.items():
                 total_cal = sum(e['calories'] for e in note_entries)
                 total_pro = sum(e['protein'] for e in note_entries)
