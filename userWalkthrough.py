@@ -109,7 +109,7 @@ def newUser(user):
 
                 push_db_to_github()
                                  
-
+                return True
 
 
 
