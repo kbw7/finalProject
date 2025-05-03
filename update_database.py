@@ -138,7 +138,10 @@ def getUserFavDiningHall(user):
 
     cursor.execute("SELECT diningHall FROM users WHERE email = ?", (user.get("email"),))
 
-    diningHall = cursor.fetchone()[0]
+    try:
+        diningHall = cursor.fetchone()[0]
+    except TypeError:
+        print("No dining hall stored in db yet (waiting for user to submit choices)")
 
     conn.close()
 

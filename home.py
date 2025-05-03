@@ -194,6 +194,7 @@ def homePage(): # only show once user has walkthrough!
 
     # ------------------------------------Aileen's code-------------------------------------------------- #
     # Display notification for favorite dish
+
     available_favs = check_favorites_available(user.get("email"))
 
     if available_favs:
@@ -203,6 +204,7 @@ def homePage(): # only show once user has walkthrough!
             for loc in fav["locations"]:
                 st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
 
+    # Kaurvaki's Code
     userDiningHall = getUserFavDiningHall(user)
 
     # Prof. Eni function get_params()
@@ -220,11 +222,12 @@ def homePage(): # only show once user has walkthrough!
 
     df = df[df["date"] == today]  # only today's meals
 
+    # Aileen's Code
     if df.empty:
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
         return  # Exit early so nothing else runs
 
-    # cleaning up df
+    # cleaning up df - Kaurvaki
     df = df.drop_duplicates(subset=["id"], keep="first")
     df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
@@ -279,6 +282,8 @@ def homePage(): # only show once user has walkthrough!
 
         # with journal:
         #      st.write("Add to Journal")
+
+        # Aileen's Code
         params = {
         "date": d.strftime("%m-%d-%Y"),
         "locationID": location_id,
