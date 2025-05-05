@@ -26,7 +26,6 @@ user = get_user_info(access_token)
 
 if user and 'email' in user:
     user_email = user['email']
-    st.write("DEBUG - Using actual email:", user_email)
 else:
     st.error("Could not retrieve user email from profile!")
     st.stop()
