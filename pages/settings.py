@@ -19,14 +19,17 @@ if "access_token" not in st.session_state:
     st.warning("Please Log In for Access! 🔒")
     st.stop()
 
-if 'user_id' not in st.session_state:
-    st.session_state['user_id'] = st.session_state.get('email', 'default_user')
-
 st.title("Settings ⚙️")
 
-user_email = st.session_state['user_id']
 access_token = st.session_state["access_token"]
 user = get_user_info(access_token)
+
+if user and 'email' in user:
+    user_email = user['email']
+    st.write("DEBUG - Using actual email:", user_email)
+else:
+    st.error("Could not retrieve user email from profile!")
+    st.stop()
 
 # ----------------- Dining Hall Preference ----------------- #
 diningHall = getUserFavDiningHall(user)
@@ -101,8 +104,6 @@ st.subheader("Select Dietary Restrictions")
 new_restrictions = [r for r in restrictions if st.checkbox(r, value=(r in curr_restrictions), key=f"restrict_{r}")]
 
 if st.button("Save Allergy/Restriction Preferences"):
-    st.write(new_allergens)
     allergensUpdate = update_user_allergy_preferences(user_email, new_allergens, new_restrictions)
-    st.write(allergensUpdate)
     push_db_to_github()
     st.success("Preferences saved successfully!")

@@ -6,9 +6,6 @@ import json
 import uuid
 
 # All of Prof. Eni Code from fresh-missing repo
-# def get_et_now():
-#     """Return current datetime in Eastern Time (America/New_York)."""
-#     return datetime.now(tz=ZoneInfo("America/New_York"))
                                                              
 from db_sync import get_db_path
 DB_PATH = get_db_path()
@@ -247,27 +244,54 @@ def remove_favorite_dish(email: str, dish: str):
     return favorites
 
 def get_user_allergens_and_restrictions(email: str):
+    import ast
+    
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT allergens, dietaryRestrictions FROM users WHERE email = ?", (email,))
         row = cursor.fetchone()
-        curr_allergens = json.loads(row[0]) if row and row[0] else []
-        curr_restrictions = json.loads(row[1]) if row and row[1] else []
+        
+        curr_allergens = []
+        curr_restrictions = []
+        
+        if row and row[0]:
+            try:
+                curr_allergens = ast.literal_eval(row[0])
+            except (SyntaxError, ValueError):
+                # Fallback to empty list if parsing fails
+                pass
+        
+        if row and row[1]:
+            try:
+                curr_restrictions = ast.literal_eval(row[1])
+            except (SyntaxError, ValueError):
+                # Fallback to empty list if parsing fails
+                pass
+        
         return curr_allergens, curr_restrictions
 
 
 def update_user_allergy_preferences(email: str, allergens: list, restrictions: list):
+    # Ensure inputs are proper lists
+    if not isinstance(allergens, list):
+        allergens = [allergens] if allergens else []
+    if not isinstance(restrictions, list):
+        restrictions = [restrictions] if restrictions else []
+    
+    # Convert to JSON
+    allergens_json = json.dumps(allergens)
+    restrictions_json = json.dumps(restrictions)
+    
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
+        
         cursor.execute(
             "UPDATE users SET allergens = ?, dietaryRestrictions = ? WHERE email = ?",
-            (json.dumps(allergens), json.dumps(restrictions), email)
+            (allergens_json, restrictions_json, email)
         )
-
-        result = cursor.fetchall()
+        
         conn.commit()
-        return result
-
+        return True
 # Call this once in your main app to initialize the DB (if not already)
 if __name__ == "__main__":
     init_db()
