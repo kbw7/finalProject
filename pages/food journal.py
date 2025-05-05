@@ -156,7 +156,18 @@ with tab2:
             push_db_to_github()
             st.session_state['last_logged_date'] = log_date
             st.success("Meal successfully logged and synced!")
+
+            # Reset selected dishes
             st.session_state['selected_dishes'] = []
+            
+            # Clear checkbox states by creating new keys
+            for key in list(st.session_state.keys()):
+                if key.startswith("add_"):
+                    del st.session_state[key]
+            
+            # Force a rerun to update the UI
+            st.rerun()
+            st.write(st.session_state['selected_dishes'])
     else:
         st.info("No items selected yet from the menu.")
 
