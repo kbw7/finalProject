@@ -2,6 +2,7 @@ import streamlit as st
 from auth import google_login
 from user_profile import render_user_profile
 import datetime
+from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 from user_profile import get_user_info
@@ -161,9 +162,10 @@ def dropKeys(cell):
 
 def greeting_Menu():
     # Greeting at Top of Page
-    device_datetime = datetime.datetime.now()
-
-    hour = int(device_datetime.strftime("%H"))
+    # Get current datetime in Eastern Time
+    device_datetime = datetime.datetime.now(tz=ZoneInfo("America/New_York"))
+    
+    hour = device_datetime.hour
 
     meal = ""
 
@@ -310,8 +312,8 @@ def homePage(): # only show once user has walkthrough!
 
             # explain a['name']
             allergies = [a['name'] for a in item.get("allergens", [])]
-            # preferences = [p['name'] for p in item.get("preferences", [])]
 
+            # preferences = [p['name'] for p in item.get("preferences", [])]
             if apply_custom_filter:
                 if any(allergen in user_allergens for allergen in allergies):
                     continue
