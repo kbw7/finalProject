@@ -222,6 +222,7 @@ def homePage(): # only show once user has walkthrough!
                                         userMeal)
 
     d = datetime.date.today()
+    st.write(d)
 
     df = get_menu(d, location_id, meal_id) # d is date
 
@@ -230,7 +231,7 @@ def homePage(): # only show once user has walkthrough!
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
 
     today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
-    st.write(pd.DataFrame(df))
+    
     df = df[df["date"] == today]  # only today's meals
 
     # Aileen's Code
