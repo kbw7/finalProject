@@ -222,15 +222,16 @@ def homePage(): # only show once user has walkthrough!
                                         userMeal)
 
     d = datetime.date.today()
-    st.write(d)
 
     df = get_menu(d, location_id, meal_id) # d is date
 
+    st.expander(df)
+    
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
 
-    today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
+    today = d + "T00:00:00"
     
     df = df[df["date"] == today]  # only today's meals
 
