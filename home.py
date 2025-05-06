@@ -235,6 +235,7 @@ def homePage(): # only show once user has walkthrough!
     
     df = df[df["date"] == today]  # only today's meals
 
+    st.write(df)
     # Aileen's Code
     if df.empty:
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
