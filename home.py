@@ -235,7 +235,6 @@ def homePage(): # only show once user has walkthrough!
     
     df = df[df["date"] == today]  # only today's meals
 
-    st.write(df)
     # Aileen's Code
     if df.empty:
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
@@ -257,7 +256,8 @@ def homePage(): # only show once user has walkthrough!
             df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
     df = df.drop("nutritionals", axis=1)
-
+    
+    st.write(df)
 
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
@@ -278,16 +278,16 @@ def homePage(): # only show once user has walkthrough!
         apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu") # Aileen's code from food_journal.py
 
         # Aileen's Code
-        params = {
-        "date": formattedDate,
-        "locationID": location_id,
-        "mealID": meal_id
-        }
+        # params = {
+        # "date": formattedDate,
+        # "locationID": location_id,
+        # "mealID": meal_id
+        # }
 
-        r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
-        items = r.json()
+        # r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
+        # items = r.json()
 
-        if items:
+        if not df.empty:
             st.subheader(f"{userMeal} at {userDiningHall}")
             header = st.columns(6)
             header[0].markdown("**Dish**")
@@ -300,11 +300,11 @@ def homePage(): # only show once user has walkthrough!
         if 'selected_dishes' not in st.session_state:
             st.session_state['selected_dishes'] = []
 
-        for i, item in enumerate(items): # Aileen's code from food_journal.py
-            name = item.get("name", "")
+        for i, row in df.iterrows(): # Aileen's code from food_journal.py
+            name = row["name"]
 
             # explain a['name']
-            allergies = [a['name'] for a in item.get("allergens", [])]
+            allergies = row["allergens"]
 
             # preferences = [p['name'] for p in item.get("preferences", [])]
             if apply_custom_filter:
@@ -313,12 +313,10 @@ def homePage(): # only show once user has walkthrough!
                 # if user_preferences and not any(pref in preferences for pref in user_preferences):
                 #     continue
 
-            nutrition = item.get("nutritionals", {})
-            nutrition = dropKeys(nutrition) if nutrition else {}
-            calories = nutrition.get("calories", 0.0)
-            protein = nutrition.get("protein", 0.0)
-            carbs = nutrition.get("carbohydrates", 0.0)
-            fat = nutrition.get("fat", 0.0)
+            calories = row["calories"]
+            protein = row["protein"]
+            carbs = row["carbohydrates"]
+            fat = row["fat"]
 
             row = st.columns(6)  # tighter layout
             row[0].write(name)
