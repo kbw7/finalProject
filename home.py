@@ -327,7 +327,7 @@ def homePage(): # only show once user has walkthrough!
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
-                    "dining_hall": diningHall,
+                    "dining_hall": userDiningHall, # Changed to be userDiningHall because when logging meals in foodJournal.py I want users to see it as "Lulu" not "Bae." More info commented in foodJournal.py in about line 114
                     "meal_type": userMeal,
                     "calories": float(calories),
                     "protein": float(protein),
