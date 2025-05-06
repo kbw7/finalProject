@@ -231,7 +231,7 @@ def homePage(): # only show once user has walkthrough!
     # format of date data in df: 2025-04-14T00:00:00
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
 
-    today = d + "T00:00:00"
+    today = str(d) + "T00:00:00"
     
     df = df[df["date"] == today]  # only today's meals
 
