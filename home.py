@@ -345,7 +345,7 @@ def homePage(): # only show once user has walkthrough!
                         index = index + 1
 
                 # Source on removing from list - https://www.w3schools.com/python/python_lists_remove.asp
-                st.session_state["selectedDishes"].pop(index)
+                st.session_state["selected_dishes"].pop(index)
 
 
 #----------------- HOME Page -----------------#
