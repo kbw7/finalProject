@@ -111,27 +111,13 @@ with tab1:
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
-                    "dining_hall": selected_location, # This will stay "selected_location" instead of "location" variable because Aileen later pulls from this to show entries in "Journal" tab so if user ate at "Lulu" we don't want them to see "Bae"
+                    "dining_hall": selected_location, # This will stay selected_location instead of "location" because Aileen later pulls from this to show entries in "Journal" tab so if user ate at "Lulu" we don't want them to see "Bae"
                     "meal_type": selected_meal,
                     "calories": float(calories),
                     "protein": float(protein),
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-            elif (not checked) and (name in [x['name'] for x in st.session_state['selected_dishes']]): # Added this in case the user unchecked a meal because then we don't want to save that entry in session_state. Found that if user selected a meal and then unchecked it, the meal would still be under "Log"
-                index = 0 # Since I don't know the index of the unchecked dish dictionary... I need to find the index so I am using a counter - Kaurvaki
-                for dish in st.session_state["selected_dishes"]:
-                    if dish["name"] == name: # if it is the unchecked dish, then exit loop and remove that dish using that index.
-                        break
-                    else:
-                        index = index + 1
-
-                # Source on removing from list - https://www.w3schools.com/python/python_lists_remove.asp
-                st.session_state["selectedDishes"].pop(index)
-
-
-
-
 with tab2:
     st.header("Selected Foods")
     if st.session_state['selected_dishes']:

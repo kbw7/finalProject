@@ -223,39 +223,38 @@ def homePage(): # only show once user has walkthrough!
 
     d = datetime.date.today()
 
-    formattedDate = d.strftime("%m-%d-%Y")
-
-    df = get_menu(formattedDate, location_id, meal_id) # d is date
+    df = get_menu(d, location_id, meal_id) # d is date
 
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
 
-    today = str(d) + "T00:00:00"
+    today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
     
-    dayDf = df[df["date"] == today]  # only today's meals
+    df = df[df["date"] == today]  # only today's meals
 
     # Aileen's Code
-    if dayDf.empty:
+    if df.empty:
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
         return  # Exit early so nothing else runs
 
     # cleaning up df - Kaurvaki - lot of code from own Assignment 5 of CS248
-    dayDf = dayDf.drop_duplicates(subset=["id"], keep="first")
-    dayDf = dayDf.drop(columns=["image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
+    df = df.drop_duplicates(subset=["id"], keep="first")
+    df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
-    dayDf["allergens"] = dayDf["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
-    dayDf["preferences"] = dayDf["preferences"].apply(transform)
-    dayDf["nutritionals"] = dayDf["nutritionals"].apply(dropKeys)
+    df["allergens"] = df["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
+    df["preferences"] = df["preferences"].apply(transform)
+    df["nutritionals"] = df["nutritionals"].apply(dropKeys)
 
-    colNames = dayDf.iloc[0].nutritionals.keys()
+    colNames = df.iloc[0].nutritionals.keys()
     for key in colNames:
         if key == "servingSizeUOM":
-            dayDf[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
+            df[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
         else:
-            dayDf[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
+            df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
-    dayDf = dayDf.drop("nutritionals", axis=1)
+    df = df.drop("nutritionals", axis=1)
+
 
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
@@ -276,16 +275,16 @@ def homePage(): # only show once user has walkthrough!
         apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu") # Aileen's code from food_journal.py
 
         # Aileen's Code
-        # params = {
-        # "date": formattedDate,
-        # "locationID": location_id,
-        # "mealID": meal_id
-        # }
+        params = {
+        "date": d.strftime("%m-%d-%Y"),
+        "locationID": location_id,
+        "mealID": meal_id
+        }
 
-        # r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
-        # items = r.json()
+        r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
+        items = r.json()
 
-        if not dayDf.empty:
+        if items:
             st.subheader(f"{userMeal} at {userDiningHall}")
             header = st.columns(6)
             header[0].markdown("**Dish**")
@@ -298,11 +297,11 @@ def homePage(): # only show once user has walkthrough!
         if 'selected_dishes' not in st.session_state:
             st.session_state['selected_dishes'] = []
 
-        for i, row in dayDf.iterrows(): # Aileen's code from food_journal.py
-            name = row["name"]
+        for i, item in enumerate(items): # Aileen's code from food_journal.py
+            name = item.get("name", "")
 
             # explain a['name']
-            allergies = row["allergens"]
+            allergies = [a['name'] for a in item.get("allergens", [])]
 
             # preferences = [p['name'] for p in item.get("preferences", [])]
             if apply_custom_filter:
@@ -311,10 +310,12 @@ def homePage(): # only show once user has walkthrough!
                 # if user_preferences and not any(pref in preferences for pref in user_preferences):
                 #     continue
 
-            calories = row["calories"]
-            protein = row["protein"]
-            carbs = row["carbohydrates"]
-            fat = row["fat"]
+            nutrition = item.get("nutritionals", {})
+            nutrition = dropKeys(nutrition) if nutrition else {}
+            calories = nutrition.get("calories", 0.0)
+            protein = nutrition.get("protein", 0.0)
+            carbs = nutrition.get("carbohydrates", 0.0)
+            fat = nutrition.get("fat", 0.0)
 
             row = st.columns(6)  # tighter layout
             row[0].write(name)
@@ -333,17 +334,6 @@ def homePage(): # only show once user has walkthrough!
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-            elif (not checked) and (name in [x['name'] for x in st.session_state['selected_dishes']]): # Added this in case the user unchecked a meal because then we don't want to save that entry in session_state. Found that if user selected a meal and then unchecked it, the meal would still be under "Log"
-                index = 0 # Since I don't know the index of the unchecked dish dictionary... I need to find the index so I am using a counter - Kaurvaki
-                for dish in st.session_state["selected_dishes"]:
-                    if dish["name"] == name: # if it is the unchecked dish, then exit loop and remove that dish using that index.
-                        break
-                    else:
-                        index = index + 1
-
-                # Source on removing from list - https://www.w3schools.com/python/python_lists_remove.asp
-                st.session_state["selectedDishes"].pop(index)
-            
 
 
 #----------------- HOME Page -----------------#
