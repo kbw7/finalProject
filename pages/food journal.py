@@ -111,7 +111,7 @@ with tab1:
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
-                    "dining_hall": location,
+                    "dining_hall": selected_location, # This will stay "selected_location" instead of "location" variable because Aileen later pulls from this to show entries in "Journal" tab so if user ate at "Lulu" we don't want them to see "Bae"
                     "meal_type": selected_meal,
                     "calories": float(calories),
                     "protein": float(protein),
