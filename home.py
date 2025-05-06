@@ -256,8 +256,6 @@ def homePage(): # only show once user has walkthrough!
             dayDf[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
     dayDf = dayDf.drop("nutritionals", axis=1)
-    
-    st.write(dayDf)
 
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
