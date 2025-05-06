@@ -232,7 +232,6 @@ def homePage(): # only show once user has walkthrough!
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
 
     today = str(d) + "T00:00:00"
-    st.write(today)
     
     df = df[df["date"] == today]  # only today's meals
 
