@@ -225,8 +225,6 @@ def homePage(): # only show once user has walkthrough!
 
     df = get_menu(d, location_id, meal_id) # d is date
 
-    st.write(df)
-
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
     # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
