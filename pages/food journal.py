@@ -108,6 +108,8 @@ with tab1:
             row[1].write(f"{calories} cal")
             row[2].write(station)
             checked = row[3].checkbox("", key=f"add_{selected_meal}_{name}_{i}")
+            # for testing
+            st.write(checked)
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
@@ -118,6 +120,9 @@ with tab1:
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
+
+
+
 with tab2:
     st.header("Selected Foods")
     if st.session_state['selected_dishes']:
