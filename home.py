@@ -297,12 +297,11 @@ def homePage(): # only show once user has walkthrough!
         if 'selected_dishes' not in st.session_state:
             st.session_state['selected_dishes'] = []
 
-        for i, item in enumerate(items): # Aileen's code from food_journal.py
-            st.write(type(item))
-            name = item.get("name", "")
+        for i, dish in enumerate(items): # Aileen's code from food_journal.py
+            name = dish.get("name", "")
 
             # explain a['name']
-            allergies = [a['name'] for a in item.get("allergens", [])]
+            allergies = [a['name'] for a in dish.get("allergens", [])]
 
             # preferences = [p['name'] for p in item.get("preferences", [])]
             if apply_custom_filter:
@@ -311,7 +310,7 @@ def homePage(): # only show once user has walkthrough!
                 # if user_preferences and not any(pref in preferences for pref in user_preferences):
                 #     continue
 
-            nutrition = item.get("nutritionals", {})
+            nutrition = dish.get("nutritionals", {})
             nutrition = dropKeys(nutrition) if nutrition else {}
             calories = nutrition.get("calories", 0.0)
             protein = nutrition.get("protein", 0.0)
