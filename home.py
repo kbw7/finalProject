@@ -242,7 +242,7 @@ def homePage(): # only show once user has walkthrough!
 
     # cleaning up df - Kaurvaki - lot of code from own Assignment 5 of CS248
     df = df.drop_duplicates(subset=["id"], keep="first")
-    df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
+    df = df.drop(columns=["image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
     df["allergens"] = df["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
     df["preferences"] = df["preferences"].apply(transform)
