@@ -55,12 +55,19 @@ def dropKeys(cell): # from home, drop irrelevant keys
 with tab1:
     col1, col2, col3 = st.columns(3)
     selected_date = col1.date_input("Select Date", datetime.now().date())
-    selected_location = col2.selectbox("Dining Hall", sorted(dfKeys["location"].unique()))
-    selected_meal = col3.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"])
+    selected_location = col2.selectbox("Dining Hall", ["Bates", "Lulu", "Stone D", "Tower"]) # Changed this to just be the list of diningHalls - Kaurvaki
+    selected_meal = col3.selectbox("Select Meal", ["Breakfast", "Lunch", "Dinner"]) 
 
     apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu")
+    
+    # Using variable "location" for getting the parameters because "Bae" is in the API but community knows dining hall as "Lulu" and not really "Bae"
+    # See more detailed note in home.py under homePage() method in about line 210 - Kaurvaki
+    if selected_location == "Lulu":
+        location = "Bae"
+    else:
+        location = selected_location
 
-    location_id, meal_id = get_params(dfKeys, selected_location, selected_meal)
+    location_id, meal_id = get_params(dfKeys, location, selected_meal)
 
     params = {
         "date": selected_date.strftime("%m-%d-%Y"),
@@ -104,7 +111,7 @@ with tab1:
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
-                    "dining_hall": selected_location,
+                    "dining_hall": location,
                     "meal_type": selected_meal,
                     "calories": float(calories),
                     "protein": float(protein),
