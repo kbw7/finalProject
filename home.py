@@ -223,9 +223,9 @@ def homePage(): # only show once user has walkthrough!
 
     d = datetime.date.today()
 
-    df = get_menu(d, location_id, meal_id) # d is date
+    formattedDate = d.strftime("%m-%d-%Y")
 
-    st.write(df)
+    df = get_menu(formattedDate, location_id, meal_id) # d is date
 
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
@@ -278,7 +278,7 @@ def homePage(): # only show once user has walkthrough!
 
         # Aileen's Code
         params = {
-        "date": d.strftime("%m-%d-%Y"),
+        "date": formattedDate,
         "locationID": location_id,
         "mealID": meal_id
         }
@@ -336,6 +336,17 @@ def homePage(): # only show once user has walkthrough!
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
+            elif (not checked) and (name in [x['name'] for x in st.session_state['selected_dishes']]): # Added this in case the user unchecked a meal because then we don't want to save that entry in session_state. Found that if user selected a meal and then unchecked it, the meal would still be under "Log"
+                index = 0 # Since I don't know the index of the unchecked dish dictionary... I need to find the index so I am using a counter - Kaurvaki
+                for dish in st.session_state["selected_dishes"]:
+                    if dish["name"] == name: # if it is the unchecked dish, then exit loop and remove that dish using that index.
+                        break
+                    else:
+                        index = index + 1
+
+                # Source on removing from list - https://www.w3schools.com/python/python_lists_remove.asp
+                st.session_state["selectedDishes"].pop(index)
+            
 
 
 #----------------- HOME Page -----------------#
