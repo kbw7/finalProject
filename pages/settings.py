@@ -40,8 +40,6 @@ else:
 
 favHall = st.selectbox("Select", ["Tower", "Bates", "Lulu", "Stone D"]) # Instead of using index, made it simpler by including the dining hall names - Kaurvaki
 
-st.write("You Selected:", favHall)
-
 if st.button("Update"):
     update_user_dining_hall(user.get("email"), favHall)
     push_db_to_github()
