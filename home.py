@@ -270,7 +270,7 @@ def homePage(): # only show once user has walkthrough!
             try:
                 # ******ast library and method 
                 user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
-                # user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
+                user_preferences = ast.literal_eval(user_record[4]) if user_record[4] else []
             except Exception as e:
                 st.warning("Could not parse stored user allergies/preferences.")
 
@@ -305,12 +305,13 @@ def homePage(): # only show once user has walkthrough!
             # explain a['name']
             allergies = [a['name'] for a in dish.get("allergens", [])]
 
-            # preferences = [p['name'] for p in item.get("preferences", [])]
+            preferences = [p['name'] for p in dish.get("preferences", [])]
+            
             if apply_custom_filter:
                 if any(allergen in user_allergens for allergen in allergies):
                     continue
-                # if user_preferences and not any(pref in preferences for pref in user_preferences):
-                #     continue
+                if user_preferences and not any(pref in preferences for pref in user_preferences):
+                    continue
 
             nutrition = dish.get("nutritionals", {})
             nutrition = dropKeys(nutrition) if nutrition else {}

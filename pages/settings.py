@@ -96,6 +96,8 @@ st.subheader("Select Allergies")
 new_allergens = [a for a in aviAllergens if st.checkbox(a, value=(a in curr_allergens), key=f"allergen_{a}")]
 
 st.subheader("Select Dietary Restrictions")
+st.write("IMPORTANT NOTE: Developers are still working on integrating the following dietary restrictions/preferences: 'Halal', 'Kosher', and 'Lactose_Intolerant' --- so as of now, the menus will not filter out these restrictions/preferences but as soon as our team has finished integrating it, the menus will reflect those changes. Thank you for your patience!")
+
 new_restrictions = [r for r in restrictions if st.checkbox(r, value=(r in curr_restrictions), key=f"restrict_{r}")]
 
 if st.button("Save Allergy/Restriction Preferences"):

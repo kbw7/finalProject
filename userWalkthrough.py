@@ -72,7 +72,7 @@ def newUser(user):
         restrictions = ["Vegetarian", "Vegan", "Gluten Sensitive", "Halal", "Kosher", "Lactose-Intolerant"]
 
         st.write("Do you have any dietary restrictions/preferences? (Click the Submit button if you have or have not selected any of the following restrictions/preferences)")
-
+        st.write("IMPORTANT NOTE: Developers are still working on integrating the following dietary restrictions/preferences: 'Halal', 'Kosher', and 'Lactose_Intolerant' --- so as of now, the menus will not filter out these restrictions/preferences but as soon as our team has finished integrating it, the menus will reflect those changes. Thank you for your patience!")
         titleCols = st.columns(2)
         titleCols[0].write("")
         titleCols[1].write("Check for Yes")
