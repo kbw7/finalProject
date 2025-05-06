@@ -233,31 +233,31 @@ def homePage(): # only show once user has walkthrough!
 
     today = str(d) + "T00:00:00"
     
-    df = df[df["date"] == today]  # only today's meals
+    dayDf = df[df["date"] == today]  # only today's meals
 
     # Aileen's Code
-    if df.empty:
+    if dayDf.empty:
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
         return  # Exit early so nothing else runs
 
     # cleaning up df - Kaurvaki - lot of code from own Assignment 5 of CS248
-    df = df.drop_duplicates(subset=["id"], keep="first")
-    df = df.drop(columns=["image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
+    dayDf = dayDf.drop_duplicates(subset=["id"], keep="first")
+    dayDf = dayDf.drop(columns=["image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
-    df["allergens"] = df["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
-    df["preferences"] = df["preferences"].apply(transform)
-    df["nutritionals"] = df["nutritionals"].apply(dropKeys)
+    dayDf["allergens"] = dayDf["allergens"].apply(transform) # for the allergens column, it goes through each row and turn them into a string
+    dayDf["preferences"] = dayDf["preferences"].apply(transform)
+    dayDf["nutritionals"] = dayDf["nutritionals"].apply(dropKeys)
 
-    colNames = df.iloc[0].nutritionals.keys()
+    colNames = dayDf.iloc[0].nutritionals.keys()
     for key in colNames:
         if key == "servingSizeUOM":
-            df[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
+            dayDf[key] = df["nutritionals"].apply(lambda dct: str(dct["servingSizeUOM"]))
         else:
-            df[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
+            dayDf[key] = df["nutritionals"].apply(lambda dct: float(dct[key]))
 
-    df = df.drop("nutritionals", axis=1)
+    dayDf = dayDf.drop("nutritionals", axis=1)
     
-    st.write(df)
+    st.write(dayDf)
 
     # Menu Title and Info.
     st.subheader(userMeal + " Today at " + userDiningHall)
@@ -287,7 +287,7 @@ def homePage(): # only show once user has walkthrough!
         # r = requests.get("https://dish.avifoodsystems.com/api/menu-items", params=params)
         # items = r.json()
 
-        if not df.empty:
+        if not dayDf.empty:
             st.subheader(f"{userMeal} at {userDiningHall}")
             header = st.columns(6)
             header[0].markdown("**Dish**")
@@ -300,7 +300,7 @@ def homePage(): # only show once user has walkthrough!
         if 'selected_dishes' not in st.session_state:
             st.session_state['selected_dishes'] = []
 
-        for i, row in df.iterrows(): # Aileen's code from food_journal.py
+        for i, row in dayDf.iterrows(): # Aileen's code from food_journal.py
             name = row["name"]
 
             # explain a['name']
