@@ -85,7 +85,6 @@ with tab1:
         header[2].markdown("**Station**")
         header[3].markdown("**Log**")
         for i, item in enumerate(items):
-            st.write(item)
             name = item.get("name", "")
             station = item.get("stationName", "")
             allergies = [a['name'] for a in item.get("allergens", [])]
@@ -119,7 +118,7 @@ with tab1:
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-            elif not checked: # Added this in case the user unchecked a meal because then we don't want to save that entry in session_state. Found that if user selected a meal and then unchecked it, the meal would still be under "Log"
+            elif (not checked) and (name in [x['name'] for x in st.session_state['selected_dishes']]): # Added this in case the user unchecked a meal because then we don't want to save that entry in session_state. Found that if user selected a meal and then unchecked it, the meal would still be under "Log"
                 index = 0 # Since I don't know the index of the unchecked dish dictionary... I need to find the index so I am using a counter - Kaurvaki
                 for dish in st.session_state["selected_dishes"]:
                     if dish["name"] == name: # if it is the unchecked dish, then exit loop and remove that dish using that index.
