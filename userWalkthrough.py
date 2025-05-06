@@ -26,7 +26,7 @@ def newUser(user):
 
     # Favorite dining hall selection
     st.write("Select your favorite or go-to dining hall to have on your Home Page and click Submit once you have picked your dining hall!")
-    favHall = st.selectbox("Select", ["Tower", "Bates", "Bae", "Stone D"])
+    favHall = st.selectbox("Select", ["Tower", "Bates", "Lulu", "Stone D"]) # Changed to Lulu
     st.write("You Selected " + favHall)
 
     # Save dining hall when user clicks this

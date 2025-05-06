@@ -31,17 +31,15 @@ else:
     st.stop()
 
 # ----------------- Dining Hall Preference ----------------- #
-diningHall = getUserFavDiningHall(user)
+currentDiningHall = getUserFavDiningHall(user) # renamed variable from "diningHall" to "currentDiningHall" - Kaurvaki
 
-if diningHall:
-    st.write(f"Your current go-to dining hall is set to **{diningHall}**")
+if currentDiningHall:
+    st.write(f"Your current go-to dining hall is set to **{currentDiningHall}**")
 else:
     st.warning("No dining hall preference set.")
 
-available_halls = ["Tower", "Bates", "Bae", "Stone D"]
-default_index = available_halls.index(diningHall) if diningHall in available_halls else 0
+favHall = st.selectbox("Select", ["Tower", "Bates", "Lulu", "Stone D"]) # Instead of using index, made it simpler by including the dining hall names - Kaurvaki
 
-favHall = st.selectbox("Select Dining Hall", available_halls, index=default_index)
 st.write("You Selected:", favHall)
 
 if st.button("Update"):

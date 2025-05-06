@@ -207,9 +207,18 @@ def homePage(): # only show once user has walkthrough!
     # Kaurvaki's Code
     userDiningHall = getUserFavDiningHall(user)
 
+    # In our user feedback form, we got that using "Bae" was confusing for people since we all call the dining hall "Lulu"
+    # since WFresh AVI uses "Bae" I made a separate variable called "diningHall" that would be hold the actual dining hall name according to the API
+    # "Bae" while the userDiningHall would remain "Lulu." Then, we can use "Bae" for the back-end but still show "Lulu" on front end
+    # All SQL queries will be fed the variable "diningHall" now, NOT "userDiningHall" - Kaurvaki
+    if userDiningHall == "Lulu":
+        diningHall = "Bae"
+    else:
+        diningHall = userDiningHall
+
     # Prof. Eni function get_params()
     location_id, meal_id = get_params(dfKeys,
-                                        userDiningHall,
+                                        diningHall,
                                         userMeal)
 
     d = datetime.date.today()
@@ -218,6 +227,8 @@ def homePage(): # only show once user has walkthrough!
 
     # We only want today's menu... not the whole week
     # format of date data in df: 2025-04-14T00:00:00
+    # Source for strftime - https://www.geeksforgeeks.org/python-strftime-function/
+
     today = d.strftime("%Y") + "-" + d.strftime("%m") + "-" + d.strftime("%d") + "T00:00:00"
 
     df = df[df["date"] == today]  # only today's meals
@@ -227,7 +238,7 @@ def homePage(): # only show once user has walkthrough!
         st.warning(f"No menu available for {userMeal} at {userDiningHall} today.")
         return  # Exit early so nothing else runs
 
-    # cleaning up df - Kaurvaki
+    # cleaning up df - Kaurvaki - lot of code from own Assignment 5 of CS248
     df = df.drop_duplicates(subset=["id"], keep="first")
     df = df.drop(columns=["date", "image", "id", "categoryName", "stationOrder", "price"], errors="ignore")
 
@@ -253,7 +264,7 @@ def homePage(): # only show once user has walkthrough!
         user_allergens = [] # Aileen's code from food_journal.py
         # user_preferences = [] not enough time to look into dietary restrictions/preferences
 
-        if user_record: # Aileen's code from food_journal.py
+        if user_record: # Kaurvaki pulled Aileen's code from food_journal.py
             try:
                 # ******ast library and method 
                 user_allergens = ast.literal_eval(user_record[3]) if user_record[3] else []
@@ -262,27 +273,6 @@ def homePage(): # only show once user has walkthrough!
                 st.warning("Could not parse stored user allergies/preferences.")
 
         apply_custom_filter = st.checkbox("Apply my saved allergy and dietary preferences to filter menu") # Aileen's code from food_journal.py
-
-        # dish, calories, protein, fat, carbs, journal = st.columns(6)
-
-        # with dish:
-        #     st.markdown("**Dish**")
-
-        # with calories:
-        #     st.write("Calories")
-
-        # with protein:
-        #     st.write("Protein")
-
-        # with fat:
-        #     st.write("Fat")
-
-        # with carbs:
-        #     st.write("Carbs")
-
-
-        # with journal:
-        #      st.write("Add to Journal")
 
         # Aileen's Code
         params = {
@@ -337,35 +327,13 @@ def homePage(): # only show once user has walkthrough!
             if checked and name not in [x['name'] for x in st.session_state['selected_dishes']]:
                 st.session_state['selected_dishes'].append({
                     "name": name,
-                    "dining_hall": userDiningHall,
+                    "dining_hall": diningHall,
                     "meal_type": userMeal,
                     "calories": float(calories),
                     "protein": float(protein),
                     "carbs": float(carbs),
                     "fat": float(fat)
                 })
-
-        # for index, row in df.iterrows():
-        #     dish, calories, protein, fat, carbs, journal = st.columns(6)
-        #     with dish:
-        #         st.write(row["name"])
-
-        #     with calories:
-        #         st.write(str(row["calories"]))
-
-        #     with protein:
-        #         st.write(str(row["protein"]) + "g")
-
-        #     with fat:
-        #         st.write(str(row["fat"]) + "g")
-
-        #     with carbs:
-        #         st.write(str(row["carbohydrates"]) + "g")
-
-            # with journal:
-            #     st.button("Add", key = num)
-            #     num += 1
-
 
 
 #----------------- HOME Page -----------------#

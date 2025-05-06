@@ -44,14 +44,6 @@ def init_db():
         )
     ''')
 
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS user_favorites (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id TEXT,
-            dish_name TEXT
-        )
-    ''')
-
     conn.commit()
     conn.close()
 
@@ -75,40 +67,6 @@ def fetch_user_info(email: str):
 
     return user_info
 
-# def store_missing_data(
-#     missing_dish_ids: List[int],
-#     date: str,
-#     dining_hall: str,
-#     meal: str,
-#     comment: str,
-#     username: str
-# ):
-#     timestamp = get_et_now().isoformat(timespec="seconds")
-#     conn = sqlite3.connect(DB_NAME)
-#     cursor = conn.cursor()
-
-#     # Ensure user exists and fetch user_id
-#     cursor.execute('INSERT OR IGNORE INTO users (username) VALUES (?)', (username,))
-#     cursor.execute('SELECT id FROM users WHERE username = ?', (username,))
-#     user_id = cursor.fetchone()[0]
-
-#     # Insert summary record and get its ID
-#     cursor.execute('''
-#         INSERT INTO missing_summary (timestamp, total_missing, comment, user_id)
-#         VALUES (?, ?, ?, ?)
-#     ''', (timestamp, len(missing_dish_ids), comment, user_id))
-#     summary_id = cursor.lastrowid
-
-#     # Insert missing dish records linked to summary
-#     for dish_id in missing_dish_ids:
-#         cursor.execute('''
-#             INSERT INTO missing_dishes (dish_id, date, dining_hall, meal, user_id, summary_id)
-#             VALUES (?, ?, ?, ?, ?, ?)
-#         ''', (dish_id, date, dining_hall, meal, user_id, summary_id))
-
-#     conn.commit()
-#     conn.close()
-
 def checkNewUser(email:str):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -118,7 +76,6 @@ def checkNewUser(email:str):
     userInfo = cursor.fetchone()
 
     return str(type(userInfo)) == "<class 'NoneType'>"
-
 
 
 def store_new_user_info(email: str, diningHall: str, allergens: str, dietaryRestrictions: str):
@@ -292,6 +249,7 @@ def update_user_allergy_preferences(email: str, allergens: list, restrictions: l
         
         conn.commit()
         return True
+    
 # Call this once in your main app to initialize the DB (if not already)
 if __name__ == "__main__":
     init_db()
