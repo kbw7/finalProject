@@ -298,6 +298,7 @@ def homePage(): # only show once user has walkthrough!
             st.session_state['selected_dishes'] = []
 
         for i, item in enumerate(items): # Aileen's code from food_journal.py
+            st.write(type(item))
             name = item.get("name", "")
 
             # explain a['name']
