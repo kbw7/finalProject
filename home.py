@@ -203,7 +203,6 @@ def homePage(): # only show once user has walkthrough!
             dish = fav["dish_name"]
             for loc in fav["locations"]:
                 st.success(f"**{dish}** available at {loc['location']} ({loc['meal']}) - {loc['station']}")
-    st.write(available_favs)
 
     # Kaurvaki's Code
     userDiningHall = getUserFavDiningHall(user)
