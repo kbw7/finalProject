@@ -320,7 +320,7 @@ def homePage(): # only show once user has walkthrough!
             carbs = nutrition.get("carbohydrates", 0.0)
             fat = nutrition.get("fat", 0.0)
 
-            row = st.columns(6)  # tighter layout
+            row = st.columns(6)  
             row[0].write(name)
             row[1].write(f"{calories} cal")
             row[2].write(f"{protein} g")
