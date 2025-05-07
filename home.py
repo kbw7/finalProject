@@ -29,14 +29,6 @@ download_db_from_github() #initialize the database
 access_token = st.session_state.get("access_token")
 user = get_user_info(access_token) 
 
-def test_notification():
-    """Simple test function that always returns a notification"""
-    return [{
-        'dish_name': 'Test Favorite Dish',
-        'locations': [
-            {'location': 'Bates', 'meal': 'Lunch', 'station': 'Test Station'}
-        ]
-    }]
 
 def render_sidebar():
     #URLs for the images used in the sidebar
@@ -204,19 +196,7 @@ def homePage(): # only show once user has walkthrough!
     # Display notification for favorite dish
 
     available_favs = check_favorites_available(user.get("email"))
-    # Try the test function first
-    test_favs = test_notification()
-    st.write("Test notification result:", test_favs)
-    
-    # Try the real function
-    try:
-        real_favs = check_favorites_available(user.get("email"))
-        st.write("Real favorites check result:", real_favs)
-    except Exception as e:
-        st.error(f"Error checking favorites: {str(e)}")
-        import traceback
-        st.code(traceback.format_exc())
-        
+
     if available_favs:
         st.markdown("### 🔔 Favorite Dishes Available Today!")
         for fav in available_favs:
