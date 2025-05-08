@@ -56,7 +56,8 @@ def toggleable_macro_plot(df_plot, x_col, title, key):
     # uses the same key to ensure the button is linked to the right view state
     if st.button("Toggle View", key=key):
         st.session_state[f"{key}_toggle"] = not st.session_state[f"{key}_toggle"]
-
+    # source for stacked bar chart: https://plotly.com/python/bar-charts/
+    # https://plotly.com/python/bar-charts/#stacked-bar-chart
     # If toggle is false, shows stacked bar chart
     if not st.session_state[f"{key}_toggle"]:
         fig = px.bar(
@@ -107,6 +108,7 @@ with tab1:
     day_df = df[df['date'] == pd.to_datetime(selected_day)]
     # If the filtered df is not empty, it means there is data for that day
     if not day_df.empty:
+        # source: https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html#groupby-aggregate
         # This groups the logs by meal type (breakfast, lunch, dinner) and sums the macros
         daily_macros = day_df.groupby('meal_type')[['protein', 'carbs', 'fat']].sum().reset_index()
         toggleable_macro_plot(daily_macros, 'meal_type', f"Caloric Intake – {selected_day.strftime('%Y-%m-%d')}", key="daily")
@@ -137,7 +139,6 @@ with tab2:
 
         # Groups data by user and sort each user's logs chronologically
         # Extracts sequences of dining hall visits
-
         if 'created_at' in week_df.columns:
             user_paths = week_df.sort_values(by=['user_id', 'created_at']).groupby('user_id')['dining_hall'].apply(
                 lambda x: [h.strip().lower().title() for h in x]
@@ -222,6 +223,7 @@ with tab3:
 
         # Creates a new DataFrame representing log activity per day
         # Each row = one date in the month, and the number of food entries logged
+        # source: https://plotly.com/python/heatmaps/
         heatmap_data = pd.DataFrame({
             'date': all_days,
             'log_count': [log_counts.get(day, 0) for day in all_days]
